@@ -1,3 +1,3 @@
-[submodule "libft"]
-	path = libft
-	url = https://github.com/VBrazhnik/Libft-Extended.git
+[submodule "ft_printf"]
+	path = ft_printf
+	url = https://github.com/VBrazhnik/ft_printf.git
