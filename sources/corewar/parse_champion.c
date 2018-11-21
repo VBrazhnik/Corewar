@@ -26,7 +26,7 @@ static int32_t	parse_int32(int fd)
 		terminate(ERR_READ_CHAMPION);
 	if (size < 4)
 		terminate(ERR_INVALID_CHAMPION);
-	return (bytecode_to_int32(buffer, 4));
+	return (bytecode_to_int32_ptr(buffer, 4));
 }
 
 static char		*parse_str(int fd, size_t len)
