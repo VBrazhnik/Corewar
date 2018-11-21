@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:10:02 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/10/24 15:10:03 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/11/09 23:00:40 by ablizniu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#include "corewar_op.h"
 #include <errno.h>
 
 void	add_cursor(t_cursor **list, t_cursor *new)
@@ -48,7 +49,8 @@ void	init_cursors(t_vm *vm)
 			if ((op_code = vm->arena[pc]) >= 0x01 && op_code <= 0x10)
 				cycles_to_exec = g_op[op_code - 1].cycles;
 			add_cursor(&(vm->cursors),
-					init_cursor(id, pc, op_code, cycles_to_exec));
+					init_cursor(-id, pc, op_code, cycles_to_exec));
+			vm->cursors_num++;
 			pc -= MEM_SIZE / vm->players_num;
 		}
 		id--;
@@ -66,6 +68,7 @@ int		main(int argc, char **argv)
 		init_arena(vm);
 		init_cursors(vm);
 		print_arena(vm->arena);
+		exec(vm);
 	}
 	else
 		print_help();

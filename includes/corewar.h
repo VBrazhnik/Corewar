@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/10/24 14:23:29 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/11/13 11:30:11 by ablizniu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,27 @@
 # include "vs.h"
 # include "libft.h"
 # include <stdint.h>
+
+/*
+** Macroses
+*/
+
+# define INDEX(X)		((X) - 1)
+
+# define OP_CODE_LEN	1
+# define ARGS_CODE_LEN	1
+# define REG_LEN		1
+# define IND_LEN		2
+
+/*
+** Arg's type — Arg's code
+*/
+
+static uint8_t			g_arg_code[3] = {
+	T_REG,
+	T_DIR,
+	T_IND
+};
 
 /*
 ** Player
@@ -56,20 +77,24 @@ typedef struct			s_player
 ** carry          — special flag
 ** op_code        — operator's code that is placed under cursor
 ** cycles_to_exec — number of cycles that remains to wait
+** args_types     - types of op's each argument
 **                  before operator execution
-** pos            — address of current position at memory
 ** pc             — address of the next operator to execute at memory
+** step           — number of bytes to shift
 ** reg            — registers
 ** next           — pointer to the next cursor
 */
 
 typedef struct			s_cursor
 {
-	t_bool				is_alive;
+	uint32_t			id;
 	t_bool				carry;
 	uint8_t				op_code;
+	size_t				lives_num;
 	int					cycles_to_exec;
-	uint32_t			pc;
+	uint8_t				args_types[3];
+	int32_t				pc;
+	uint32_t			step;
 	int32_t				reg[REG_NUMBER];
 	struct s_cursor		*next;
 }						t_cursor;
@@ -100,6 +125,7 @@ typedef struct			s_vm
 	uint8_t				arena[MEM_SIZE];
 	t_player			*players[MAX_PLAYERS];
 	size_t				players_num;
+	size_t				main_cycle;
 	t_player			*last_alive;
 	t_cursor			*cursors;
 	size_t				cursors_num;
@@ -111,214 +137,6 @@ typedef struct			s_vm
 	t_bool				display_aff;
 	uint8_t				log;
 }						t_vm;
-
-/*
-** Operator
-*/
-
-/*
-** name            — operator's name
-** code            — operator's code
-** args_num        — number of arguments
-** args_types_code — flag which reports that operator has code of types
-** args_types      — types of each argument
-** modify_carry    — flag which reports that operator modifies carry
-** t_dir_size      — size of T_DIR agrument.
-** cycles          — cycles to execution of operator
-** func            — pointer to function
-*/
-
-typedef struct			s_op
-{
-	char				*name;
-	uint8_t				code;
-	uint8_t				args_num;
-	t_bool				args_types_code;
-	uint8_t				args_types[3];
-	t_bool				modify_carry;
-	uint8_t				t_dir_size;
-	uint32_t			cycles;
-	void				*func;
-}						t_op;
-
-static t_op				g_op[16] = {
-	{
-		.name = "live",
-		.code = 0x01,
-		.args_num = 1,
-		.args_types_code = false,
-		.args_types = {T_DIR, 0, 0},
-		.modify_carry = false,
-		.t_dir_size = 4,
-		.cycles = 10,
-		.func = NULL
-	},
-	{
-		.name = "ld",
-		.code = 0x02,
-		.args_num = 2,
-		.args_types_code = true,
-		.args_types = {T_DIR | T_IND, T_REG, 0},
-		.modify_carry = true,
-		.t_dir_size = 4,
-		.cycles = 5,
-		.func = NULL
-	},
-	{
-		.name = "st",
-		.code = 0x03,
-		.args_num = 2,
-		.args_types_code = true,
-		.args_types = {T_REG, T_REG | T_IND, 0},
-		.modify_carry = false,
-		.t_dir_size = 0,
-		.cycles = 5,
-		.func = NULL
-	},
-	{
-		.name = "add",
-		.code = 0x04,
-		.args_num = 3,
-		.args_types_code = true,
-		.args_types = {T_REG, T_REG, T_REG},
-		.modify_carry = true,
-		.t_dir_size = 0,
-		.cycles = 10,
-		.func = NULL
-	},
-	{
-		.name = "sub",
-		.code = 0x05,
-		.args_num = 3,
-		.args_types_code = true,
-		.args_types = {T_REG, T_REG, T_REG},
-		.modify_carry = true,
-		.t_dir_size = 0,
-		.cycles = 10,
-		.func = NULL
-	},
-	{
-		.name = "and",
-		.code = 0x06,
-		.args_num = 3,
-		.args_types_code = true,
-		.args_types = {T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG},
-		.modify_carry = true,
-		.t_dir_size = 4,
-		.cycles = 6,
-		.func = NULL
-	},
-	{
-		.name = "or",
-		.code = 0x07,
-		.args_num = 3,
-		.args_types_code = true,
-		.args_types = {T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG},
-		.modify_carry = true,
-		.t_dir_size = 4,
-		.cycles = 6,
-		.func = NULL
-	},
-	{
-		.name = "xor",
-		.code = 0x08,
-		.args_num = 3,
-		.args_types_code = true,
-		.args_types = {T_REG | T_DIR | T_IND, T_REG | T_DIR | T_IND, T_REG},
-		.modify_carry = true,
-		.t_dir_size = 4,
-		.cycles = 6,
-		.func = NULL
-	},
-	{
-		.name = "zjmp",
-		.code = 0x09,
-		.args_num = 1,
-		.args_types_code = false,
-		.args_types = {T_DIR, 0, 0},
-		.modify_carry = false,
-		.t_dir_size = 2,
-		.cycles = 20,
-		.func = NULL
-	},
-	{
-		.name = "ldi",
-		.code = 0x0A,
-		.args_num = 3,
-		.args_types_code = true,
-		.args_types = {T_REG | T_DIR | T_IND, T_REG | T_DIR, T_REG},
-		.modify_carry = false,
-		.t_dir_size = 2,
-		.cycles = 25,
-		.func = NULL
-	},
-	{
-		.name = "sti",
-		.code = 0x0B,
-		.args_num = 3,
-		.args_types_code = true,
-		.args_types = {T_REG, T_REG | T_DIR | T_IND, T_REG | T_DIR},
-		.modify_carry = false,
-		.t_dir_size = 2,
-		.cycles = 25,
-		.func = NULL
-	},
-	{
-		.name = "fork",
-		.code = 0x0C,
-		.args_num = 1,
-		.args_types_code = false,
-		.args_types = {T_DIR, 0, 0},
-		.modify_carry = false,
-		.t_dir_size = 2,
-		.cycles = 800,
-		.func = NULL
-	},
-	{
-		.name = "lld",
-		.code = 0x0D,
-		.args_num = 2,
-		.args_types_code = true,
-		.args_types = {T_DIR | T_IND, T_REG, 0},
-		.modify_carry = true,
-		.t_dir_size = 4,
-		.cycles = 10,
-		.func = NULL
-	},
-	{
-		.name = "lldi",
-		.code = 0x0E,
-		.args_num = 3,
-		.args_types_code = true,
-		.args_types = {T_REG | T_DIR | T_IND, T_REG | T_DIR, T_REG},
-		.modify_carry = true,
-		.t_dir_size = 2,
-		.cycles = 50,
-		.func = NULL
-	},
-	{
-		.name = "lfork",
-		.code = 0x0F,
-		.args_num = 1,
-		.args_types_code = false,
-		.args_types = {T_DIR, 0, 0},
-		.modify_carry = false,
-		.t_dir_size = 2,
-		.cycles = 1000,
-		.func = NULL
-	},
-	{
-		.name = "aff",
-		.code = 0x10,
-		.args_num = 1,
-		.args_types_code = true,
-		.args_types = {T_REG, 0, 0},
-		.modify_carry = false,
-		.t_dir_size = 0,
-		.cycles = 2,
-		.func = NULL
-	}
-};
 
 /*
 ** Functions
@@ -355,6 +173,32 @@ void					parse_log_flag(int *argc, char ***argv, t_vm *vm);
 
 t_player				*parse_champion(char *filename, int num);
 
+static void				add_player(t_player **list, t_player *new);
+
+void					add_cursor(t_cursor **list, t_cursor *new);
+
+/*
+** Validate
+*/
+
+void					parse_arg_types(t_vm **vm, t_cursor **cursor);
+
+t_bool					validate_arg_types(t_cursor **cursor);
+
+uint32_t				calc_step(t_cursor **cursor);
+
+void					operations(t_cursor *cursor, t_vm **vm);
+
+t_bool					validate_args(t_cursor **cursor, t_vm **vm);
+
+/*
+** Execute
+*/
+
+void					exec(t_vm *vm);
+
+uint32_t				counter_of_alive_processes(t_vm **vm);
+
 /*
 ** Find
 */
@@ -373,10 +217,23 @@ void					print_arena(uint8_t *arena);
 ** Utils
 */
 
+void					copy_reg(t_cursor *current, t_cursor *copy);
+
 void					terminate(char *s);
 
-int32_t					bytecode_to_int32(const uint8_t *bytecode, size_t size);
+int32_t					bytecode_to_int32_ptr(const uint8_t *bytecode,
+															size_t size);
+
+int32_t					bytecode_to_int32(const uint8_t *arena, int32_t addr,
+																int32_t size);
+
+void					int32_to_bytecode(uint8_t *arena, int32_t addr,
+												int32_t value, int32_t size);
 
 t_bool					is_filename(const char *filename);
+
+int32_t					calc_addr(int32_t addr);
+
+int8_t					get_byte(t_vm **vm, int32_t pc, int32_t step);
 
 #endif

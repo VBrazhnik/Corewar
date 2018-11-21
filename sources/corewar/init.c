@@ -30,22 +30,23 @@ t_player	*init_player(int id)
 	return (player);
 }
 
-t_cursor	*init_cursor(int32_t id,
+t_cursor	*init_cursor(int32_t player_id,
 						uint32_t pc,
 						uint8_t op_code,
 						int cycles_to_exec)
 {
-	t_cursor	*cursor;
+	t_cursor		*cursor;
+	static uint32_t	cursor_id;
 
 	if (!(cursor = (t_cursor *)ft_memalloc(sizeof(t_cursor))))
 		terminate(ERR_CURSOR_INIT);
-	cursor->is_alive = false;
-	cursor->carry = 0;
+	cursor->id = ++cursor_id;
+	cursor->carry = false;
 	cursor->op_code = op_code;
 	cursor->cycles_to_exec = cycles_to_exec;
 	cursor->pc = pc;
 	cursor->next = NULL;
-	cursor->reg[0] = -id;
+	cursor->reg[0] = player_id;
 	return (cursor);
 }
 
