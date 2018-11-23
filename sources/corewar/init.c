@@ -31,7 +31,7 @@ t_player	*init_player(int id)
 }
 
 t_cursor	*init_cursor(int32_t player_id,
-						uint32_t pc,
+						int32_t pc,
 						uint8_t op_code,
 						int cycles_to_exec)
 {
@@ -43,6 +43,8 @@ t_cursor	*init_cursor(int32_t player_id,
 	cursor->id = ++cursor_id;
 	cursor->carry = false;
 	cursor->op_code = op_code;
+	cursor->lives_num = 0;
+	cursor->last_live = 0;
 	cursor->cycles_to_exec = cycles_to_exec;
 	cursor->pc = pc;
 	cursor->next = NULL;
@@ -62,6 +64,7 @@ t_vm		*init_vm(void)
 	vm->cursors_num = 0;
 	vm->cycles = 0;
 	vm->cycles_to_die = CYCLE_TO_DIE;
+	vm->cycles_after_check = 0;
 	vm->checks_num = 0;
 	vm->vs = NULL;
 	vm->dump = -1;

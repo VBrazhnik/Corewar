@@ -44,7 +44,8 @@ typedef struct	s_op
 	t_bool		modify_carry;
 	uint8_t		t_dir_size;
 	uint32_t	cycles;
-	void		(*func)(t_vm **, t_cursor **, struct s_op);
+	void		(*func)(t_vm *, t_cursor *);
+
 }				t_op;
 
 /*
@@ -55,37 +56,37 @@ typedef struct	s_op
 ** Functions
 */
 
-void			op_live(t_vm **vm, t_cursor **pc, t_op op);
+void			op_live(t_vm *vm, t_cursor *pc);
 
-void			op_ld(t_vm **vm, t_cursor **pc, t_op op);
+void			op_ld(t_vm *vm, t_cursor *pc);
 
-void			op_st(t_vm **vm, t_cursor **pc, t_op op);
+void			op_st(t_vm *vm, t_cursor *pc);
 
-void			op_add(t_vm **vm, t_cursor **pc, t_op op);
+void			op_add(t_vm *vm, t_cursor *pc);
 
-void			op_sub(t_vm **vm, t_cursor **pc, t_op op);
+void			op_sub(t_vm *vm, t_cursor *pc);
 
-void			op_and(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_and(t_vm *vm, t_cursor *cursor);
 
-void			op_or(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_or(t_vm *vm, t_cursor *cursor);
 
-void			op_xor(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_xor(t_vm *vm, t_cursor *cursor);
 
-void			op_zjmp(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_zjmp(t_vm *vm, t_cursor *cursor);
 
-void			op_ldi(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_ldi(t_vm *vm, t_cursor *cursor);
 
-void			op_sti(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_sti(t_vm *vm, t_cursor *cursor);
 
-void			op_fork(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_fork(t_vm *vm, t_cursor *cursor);
 
-void			op_lld(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_lld(t_vm *vm, t_cursor *cursor);
 
-void			op_lldi(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_lldi(t_vm *vm, t_cursor *cursor);
 
-void			op_lfork(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_lfork(t_vm *vm, t_cursor *cursor);
 
-void			op_aff(t_vm **vm, t_cursor **cursor, t_op op);
+void			op_aff(t_vm *vm, t_cursor *cursor);
 
 /*
 ** Array
@@ -274,9 +275,27 @@ static t_op		g_op[16] = {
 ** Functions
 */
 
-int32_t			get_op_arg(t_vm **vm,
-							t_cursor **cursor,
-							t_op op,
-							uint8_t index);
+int32_t			get_op_arg(t_vm *vm,
+							t_cursor *cursor,
+							uint8_t index,
+							t_bool mod);
+
+t_cursor		*duplicate_cursor(t_vm *vm, t_cursor *cursor, int32_t addr);
+
+void			parse_arg_types(t_vm *vm, t_cursor *cursor, t_op *op);
+
+t_bool			valid_arg_types(t_cursor *cursor, t_op *op);
+
+t_bool			valid_args(t_cursor *cursor, t_vm *vm, t_op *op);
+
+uint32_t		calc_step(t_cursor *cursor, t_op *op);
+
+uint32_t		step_size(uint8_t arg_type, t_op *op);
+
+int32_t			bytecode_to_int32(const uint8_t *arena, int32_t addr,
+																int32_t size);
+
+void			int32_to_bytecode(uint8_t *arena, int32_t addr, int32_t value,
+							int32_t size);
 
 #endif

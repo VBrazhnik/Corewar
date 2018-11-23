@@ -10,21 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "corewar_op.h"
 
-void			op_lfork(t_vm **vm, t_cursor **cursor, t_op op)
+inline static void	log_lfork(t_cursor *cursor, int32_t addr)
 {
-	int32_t		pos;
-	t_cursor	*temp_elem;
+	ft_printf("P %4d | lfork %d (%d)\n", cursor->id, addr, cursor->pc + addr);
+}
 
-	(*cursor)->step += OP_CODE_LEN;
-	pos = get_op_arg(vm, cursor, op, 1);
-	temp_elem = init_cursor((*cursor)->reg[0],
-		calc_addr(pos + (*cursor)->pc), (*vm)->arena[(*cursor)->pc + pos],
-		g_op[INDEX((*vm)->arena[(*cursor)->pc + pos])].cycles);
-	copy_reg((*cursor), temp_elem);
-	(*vm)->cursors_num++;
-	temp_elem->carry = (*cursor)->carry;
-	temp_elem->next = (*vm)->cursors;
-	(*vm)->cursors = temp_elem;
+void				op_lfork(t_vm *vm, t_cursor *cursor)
+{
+	int32_t		addr;
+	t_cursor	*new;
+
+	cursor->step += OP_CODE_LEN;
+	addr = get_op_arg(vm, cursor, 1, true);
+	new = duplicate_cursor(vm, cursor, addr);
+	add_cursor(&(vm->cursors), new);
+	vm->cursors_num++;
+	if (vm->log & OP_LEVEL)
+		log_lfork(cursor, addr);
 }

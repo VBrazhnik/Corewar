@@ -10,15 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "corewar_op.h"
 
-void	op_ld(t_vm **vm, t_cursor **cursor, t_op op)
+inline static void	log_ld(uint32_t cursor_id, int32_t value, int32_t r_id)
+{
+	ft_printf("P %4d | ld %d r%d\n", cursor_id, value, r_id);
+}
+
+void				op_ld(t_vm *vm, t_cursor *cursor)
 {
 	int32_t		value;
+	int32_t		r_id;
 
-	(*cursor)->step += (OP_CODE_LEN + ARGS_CODE_LEN);
-	value = get_op_arg(vm, cursor, op, 1);
-	(*cursor)->carry = (t_bool)(!value);
-	(*cursor)->reg[INDEX(get_byte(vm, (*cursor)->pc, (*cursor)->step))] = value;
-	(*cursor)->step += REG_LEN;
+	cursor->step += (OP_CODE_LEN + ARGS_CODE_LEN);
+	value = get_op_arg(vm, cursor, 1, true);
+	cursor->carry = (t_bool)(!value);
+	r_id = get_byte(vm, cursor->pc, cursor->step);
+	cursor->reg[INDEX(r_id)] = value;
+	cursor->step += REG_LEN;
+	if (vm->log & OP_LEVEL)
+		log_ld(cursor->id, value, r_id);
 }

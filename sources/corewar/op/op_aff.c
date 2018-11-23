@@ -12,12 +12,13 @@
 
 #include "corewar_op.h"
 
-void	op_aff(t_vm **vm, t_cursor **cursor, t_op op)
+void			op_aff(t_vm *vm, t_cursor *cursor)
 {
 	int32_t		value;
 
-	(*cursor)->step += (OP_CODE_LEN + ARGS_CODE_LEN);
-	value = get_op_arg(vm, cursor, op, 1);
-	printf("Aff: %c\n", (char)value);
-	(*cursor)->step += REG_LEN;
+	cursor->step += (OP_CODE_LEN + ARGS_CODE_LEN);
+	value = get_op_arg(vm, cursor, 1, true);
+	if (vm->display_aff)
+		printf("Aff: %c\n", (char)value);
+	cursor->step += REG_LEN;
 }

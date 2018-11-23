@@ -10,33 +10,27 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "ft_printf.h"
 #include "corewar_op.h"
 
-void	copy_reg(t_cursor *current, t_cursor *copy)
+inline static void	log_fork(t_cursor *cursor, int32_t addr)
 {
-	int8_t	i;
-
-	i = 1;
-	while (i < REG_NUMBER)
-	{
-		copy->reg[i] = current->reg[i];
-		i++;
-	}
+	ft_printf("P %4d | fork %d (%d)\n",
+										cursor->id,
+										addr,
+										cursor->pc + addr % IDX_MOD);
 }
 
-void	op_fork(t_vm **vm, t_cursor **cursor, t_op op)
+void				op_fork(t_vm *vm, t_cursor *cursor)
 {
-	int32_t		pos;
-	t_cursor	*temp_elem;
+	int32_t		addr;
+	t_cursor	*new;
 
-	(*cursor)->step += OP_CODE_LEN;
-	pos = (get_op_arg(vm, cursor, op, 1) % IDX_MOD);
-	temp_elem = init_cursor((*cursor)->reg[0],
-		calc_addr(pos + (*cursor)->pc), (*vm)->arena[(*cursor)->pc + pos],
-		g_op[INDEX((*vm)->arena[(*cursor)->pc + pos])].cycles);
-	copy_reg((*cursor), temp_elem);
-	(*vm)->cursors_num++;
-	temp_elem->carry = (*cursor)->carry;
-	temp_elem->next = (*vm)->cursors;
-	(*vm)->cursors = temp_elem;
+	cursor->step += OP_CODE_LEN;
+	addr = get_op_arg(vm, cursor, 1, true);
+	new = duplicate_cursor(vm, cursor, addr % IDX_MOD);
+	add_cursor(&(vm->cursors), new);
+	vm->cursors_num++;
+	if (vm->log & OP_LEVEL)
+		log_fork(cursor, addr);
 }

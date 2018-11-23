@@ -12,30 +12,87 @@
 
 #include "corewar_op.h"
 
-int32_t	get_op_arg(t_vm **vm, t_cursor **cursor, t_op op, uint8_t index)
+int32_t		bytecode_to_int32(const uint8_t *arena, int32_t addr, int32_t size)
 {
+	int32_t		result;
+	t_bool		sign;
+	int			i;
+
+	result = 0;
+	sign = (t_bool)(arena[calc_addr(addr)] & 0x80);
+	i = 0;
+	while (size)
+	{
+		if (sign)
+			result += ((arena[calc_addr(addr + size - 1)] ^ 0xFF) << (i++ * 8));
+		else
+			result += arena[calc_addr(addr + size - 1)] << (i++ * 8);
+		size--;
+	}
+	if (sign)
+		result = ~(result);
+	return (result);
+}
+
+void		int32_to_bytecode(uint8_t *arena, int32_t addr, int32_t value,
+						int32_t size)
+{
+	int8_t		i;
+
+	i = 0;
+	while (size)
+	{
+		arena[calc_addr(addr + size - 1)] = (uint8_t)((value >> i) & 0xFF);
+		i += 8;
+		size--;
+	}
+}
+
+int32_t		get_op_arg(t_vm *vm, t_cursor *cursor, uint8_t index, t_bool mod)
+{
+	t_op		*op;
 	int32_t		value;
 	int32_t		addr;
 
+	op = &g_op[INDEX(cursor->op_code)];
 	value = 0;
-	if ((*cursor)->args_types[INDEX(index)] & T_REG)
+	if (cursor->args_types[INDEX(index)] & T_REG)
+		value = cursor->reg[INDEX(get_byte(vm, cursor->pc, cursor->step))];
+	else if (cursor->args_types[INDEX(index)] & T_DIR)
+		value = bytecode_to_int32(vm->arena,
+								cursor->pc + cursor->step,
+								op->t_dir_size);
+	else if (cursor->args_types[INDEX(index)] & T_IND)
 	{
-		value = (*cursor)->reg[INDEX(get_byte(vm, (*cursor)->pc,
-														(*cursor)->step))];
-		(*cursor)->step += REG_LEN;
+		addr = bytecode_to_int32(vm->arena,
+								cursor->pc + cursor->step,
+								IND_LEN);
+		value = bytecode_to_int32(vm->arena,
+							cursor->pc + (mod ? (addr % IDX_MOD) : addr),
+							DIR_SIZE);
 	}
-	else if ((*cursor)->args_types[INDEX(index)] & T_DIR)
-	{
-		value = bytecode_to_int32((*vm)->arena, (*cursor)->pc + (*cursor)->step, op.t_dir_size);
-		(*cursor)->step += op.t_dir_size;
-	}
-	else if ((*cursor)->args_types[INDEX(index)] & T_IND)
-	{
-		addr = bytecode_to_int32((*vm)->arena,
-									(*cursor)->pc + (*cursor)->step, IND_LEN);
-		value = bytecode_to_int32((*vm)->arena,
-									(*cursor)->pc + (addr % IDX_MOD), DIR_SIZE);
-		(*cursor)->step += IND_LEN;
-	}
+	cursor->step += step_size(cursor->args_types[INDEX(index)], op);
 	return (value);
+}
+
+t_cursor	*duplicate_cursor(t_vm *vm, t_cursor *cursor, int32_t addr)
+{
+	t_cursor	*new;
+	int			cycles_to_exec;
+	int			i;
+
+	addr = calc_addr(cursor->pc + addr);
+	cycles_to_exec = 0;
+	if (vm->arena[addr] > 0 && vm->arena[addr] <= 0x10)
+		cycles_to_exec = g_op[INDEX(vm->arena[addr])].cycles;
+	new = init_cursor(cursor->reg[0], addr, vm->arena[addr], cycles_to_exec);
+	i = 0;
+	while (i < REG_NUMBER)
+	{
+		new->reg[i] = cursor->reg[i];
+		i++;
+	}
+	new->carry = cursor->carry;
+	new->last_live = cursor->last_live;
+	return (new);
 }

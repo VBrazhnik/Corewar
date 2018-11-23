@@ -16,20 +16,9 @@
 
 void	add_cursor(t_cursor **list, t_cursor *new)
 {
-	t_cursor	*iterator;
-
-	if (list && new)
-	{
-		if (*list)
-		{
-			iterator = *list;
-			while (iterator->next)
-				iterator = iterator->next;
-			iterator->next = new;
-		}
-		else
-			*list = new;
-	}
+	if (new)
+		new->next = *list;
+	*list = new;
 }
 
 void	init_cursors(t_vm *vm)
@@ -39,21 +28,21 @@ void	init_cursors(t_vm *vm)
 	uint8_t		op_code;
 	int			cycles_to_exec;
 
-	id = MAX_PLAYERS;
-	pc = MEM_SIZE - MEM_SIZE / vm->players_num;
+	id = 1;
+	pc = 0;
 	cycles_to_exec = 0;
-	while (id >= 1)
+	while (id <= MAX_PLAYERS)
 	{
-		if (vm->players[id - 1])
+		if (vm->players[INDEX(id)])
 		{
 			if ((op_code = vm->arena[pc]) >= 0x01 && op_code <= 0x10)
-				cycles_to_exec = g_op[op_code - 1].cycles;
+				cycles_to_exec = g_op[INDEX(op_code)].cycles;
 			add_cursor(&(vm->cursors),
 					init_cursor(-id, pc, op_code, cycles_to_exec));
 			vm->cursors_num++;
-			pc -= MEM_SIZE / vm->players_num;
+			pc += MEM_SIZE / vm->players_num;
 		}
-		id--;
+		id++;
 	}
 }
 
@@ -67,7 +56,7 @@ int		main(int argc, char **argv)
 		parse_args(argc, argv, (vm = init_vm()));
 		init_arena(vm);
 		init_cursors(vm);
-		print_arena(vm->arena);
+		log_intro(vm->players);
 		exec(vm);
 	}
 	else

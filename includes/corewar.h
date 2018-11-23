@@ -91,6 +91,7 @@ typedef struct			s_cursor
 	t_bool				carry;
 	uint8_t				op_code;
 	size_t				lives_num;
+	size_t				last_live;
 	int					cycles_to_exec;
 	uint8_t				args_types[3];
 	int32_t				pc;
@@ -125,15 +126,15 @@ typedef struct			s_vm
 	uint8_t				arena[MEM_SIZE];
 	t_player			*players[MAX_PLAYERS];
 	size_t				players_num;
-	size_t				main_cycle;
 	t_player			*last_alive;
 	t_cursor			*cursors;
 	size_t				cursors_num;
 	size_t				cycles;
 	ssize_t				cycles_to_die;
+	size_t				cycles_after_check;
 	size_t				checks_num;
 	t_vs				*vs;
-	int					dump;
+	ssize_t				dump;
 	t_bool				display_aff;
 	uint8_t				log;
 }						t_vm;
@@ -149,7 +150,7 @@ typedef struct			s_vm
 t_player				*init_player(int id);
 
 t_cursor				*init_cursor(int32_t id,
-									uint32_t pc,
+									int32_t pc,
 									uint8_t op_code,
 									int cycles_to_exec);
 
@@ -181,23 +182,13 @@ void					add_cursor(t_cursor **list, t_cursor *new);
 ** Validate
 */
 
-void					parse_arg_types(t_vm **vm, t_cursor **cursor);
-
-t_bool					validate_arg_types(t_cursor **cursor);
-
-uint32_t				calc_step(t_cursor **cursor);
-
-void					operations(t_cursor *cursor, t_vm **vm);
-
-t_bool					validate_args(t_cursor **cursor, t_vm **vm);
+void					exec_op(t_cursor *cursor, t_vm *vm);
 
 /*
 ** Execute
 */
 
 void					exec(t_vm *vm);
-
-uint32_t				counter_of_alive_processes(t_vm **vm);
 
 /*
 ** Find
@@ -217,23 +208,43 @@ void					print_arena(uint8_t *arena);
 ** Utils
 */
 
-void					copy_reg(t_cursor *current, t_cursor *copy);
-
 void					terminate(char *s);
 
 int32_t					bytecode_to_int32_ptr(const uint8_t *bytecode,
 															size_t size);
 
-int32_t					bytecode_to_int32(const uint8_t *arena, int32_t addr,
-																int32_t size);
-
-void					int32_to_bytecode(uint8_t *arena, int32_t addr,
-												int32_t value, int32_t size);
-
 t_bool					is_filename(const char *filename);
 
 int32_t					calc_addr(int32_t addr);
 
-int8_t					get_byte(t_vm **vm, int32_t pc, int32_t step);
+int8_t					get_byte(t_vm *vm, int32_t pc, int32_t step);
+
+uint32_t				calc_lives_num(t_cursor *cursor);
+
+void					cycles_to_die_check(t_vm **vm);
+
+/*
+** Log
+*/
+
+/*
+** Levels
+*/
+
+# define LIVE_LEVEL		1
+# define CYCLE_LEVEL	2
+# define OP_LEVEL		4
+# define DEATH_LEVEL	8
+# define PC_LEVEL		16
+
+void					log_intro(t_player **players);
+
+void					log_cycle(size_t cycle);
+
+void					log_pc_movements(uint8_t *arena, t_cursor *cursor);
+
+void					log_cursor_death(t_vm *vm, t_cursor *cursor);
+
+void					log_cycles_to_die(ssize_t cycles_to_die);
 
 #endif
