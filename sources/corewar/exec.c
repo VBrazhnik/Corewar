@@ -39,12 +39,30 @@ void		last_exec(t_vm *vm)
 	}
 }
 
+void		update_op_code(t_vm *vm)
+{
+	t_cursor	*current;
+
+	current = vm->cursors;
+	while (current)
+	{
+		if (current->cycles_to_exec == 0)
+		{
+			current->op_code = vm->arena[current->pc];
+			if (vm->arena[current->pc] > 0 && vm->arena[current->pc] <= 0x10)
+				current->cycles_to_exec = g_op[INDEX(current->op_code)].cycles;
+		}
+		current = current->next;
+	}
+}
+
 void		exec(t_vm *vm)
 {
 	t_cursor	*current;
 
 	while (vm->cycles_to_die >= 0)
 	{
+		update_op_code(vm);
 		if (vm->dump == vm->cycles)
 			print_arena(vm->arena);
 		vm->cycles++;
@@ -66,15 +84,12 @@ void		exec(t_vm *vm)
 	}
 }
 
-void		update_cursor(t_cursor *cursor, const uint8_t *arena)
+void		update_cursor(t_cursor *cursor)
 {
 	cursor->pc += cursor->step;
 	cursor->pc = calc_addr(cursor->pc);
 	cursor->step = 0;
 	ft_bzero(cursor->args_types, 3);
-	cursor->op_code = arena[cursor->pc];
-	if (arena[cursor->pc] > 0 && arena[cursor->pc] <= 0x10)
-		cursor->cycles_to_exec = g_op[INDEX(cursor->op_code)].cycles;
 }
 
 void		exec_op(t_cursor *cursor, t_vm *vm)
@@ -100,6 +115,6 @@ void		exec_op(t_cursor *cursor, t_vm *vm)
 		}
 		else
 			cursor->step = OP_CODE_LEN;
-		update_cursor(cursor, vm->arena);
+		update_cursor(cursor);
 	}
 }
