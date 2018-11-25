@@ -25,20 +25,15 @@ void	init_cursors(t_vm *vm)
 {
 	uint32_t	id;
 	uint32_t	pc;
-	uint8_t		op_code;
-	int			cycles_to_exec;
 
 	id = 1;
 	pc = 0;
-	cycles_to_exec = 0;
 	while (id <= MAX_PLAYERS)
 	{
 		if (vm->players[INDEX(id)])
 		{
-			if ((op_code = vm->arena[pc]) >= 0x01 && op_code <= 0x10)
-				cycles_to_exec = g_op[INDEX(op_code)].cycles;
 			add_cursor(&(vm->cursors),
-					init_cursor(-id, pc, op_code, cycles_to_exec));
+					init_cursor(-id, pc));
 			vm->cursors_num++;
 			pc += MEM_SIZE / vm->players_num;
 		}

@@ -31,9 +31,7 @@ t_player	*init_player(int id)
 }
 
 t_cursor	*init_cursor(int32_t player_id,
-						int32_t pc,
-						uint8_t op_code,
-						int cycles_to_exec)
+						int32_t pc)
 {
 	t_cursor		*cursor;
 	static uint32_t	cursor_id;
@@ -42,10 +40,10 @@ t_cursor	*init_cursor(int32_t player_id,
 		terminate(ERR_CURSOR_INIT);
 	cursor->id = ++cursor_id;
 	cursor->carry = false;
-	cursor->op_code = op_code;
+	cursor->op_code = 0;
 	cursor->lives_num = 0;
 	cursor->last_live = 0;
-	cursor->cycles_to_exec = cycles_to_exec;
+	cursor->cycles_to_exec = -1;
 	cursor->pc = pc;
 	cursor->next = NULL;
 	cursor->reg[0] = player_id;

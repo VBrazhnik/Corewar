@@ -25,7 +25,7 @@ void				op_lfork(t_vm *vm, t_cursor *cursor)
 
 	cursor->step += OP_CODE_LEN;
 	addr = get_op_arg(vm, cursor, 1, true);
-	new = duplicate_cursor(vm, cursor, addr);
+	new = duplicate_cursor(cursor, addr);
 	add_cursor(&(vm->cursors), new);
 	vm->cursors_num++;
 	if (vm->log & OP_LEVEL)

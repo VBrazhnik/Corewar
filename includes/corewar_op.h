@@ -280,7 +280,7 @@ int32_t			get_op_arg(t_vm *vm,
 							uint8_t index,
 							t_bool mod);
 
-t_cursor		*duplicate_cursor(t_vm *vm, t_cursor *cursor, int32_t addr);
+t_cursor		*duplicate_cursor(t_cursor *cursor, int32_t addr);
 
 void			parse_arg_types(t_vm *vm, t_cursor *cursor, t_op *op);
 

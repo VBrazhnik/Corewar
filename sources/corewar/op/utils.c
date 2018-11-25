@@ -75,17 +75,13 @@ int32_t		get_op_arg(t_vm *vm, t_cursor *cursor, uint8_t index, t_bool mod)
 	return (value);
 }
 
-t_cursor	*duplicate_cursor(t_vm *vm, t_cursor *cursor, int32_t addr)
+t_cursor	*duplicate_cursor(t_cursor *cursor, int32_t addr)
 {
 	t_cursor	*new;
-	int			cycles_to_exec;
 	int			i;
 
 	addr = calc_addr(cursor->pc + addr);
-	cycles_to_exec = 0;
-	if (vm->arena[addr] > 0 && vm->arena[addr] <= 0x10)
-		cycles_to_exec = g_op[INDEX(vm->arena[addr])].cycles;
-	new = init_cursor(cursor->reg[0], addr, vm->arena[addr], cycles_to_exec);
+	new = init_cursor(cursor->reg[0], addr);
 	i = 0;
 	while (i < REG_NUMBER)
 	{

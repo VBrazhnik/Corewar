@@ -150,9 +150,7 @@ typedef struct			s_vm
 t_player				*init_player(int id);
 
 t_cursor				*init_cursor(int32_t id,
-									int32_t pc,
-									uint8_t op_code,
-									int cycles_to_exec);
+									int32_t pc);
 
 t_vm					*init_vm(void);
 
