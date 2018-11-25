@@ -80,11 +80,12 @@ void		init_arena(t_vm *vm)
 	pc = 0;
 	while (id <= MAX_PLAYERS)
 	{
-		if (vm->players[id - 1])
+		if (vm->players[INDEX(id)])
 		{
+			vm->last_alive = vm->players[INDEX(id)];
 			ft_memcpy(&(vm->arena[pc]),
-				vm->players[id - 1]->code,
-				(size_t)(vm->players[id - 1]->code_size));
+				vm->players[INDEX(id)]->code,
+				(size_t)(vm->players[INDEX(id)]->code_size));
 			pc += MEM_SIZE / vm->players_num;
 		}
 		id++;

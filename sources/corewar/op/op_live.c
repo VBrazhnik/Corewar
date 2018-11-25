@@ -42,6 +42,7 @@ void				op_live(t_vm *vm, t_cursor *cursor)
 		{
 			player->last_live = vm->cycles;
 			player->lives_num++;
+			vm->last_alive = player;
 		}
 	}
 	if (vm->log & OP_LEVEL)

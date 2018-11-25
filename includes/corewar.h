@@ -245,4 +245,6 @@ void					log_cursor_death(t_vm *vm, t_cursor *cursor);
 
 void					log_cycles_to_die(ssize_t cycles_to_die);
 
+void					log_last_alive(t_vm *vm);
+
 #endif

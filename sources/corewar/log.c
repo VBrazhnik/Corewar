@@ -65,3 +65,9 @@ inline void	log_cycles_to_die(ssize_t cycles_to_die)
 {
 	ft_printf("Cycle to die is now %d\n", cycles_to_die);
 }
+
+inline void	log_last_alive(t_vm *vm)
+{
+	ft_printf("Contestant %d, \"%s\", has won !\n",
+			FT_ABS(vm->last_alive->id), vm->last_alive->name);
+}

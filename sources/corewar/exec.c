@@ -64,6 +64,7 @@ void		exec(t_vm *vm)
 		if (vm->dump == vm->cycles)
 			print_arena(vm->arena);
 	}
+	log_last_alive(vm);
 }
 
 void		update_op_code(t_vm *vm, t_cursor *current)
