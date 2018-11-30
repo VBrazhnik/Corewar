@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_live.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 20:23:16 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/09 20:00:46 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:53:08 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,8 @@ void				op_live(t_vm *vm, t_cursor *cursor)
 			vm->last_alive = player;
 		}
 	}
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_live(cursor->id, player_id);
-	if (vm->log & LIVE_LEVEL && player)
+	if (vm->log & LIVE_LOG && player)
 		log_live_msg(FT_ABS(player_id), player->name);
 }

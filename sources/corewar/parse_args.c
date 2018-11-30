@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   parse_args.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 17:06:23 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/10/25 17:06:24 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/11/30 18:53:24 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-** -v                  — visualize
-** -d N                — dump memory after N cycles then exit
-** -a                  — display output of aff operator
-** -l <num>            — write logs. <num> defines log level.
-** -n <num> <champion> — set as player's number value of <num>
+** -v                      — visualize
+** -d N                    — dump memory after N cycles then exit
+** -a                      — display output of aff operator
+** -l <num>                — write logs. <num> defines log level.
+** -n <num> <champion.cor> — set as player's number value of <num>
 */
 
 #include "corewar.h"
@@ -120,12 +120,13 @@ void		parse_args(int argc, char **argv, t_vm *vm)
 			parse_vs_flag(&argc, &argv, vm);
 		else if (!ft_strcmp(*argv, "-d"))
 			parse_dump_flag(&argc, &argv, vm);
+		else if (!ft_strcmp(*argv, "-s"))
+			parse_drop_flag(&argc, &argv, vm);
 		else if (!ft_strcmp(*argv, "-a"))
 			parse_aff_flag(&argc, &argv, vm);
 		else if (!ft_strcmp(*argv, "-l"))
 			parse_log_flag(&argc, &argv, vm);
-		else if (!ft_strcmp(*argv, "-n") ||
-			is_filename(*argv))
+		else if (!ft_strcmp(*argv, "-n") || is_filename(*argv))
 			parse_champion_filename(&argc, &argv, vm, &list);
 		else
 			print_help();

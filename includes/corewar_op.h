@@ -292,10 +292,13 @@ uint32_t		calc_step(t_cursor *cursor, t_op *op);
 
 uint32_t		step_size(uint8_t arg_type, t_op *op);
 
-int32_t			bytecode_to_int32(const uint8_t *arena, int32_t addr,
-																int32_t size);
+int32_t			bytecode_to_int32(const uint8_t *arena,
+									int32_t addr,
+									int32_t size);
 
-void			int32_to_bytecode(uint8_t *arena, int32_t addr, int32_t value,
-							int32_t size);
+void			int32_to_bytecode(uint8_t *arena,
+									int32_t addr,
+									int32_t value,
+									int32_t size);
 
 #endif

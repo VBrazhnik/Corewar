@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_op_args.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/02 22:26:47 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/10 21:41:07 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/29 20:09:34 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void		parse_arg_types(t_vm *vm, t_cursor *cursor, t_op *op)
 	{
 		args_types = get_byte(vm, cursor->pc, 1);
 		if (op->args_num >= 1)
-			parse_arg_type((args_types & 0xC0) >> 6, 1, cursor);
+			parse_arg_type((uint8_t)((args_types & 0xC0) >> 6), 1, cursor);
 		if (op->args_num >= 2)
-			parse_arg_type((args_types & 0x30) >> 4, 2, cursor);
+			parse_arg_type((uint8_t)((args_types & 0x30) >> 4), 2, cursor);
 		if (op->args_num >= 3)
-			parse_arg_type((args_types & 0xC) >> 2, 3, cursor);
+			parse_arg_type((uint8_t)((args_types & 0xC) >> 2), 3, cursor);
 	}
 	else
 		cursor->args_types[0] = op->args_types[0];

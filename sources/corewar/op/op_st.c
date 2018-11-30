@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_st.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 14:31:12 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/09 22:52:17 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:53:27 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ void				op_st(t_vm *vm, t_cursor *cursor)
 																DIR_SIZE);
 		cursor->step += IND_SIZE;
 	}
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_st(cursor->id, r_id, addr);
 }

@@ -43,7 +43,7 @@ t_cursor	*init_cursor(int32_t player_id,
 	cursor->op_code = 0;
 	cursor->lives_num = 0;
 	cursor->last_live = 0;
-	cursor->cycles_to_exec = -1;
+	cursor->cycles_to_exec = 0;
 	cursor->pc = pc;
 	cursor->next = NULL;
 	cursor->reg[0] = player_id;
@@ -66,6 +66,7 @@ t_vm		*init_vm(void)
 	vm->checks_num = 0;
 	vm->vs = NULL;
 	vm->dump = -1;
+	vm->drop = -1;
 	vm->display_aff = false;
 	vm->log = 0;
 	return (vm);

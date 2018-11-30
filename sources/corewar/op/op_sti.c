@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_sti.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 17:28:48 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/12 17:44:08 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:53:32 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,6 @@ void				op_sti(t_vm *vm, t_cursor *cursor)
 	addr_2 = get_op_arg(vm, cursor, 3, true);
 	int32_to_bytecode(vm->arena,
 			(cursor->pc + ((addr_1 + addr_2) % IDX_MOD)), value, DIR_SIZE);
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_sti(cursor, r_id, addr_1, addr_2);
 }

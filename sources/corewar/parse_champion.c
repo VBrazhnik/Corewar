@@ -14,7 +14,6 @@
 #include "corewar_error_msg.h"
 #include <fcntl.h>
 #include <unistd.h>
-#include <stdlib.h>
 
 static int32_t	parse_int32(int fd)
 {

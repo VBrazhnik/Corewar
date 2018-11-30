@@ -13,24 +13,6 @@
 #include "ft_printf.h"
 #include "corewar.h"
 
-void		log_intro(t_player **players)
-{
-	int		i;
-
-	i = 0;
-	ft_printf("Introducing contestants...\n");
-	while (i < MAX_PLAYERS)
-	{
-		if (players[i])
-			ft_printf("* Player %d, weighing %d bytes, \"%s\" (\"%s\") !\n",
-														i + 1,
-														players[i]->code_size,
-														players[i]->name,
-														players[i]->comment);
-		i++;
-	}
-}
-
 inline void	log_cycle(size_t cycle)
 {
 	ft_printf("It is now cycle %d\n", cycle);
@@ -64,10 +46,4 @@ inline void	log_cursor_death(t_vm *vm, t_cursor *cursor)
 inline void	log_cycles_to_die(ssize_t cycles_to_die)
 {
 	ft_printf("Cycle to die is now %d\n", cycles_to_die);
-}
-
-inline void	log_last_alive(t_vm *vm)
-{
-	ft_printf("Contestant %d, \"%s\", has won !\n",
-			FT_ABS(vm->last_alive->id), vm->last_alive->name);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_or.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 14:58:42 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/12 15:08:10 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:53:23 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ void				op_or(t_vm *vm, t_cursor *cursor)
 	r_id = get_byte(vm, cursor->pc, cursor->step);
 	cursor->reg[INDEX(r_id)] = value;
 	cursor->step += REG_LEN;
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_or(cursor->id, value_1, value_2, r_id);
 }

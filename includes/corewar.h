@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/13 11:30:11 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 17:23:15 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,11 @@ typedef struct			s_player
 */
 
 /*
-** is_alive       — flag which reports that cursor was assigned as alive
-**                  during cycles_to_die
+** id             — id number of cursor
 ** carry          — special flag
 ** op_code        — operator's code that is placed under cursor
+** lives_num      — number of executed live operator during of cycle to die
+** last_live      — cycle's number when live operator was executed last time
 ** cycles_to_exec — number of cycles that remains to wait
 ** args_types     - types of op's each argument
 **                  before operator execution
@@ -105,20 +106,22 @@ typedef struct			s_cursor
 */
 
 /*
-** arena         — memory where players are fighting
-** players       — list of players
-** players_num   — number of players
-** last_alive    — pointer to the last player that was assigned as alive
-** cursors       — list of cursors
-** cursors_num   — number of cursors
-** cycles        — number of cycles that was passed after start
-** cycles_to_die — game parameter
-** checks_num    — game parameter
-** vs            — visualizer
-** dump          — cycle's number after which dump will be created
-** display_aff   — flag that reports display output of aff operator or not
-** log           — number that reports about log level.
-**                 If log is assigned as -1, it means that log doesn't display.
+** arena              — memory where players are fighting
+** players            — list of players
+** players_num        — number of players
+** last_alive         — pointer to the last player that was assigned as alive
+** cursors            — list of cursors
+** cursors_num        — number of cursors
+** cycles             — number of cycles that was passed after start
+** cycles_to_die      — game parameter
+** cycles_after_check — number of cycles that was passed after last rules check
+** checks_num         — game parameter
+** vs                 — visualizer
+** dump               — cycle's number after which dump will be created
+** display_aff        — flag that reports display output of aff operator or not
+** log                — number that reports about log level.
+**                      If log is assigned as -1, it means that log doesn't
+**                      display.
 */
 
 typedef struct			s_vm
@@ -135,6 +138,7 @@ typedef struct			s_vm
 	size_t				checks_num;
 	t_vs				*vs;
 	ssize_t				dump;
+	ssize_t				drop;
 	t_bool				display_aff;
 	uint8_t				log;
 }						t_vm;
@@ -149,8 +153,7 @@ typedef struct			s_vm
 
 t_player				*init_player(int id);
 
-t_cursor				*init_cursor(int32_t id,
-									int32_t pc);
+t_cursor				*init_cursor(int32_t id, int32_t pc);
 
 t_vm					*init_vm(void);
 
@@ -166,6 +169,8 @@ void					parse_vs_flag(int *argc, char ***argv, t_vm *vm);
 
 void					parse_dump_flag(int *argc, char ***argv, t_vm *vm);
 
+void					parse_drop_flag(int *argc, char ***argv, t_vm *vm);
+
 void					parse_aff_flag(int *argc, char ***argv, t_vm *vm);
 
 void					parse_log_flag(int *argc, char ***argv, t_vm *vm);
@@ -175,12 +180,6 @@ t_player				*parse_champion(char *filename, int num);
 static void				add_player(t_player **list, t_player *new);
 
 void					add_cursor(t_cursor **list, t_cursor *new);
-
-/*
-** Validate
-*/
-
-void					exec_op(t_cursor *cursor, t_vm *vm);
 
 /*
 ** Execute
@@ -195,12 +194,12 @@ void					exec(t_vm *vm);
 t_player				*find_player(t_player *list, int32_t id);
 
 /*
-** Print
+** Free
 */
 
-void					print_help(void);
+void					free_cursors(t_vm *vm);
 
-void					print_arena(uint8_t *arena);
+void					free_players(t_player **players);
 
 /*
 ** Utils
@@ -222,6 +221,18 @@ uint32_t				calc_lives_num(t_cursor *cursor);
 void					cycles_to_die_check(t_vm **vm);
 
 /*
+** Print
+*/
+
+void					print_intro(t_player **players);
+
+void					print_last_alive(t_vm *vm);
+
+void					print_help();
+
+void					print_arena(uint8_t *arena);
+
+/*
 ** Log
 */
 
@@ -229,13 +240,15 @@ void					cycles_to_die_check(t_vm **vm);
 ** Levels
 */
 
-# define LIVE_LEVEL		1
-# define CYCLE_LEVEL	2
-# define OP_LEVEL		4
-# define DEATH_LEVEL	8
-# define PC_LEVEL		16
+# define LIVE_LOG			1
+# define CYCLE_LOG			2
+# define OP_LOG				4
+# define DEATH_LOG			8
+# define PC_MOVEMENT_LOG	16
 
-void					log_intro(t_player **players);
+/*
+** Functions
+*/
 
 void					log_cycle(size_t cycle);
 
@@ -244,7 +257,5 @@ void					log_pc_movements(uint8_t *arena, t_cursor *cursor);
 void					log_cursor_death(t_vm *vm, t_cursor *cursor);
 
 void					log_cycles_to_die(ssize_t cycles_to_die);
-
-void					log_last_alive(t_vm *vm);
 
 #endif

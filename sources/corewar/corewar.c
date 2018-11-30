@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:10:02 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/09 23:00:40 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:02:28 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,7 @@ void	init_cursors(t_vm *vm)
 	{
 		if (vm->players[INDEX(id)])
 		{
-			add_cursor(&(vm->cursors),
-					init_cursor(-id, pc));
+			add_cursor(&(vm->cursors), init_cursor(-id, pc));
 			vm->cursors_num++;
 			pc += MEM_SIZE / vm->players_num;
 		}
@@ -51,8 +50,11 @@ int		main(int argc, char **argv)
 		parse_args(argc, argv, (vm = init_vm()));
 		init_arena(vm);
 		init_cursors(vm);
-		log_intro(vm->players);
+		print_intro(vm->players);
 		exec(vm);
+		print_last_alive(vm);
+		free_players(vm->players);
+		ft_memdel((void **)&vm);
 	}
 	else
 		print_help();

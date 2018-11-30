@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_and.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 12:33:19 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/12 17:33:31 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:52:39 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,6 @@ void				op_and(t_vm *vm, t_cursor *cursor)
 	reg_id = get_byte(vm, cursor->pc, cursor->step);
 	cursor->reg[INDEX(reg_id)] = value;
 	cursor->step += REG_LEN;
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_and(cursor->id, value_1, value_2, reg_id);
 }

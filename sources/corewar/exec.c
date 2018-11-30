@@ -3,80 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 17:31:17 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/13 16:29:30 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 19:32:11 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "corewar_op.h"
-#include <stdlib.h>
 
-void		last_exec(t_vm *vm)
-{
-	t_cursor	*current;
-	t_cursor	*del;
-
-	vm->cycles++;
-	if (vm->log & CYCLE_LEVEL)
-		log_cycle(vm->cycles);
-	current = vm->cursors;
-	while (current)
-	{
-		exec_op(current, vm);
-		current = current->next;
-	}
-	current = vm->cursors;
-	while (current)
-	{
-		del = current;
-		current = current->next;
-		if (vm->log & DEATH_LEVEL)
-			log_cursor_death(vm, del);
-		ft_memdel((void **)&del);
-	}
-}
-
-void		exec(t_vm *vm)
-{
-	t_cursor	*current;
-
-	if (vm->dump == 0)
-		print_arena(vm->arena);
-	while (vm->cycles_to_die >= 0 && vm->cursors_num)
-	{
-		vm->cycles++;
-		vm->cycles_after_check++;
-		if (vm->log & CYCLE_LEVEL)
-			log_cycle(vm->cycles);
-		current = vm->cursors;
-		while (current)
-		{
-			exec_op(current, vm);
-			current = current->next;
-		}
-		if (vm->cycles && (vm->cycles_to_die == vm->cycles_after_check))
-			cycles_to_die_check(&vm);
-		if (vm->cycles_to_die <= 0)
-			last_exec(vm);
-		if (vm->dump == vm->cycles)
-			print_arena(vm->arena);
-	}
-	log_last_alive(vm);
-}
-
-void		update_op_code(t_vm *vm, t_cursor *current)
+void	update_op_code(t_vm *vm, t_cursor *current)
 {
 	current->op_code = vm->arena[current->pc];
-	if (vm->arena[current->pc] > 0 && vm->arena[current->pc] <= 0x10)
+	if (vm->arena[current->pc] >= 0x01 && vm->arena[current->pc] <= 0x10)
 		current->cycles_to_exec = g_op[INDEX(current->op_code)].cycles;
 	else
 		current->cycles_to_exec = 0;
 }
 
-void		move_cursor(t_cursor *cursor)
+void	move_cursor(t_cursor *cursor)
 {
 	cursor->pc += cursor->step;
 	cursor->pc = calc_addr(cursor->pc);
@@ -84,11 +30,11 @@ void		move_cursor(t_cursor *cursor)
 	ft_bzero(cursor->args_types, 3);
 }
 
-void		exec_op(t_cursor *cursor, t_vm *vm)
+void	exec_op(t_cursor *cursor, t_vm *vm)
 {
 	t_op	*op;
 
-	if (cursor->cycles_to_exec == -1)
+	if (cursor->cycles_to_exec == 0)
 		update_op_code(vm, cursor);
 	if (cursor->cycles_to_exec > 0)
 		cursor->cycles_to_exec--;
@@ -104,12 +50,51 @@ void		exec_op(t_cursor *cursor, t_vm *vm)
 				(*op).func(vm, cursor);
 			else
 				cursor->step += calc_step(cursor, op);
-			if (vm->log & PC_LEVEL && cursor->step)
+			if (vm->log & PC_MOVEMENT_LOG && cursor->step)
 				log_pc_movements(vm->arena, cursor);
 		}
 		else
 			cursor->step = OP_CODE_LEN;
-		cursor->cycles_to_exec = -1;
 		move_cursor(cursor);
 	}
+}
+
+void	exec_cycle(t_vm *vm)
+{
+	t_cursor	*current;
+
+	vm->cycles++;
+	vm->cycles_after_check++;
+	if (vm->log & CYCLE_LOG)
+		log_cycle(vm->cycles);
+	current = vm->cursors;
+	while (current)
+	{
+		exec_op(current, vm);
+		current = current->next;
+	}
+}
+
+void	exec(t_vm *vm)
+{
+	while (vm->cycles_to_die > 0 && vm->cursors_num)
+	{
+		if (vm->dump == vm->cycles)
+		{
+			print_arena(vm->arena);
+			exit(0);
+		}
+		if (vm->drop > 0 && !(vm->cycles % vm->drop))
+		{
+			print_arena(vm->arena);
+			while (getchar() != '\n')
+				;
+		}
+		exec_cycle(vm);
+		if (vm->cycles && (vm->cycles_to_die == vm->cycles_after_check))
+			cycles_to_die_check(&vm);
+	}
+	if (vm->cycles_to_die <= 0 && vm->cursors_num)
+		exec_cycle(vm);
+	free_cursors(vm);
 }

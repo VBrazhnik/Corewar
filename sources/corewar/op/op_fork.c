@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_fork.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 17:49:17 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/13 11:58:24 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:52:44 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ void				op_fork(t_vm *vm, t_cursor *cursor)
 	new = duplicate_cursor(cursor, addr % IDX_MOD);
 	add_cursor(&(vm->cursors), new);
 	vm->cursors_num++;
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_fork(cursor, addr);
 }

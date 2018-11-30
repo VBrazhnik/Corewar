@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_zjmp.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 15:17:29 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/13 15:14:20 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:53:42 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,6 @@ void				op_zjmp(t_vm *vm, t_cursor *cursor)
 		cursor->pc = calc_addr(cursor->pc + (addr % IDX_MOD));
 		cursor->step = 0;
 	}
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_zjmp(cursor, addr);
 }

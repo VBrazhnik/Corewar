@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_lld.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/13 11:46:46 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/13 11:48:37 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:53:13 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,6 @@ void				op_lld(t_vm *vm, t_cursor *cursor)
 	r_id = get_byte(vm, cursor->pc, cursor->step);
 	cursor->reg[INDEX(r_id)] = value;
 	cursor->step += REG_LEN;
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_lld(cursor->id, value, r_id);
 }

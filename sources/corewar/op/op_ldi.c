@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_ldi.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 16:33:56 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/12 17:24:55 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:52:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ void				op_ldi(t_vm *vm, t_cursor *cursor)
 	cursor->reg[INDEX(reg_id)] = bytecode_to_int32(vm->arena,
 				(cursor->pc + ((addr_1 + addr_2) % IDX_MOD)), DIR_SIZE);
 	cursor->step += REG_LEN;
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_ldi(cursor, addr_1, addr_2, reg_id);
 }

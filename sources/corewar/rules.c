@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rules.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 09:18:53 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/23 09:18:55 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/11/29 19:00:37 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void		del_died_cursors(t_vm *vm)
 
 	while (vm->cursors && is_died(vm, vm->cursors))
 	{
-		if (vm->log & DEATH_LEVEL)
+		if (vm->log & DEATH_LOG)
 			log_cursor_death(vm, vm->cursors);
 		del = vm->cursors;
 		vm->cursors = (vm->cursors)->next;
@@ -58,7 +58,7 @@ void		del_died_cursors(t_vm *vm)
 		if (is_died(vm, iterator->next))
 		{
 			del = iterator->next;
-			if (vm->log & DEATH_LEVEL)
+			if (vm->log & DEATH_LOG)
 				log_cursor_death(vm, del);
 			iterator->next = iterator->next->next;
 			ft_memdel((void **)&del);
@@ -84,6 +84,6 @@ void		cycles_to_die_check(t_vm **vm)
 	}
 	reset_lives_nums(*vm);
 	(*vm)->cycles_after_check = 0;
-	if (((*vm)->log & CYCLE_LEVEL) && !(*vm)->checks_num)
+	if (((*vm)->log & CYCLE_LOG) && !(*vm)->checks_num)
 		log_cycles_to_die((*vm)->cycles_to_die);
 }

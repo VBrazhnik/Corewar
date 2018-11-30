@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_lldi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/13 11:49:45 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/13 13:04:50 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:53:17 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ void				op_lldi(t_vm *vm, t_cursor *cursor)
 	cursor->reg[INDEX(r_id)] = bytecode_to_int32(vm->arena,
 			cursor->pc + (addr_1 + addr_2), DIR_SIZE);
 	cursor->step += REG_LEN;
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_lldi(cursor, addr_1, addr_2, r_id);
 }

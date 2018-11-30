@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   op_add.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/08 16:50:27 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/12 15:37:46 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/11/30 20:52:33 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,6 @@ void				op_add(t_vm *vm, t_cursor *cursor)
 	r3_id = get_byte(vm, cursor->pc, cursor->step);
 	cursor->reg[INDEX(r3_id)] = value;
 	cursor->step += REG_LEN;
-	if (vm->log & OP_LEVEL)
+	if (vm->log & OP_LOG)
 		log_add(cursor->id, r1_id, r2_id, r3_id);
 }
