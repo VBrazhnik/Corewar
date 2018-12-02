@@ -67,7 +67,31 @@ VS_SOURCES_LIST = \
 VS_SOURCES = $(addprefix $(VS_SOURCES_DIRECTORY), $(VS_SOURCES_LIST))
 
 ASM_SOURCES_DIRECTORY = ./sources/asm/
-ASM_SOURCES_LIST = 
+ASM_SOURCES_LIST = \
+    label_op.c\
+    check_utils.c\
+    get_pos.c\
+    argument_check.c\
+	check_dir.c\
+	check_two_reg.c\
+	check_three_reg.c\
+	check_reg.c\
+	check_three_two_reg.c\
+	check_st.c\
+	check_sti.c\
+	check_aff.c\
+	check_arg.c\
+	get_arg.c\
+	read_bot_name_comm.c\
+	parse_operations.c\
+	read_label.c\
+	place_num.c\
+	main.c\
+	final_placing.c\
+	print_error.c\
+	ft_skip_whitespaces.c\
+	ft_strchri.c\
+	ft_strcmpi.c
 ASM_SOURCES = $(addprefix $(ASM_SOURCES_DIRECTORY), $(ASM_SOURCES_LIST))
 
 OBJECTS_DIRECTORY = ./objects/
@@ -92,7 +116,7 @@ RESET = \033[0m
 
 .PHONY: all clean fclean re
 
-all: $(COREWAR_NAME)
+all: $(COREWAR_NAME) $(ASM_NAME)
 
 $(COREWAR_NAME): $(FT_PRINTF) $(COREWAR_OBJECTS_DIRECTORY) $(VS_OBJECTS_DIRECTORY) $(COREWAR_OBJECTS) $(VS_OBJECTS)
 	@$(CC) $(FLAGS) $(COREWAR_LIBRARIES) $(COREWAR_INCLUDES) $(COREWAR_OBJECTS) $(VS_OBJECTS) -o $(COREWAR_NAME)
