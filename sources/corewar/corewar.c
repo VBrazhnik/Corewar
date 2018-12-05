@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:10:02 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/30 20:02:28 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/05 21:54:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,23 @@ void	init_cursors(t_vm *vm)
 
 	id = 1;
 	pc = 0;
-	while (id <= MAX_PLAYERS)
+	while (id <= vm->players_num)
 	{
-		if (vm->players[INDEX(id)])
-		{
-			add_cursor(&(vm->cursors), init_cursor(-id, pc));
-			vm->cursors_num++;
-			pc += MEM_SIZE / vm->players_num;
-		}
+		add_cursor(&(vm->cursors), init_cursor(-id, pc));
+		vm->cursors_num++;
+		pc += MEM_SIZE / vm->players_num;
 		id++;
+	}
+}
+
+void	update_flags(t_vm *vm)
+{
+	if (vm->vs)
+	{
+		vm->dump_cycle = -1;
+		vm->show_cycle = -1;
+		vm->display_aff = false;
+		vm->log = 0;
 	}
 }
 
@@ -48,12 +56,15 @@ int		main(int argc, char **argv)
 	if (argc >= 2)
 	{
 		parse_args(argc, argv, (vm = init_vm()));
+		update_flags(vm);
 		init_arena(vm);
 		init_cursors(vm);
-		print_intro(vm->players);
+		if (!vm->vs)
+			print_intro(vm->players, vm->players_num);
 		exec(vm);
-		print_last_alive(vm);
-		free_players(vm->players);
+		if (!vm->vs)
+			print_last_alive(vm);
+		free_players(vm->players, vm->players_num);
 		ft_memdel((void **)&vm);
 	}
 	else

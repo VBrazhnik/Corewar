@@ -6,17 +6,9 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 17:06:23 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/30 18:53:24 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/05 21:26:16 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-/*
-** -v                      — visualize
-** -d N                    — dump memory after N cycles then exit
-** -a                      — display output of aff operator
-** -l <num>                — write logs. <num> defines log level.
-** -n <num> <champion.cor> — set as player's number value of <num>
-*/
 
 #include "corewar.h"
 #include "corewar_error_msg.h"
@@ -49,11 +41,11 @@ static void	parse_champion_filename(int *argc,
 	id = 0;
 	if (*argc >= 3 && !ft_strcmp(**argv, "-n"))
 	{
-		if (!ft_isint(*(*argv + 1), true) ||
-			(id = ft_atoi(*(*argv + 1))) < 1 ||
-			id > MAX_PLAYERS ||
-			find_player(*list, id) ||
-			!is_filename(*(*argv + 2)))
+		if (!ft_isint(*(*argv + 1), true)
+			|| (id = ft_atoi(*(*argv + 1))) < 1
+			|| id > MAX_PLAYERS
+			|| find_player(*list, id)
+			|| !is_filename(*(*argv + 2)))
 			print_help();
 		add_player(list, parse_champion(*(*argv + 2), id));
 		vm->players_num++;
@@ -77,20 +69,12 @@ static void	update_players_ids(t_player *list)
 	int32_t		id;
 
 	id = 1;
-	while (id <= MAX_PLAYERS)
+	player = list;
+	while (player)
 	{
-		player = list;
 		if (!find_player(list, id))
-			while (player)
-			{
-				if (player->id == 0)
-				{
-					player->id = id;
-					break ;
-				}
-				player = player->next;
-			}
-		id++;
+			player->id = id++;
+		player = player->next;
 	}
 }
 
@@ -100,9 +84,10 @@ static void	set_players(t_vm *vm, t_player *list)
 
 	id = 1;
 	update_players_ids(list);
-	while (id <= MAX_PLAYERS)
+	while (id <= vm->players_num)
 	{
-		vm->players[id - 1] = find_player(list, id);
+		if (!(vm->players[id - 1] = find_player(list, id)))
+			print_help();
 		id++;
 	}
 }
@@ -118,10 +103,10 @@ void		parse_args(int argc, char **argv, t_vm *vm)
 	{
 		if (!ft_strcmp(*argv, "-v"))
 			parse_vs_flag(&argc, &argv, vm);
-		else if (!ft_strcmp(*argv, "-d"))
+		else if (!ft_strcmp(*argv, "-dump") || !ft_strcmp(*argv, "-d"))
 			parse_dump_flag(&argc, &argv, vm);
-		else if (!ft_strcmp(*argv, "-s"))
-			parse_drop_flag(&argc, &argv, vm);
+		else if (!ft_strcmp(*argv, "-show") || !ft_strcmp(*argv, "-s"))
+			parse_show_flag(&argc, &argv, vm);
 		else if (!ft_strcmp(*argv, "-a"))
 			parse_aff_flag(&argc, &argv, vm);
 		else if (!ft_strcmp(*argv, "-l"))

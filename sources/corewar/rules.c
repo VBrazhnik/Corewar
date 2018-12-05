@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 09:18:53 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/29 19:00:37 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/05 21:29:48 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void		reset_lives_nums(t_vm *vm)
 	t_cursor	*current;
 
 	i = 0;
-	while (i < MAX_PLAYERS)
+	while (i < vm->players_num)
 	{
 		if (vm->players[i])
 			vm->players[i]->lives_num = 0;
@@ -39,7 +39,7 @@ t_bool		is_died(t_vm *vm, t_cursor *cursor)
 		&& vm->cycles - cursor->last_live >= vm->cycles_to_die);
 }
 
-void		del_died_cursors(t_vm *vm)
+void		delete_died_cursors(t_vm *vm)
 {
 	t_cursor	*del;
 	t_cursor	*iterator;
@@ -68,22 +68,19 @@ void		del_died_cursors(t_vm *vm)
 			iterator = iterator->next;
 }
 
-void		cycles_to_die_check(t_vm **vm)
+void		cycles_to_die_check(t_vm *vm)
 {
-	static ssize_t	cycles_to_die = CYCLE_TO_DIE;
-
-	(*vm)->checks_num++;
-	cycles_to_die = (*vm)->cycles_to_die;
-	del_died_cursors(*vm);
-	if (((*vm)->cycles_after_check == cycles_to_die
-		&& (*vm)->checks_num == MAX_CHECKS)
-		|| (calc_lives_num((*vm)->cursors) >= NBR_LIVE))
+	vm->checks_num++;
+	delete_died_cursors(vm);
+	if ((vm->cycles_after_check == vm->cycles_to_die
+		&& vm->checks_num == MAX_CHECKS)
+		|| (calc_lives_num(vm->cursors) >= NBR_LIVE))
 	{
-		(*vm)->cycles_to_die -= CYCLE_DELTA;
-		(*vm)->checks_num = 0;
+		vm->cycles_to_die -= CYCLE_DELTA;
+		vm->checks_num = 0;
 	}
-	reset_lives_nums(*vm);
-	(*vm)->cycles_after_check = 0;
-	if (((*vm)->log & CYCLE_LOG) && !(*vm)->checks_num)
-		log_cycles_to_die((*vm)->cycles_to_die);
+	reset_lives_nums(vm);
+	vm->cycles_after_check = 0;
+	if ((vm->log & CYCLE_LOG) && !vm->checks_num)
+		log_cycles_to_die(vm->cycles_to_die);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 16:04:36 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/10/24 16:04:37 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/03 00:11:58 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,10 @@ t_vm		*init_vm(void)
 	vm->cycles_after_check = 0;
 	vm->checks_num = 0;
 	vm->vs = NULL;
-	vm->dump = -1;
-	vm->drop = -1;
+	vm->dump_cycle = -1;
+	vm->dump_print_mode = 0;
+	vm->show_cycle = -1;
+	vm->show_print_mode = 0;
 	vm->display_aff = false;
 	vm->log = 0;
 	return (vm);
@@ -79,16 +81,13 @@ void		init_arena(t_vm *vm)
 
 	id = 1;
 	pc = 0;
-	while (id <= MAX_PLAYERS)
+	while (id <= vm->players_num)
 	{
-		if (vm->players[INDEX(id)])
-		{
-			vm->last_alive = vm->players[INDEX(id)];
-			ft_memcpy(&(vm->arena[pc]),
-				vm->players[INDEX(id)]->code,
-				(size_t)(vm->players[INDEX(id)]->code_size));
-			pc += MEM_SIZE / vm->players_num;
-		}
+		vm->last_alive = vm->players[INDEX(id)];
+		ft_memcpy(&(vm->arena[pc]),
+			vm->players[INDEX(id)]->code,
+			(size_t)(vm->players[INDEX(id)]->code_size));
+		pc += MEM_SIZE / vm->players_num;
 		id++;
 	}
 }

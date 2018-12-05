@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/30 17:23:15 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/05 21:41:08 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ static uint8_t			g_arg_code[3] = {
 ** comment   — champion's comment
 ** code_size — size of champion's executable code
 ** code      — champion's executable code
-** last_live — cycle's number, on which player was assigned as alive last time
 ** lives_num — number of reports that player is alive during cycles_to_die
+** last_live — cycle's number, on which player was assigned as alive last time
 ** next      — pointer to the next player
 */
 
@@ -62,8 +62,8 @@ typedef struct			s_player
 	char				*comment;
 	int32_t				code_size;
 	uint8_t				*code;
-	size_t				last_live;
 	size_t				lives_num;
+	size_t				last_live;
 	struct s_player		*next;
 }						t_player;
 
@@ -137,10 +137,12 @@ typedef struct			s_vm
 	size_t				cycles_after_check;
 	size_t				checks_num;
 	t_vs				*vs;
-	ssize_t				dump;
-	ssize_t				drop;
+	ssize_t				dump_cycle;
+	int					dump_print_mode;
+	ssize_t				show_cycle;
+	int					show_print_mode;
 	t_bool				display_aff;
-	uint8_t				log;
+	int					log;
 }						t_vm;
 
 /*
@@ -169,7 +171,7 @@ void					parse_vs_flag(int *argc, char ***argv, t_vm *vm);
 
 void					parse_dump_flag(int *argc, char ***argv, t_vm *vm);
 
-void					parse_drop_flag(int *argc, char ***argv, t_vm *vm);
+void					parse_show_flag(int *argc, char ***argv, t_vm *vm);
 
 void					parse_aff_flag(int *argc, char ***argv, t_vm *vm);
 
@@ -188,6 +190,14 @@ void					add_cursor(t_cursor **list, t_cursor *new);
 void					exec(t_vm *vm);
 
 /*
+** Execute Utils
+*/
+
+void					update_op_code(t_vm *vm, t_cursor *current);
+
+void					move_cursor(t_cursor *cursor);
+
+/*
 ** Find
 */
 
@@ -197,9 +207,9 @@ t_player				*find_player(t_player *list, int32_t id);
 ** Free
 */
 
-void					free_cursors(t_vm *vm);
+void					delete_cursors(t_vm *vm);
 
-void					free_players(t_player **players);
+void					free_players(t_player **players, size_t players_num);
 
 /*
 ** Utils
@@ -218,19 +228,19 @@ int8_t					get_byte(t_vm *vm, int32_t pc, int32_t step);
 
 uint32_t				calc_lives_num(t_cursor *cursor);
 
-void					cycles_to_die_check(t_vm **vm);
+void					cycles_to_die_check(t_vm *vm);
 
 /*
 ** Print
 */
 
-void					print_intro(t_player **players);
+void					print_intro(t_player **players, size_t players_num);
 
 void					print_last_alive(t_vm *vm);
 
 void					print_help();
 
-void					print_arena(uint8_t *arena);
+void					print_arena(uint8_t *arena, int print_mode);
 
 /*
 ** Log

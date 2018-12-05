@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 20:23:16 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/30 20:53:08 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/05 20:15:02 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,12 @@ void				op_live(t_vm *vm, t_cursor *cursor)
 	cursor->lives_num++;
 	cursor->last_live = vm->cycles;
 	player = NULL;
-	if (player_id <= -1 && player_id >= -(MAX_PLAYERS))
+	if (player_id <= -1 && player_id >= -(vm->players_num))
 	{
 		player = vm->players[INDEX(FT_ABS(player_id))];
-		if (player)
-		{
-			player->last_live = vm->cycles;
-			player->lives_num++;
-			vm->last_alive = player;
-		}
+		player->last_live = vm->cycles;
+		player->lives_num++;
+		vm->last_alive = player;
 	}
 	if (vm->log & OP_LOG)
 		log_live(cursor->id, player_id);

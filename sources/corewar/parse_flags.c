@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 19:50:41 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/30 18:57:07 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/05 22:09:40 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,14 @@ void	parse_vs_flag(int *argc, char ***argv, t_vm *vm)
 
 void	parse_dump_flag(int *argc, char ***argv, t_vm *vm)
 {
-	if (*argc >= 2 && ft_isint(*(*argv + 1), true))
+	if (!vm->dump_print_mode && *argc >= 2 && ft_isint(*(*argv + 1), true))
 	{
-		if ((vm->dump = ft_atoi(*(*argv + 1))) < 0)
-			vm->dump = -1;
+		if ((vm->dump_cycle = ft_atoi(*(*argv + 1))) < 0)
+			vm->dump_cycle = -1;
+		if (!ft_strcmp(**argv, "-d"))
+			vm->dump_print_mode = 64;
+		else
+			vm->dump_print_mode = 32;
 		(*argc) -= 2;
 		(*argv) += 2;
 	}
@@ -32,12 +36,16 @@ void	parse_dump_flag(int *argc, char ***argv, t_vm *vm)
 		print_help();
 }
 
-void	parse_drop_flag(int *argc, char ***argv, t_vm *vm)
+void	parse_show_flag(int *argc, char ***argv, t_vm *vm)
 {
-	if (*argc >= 2 && ft_isint(*(*argv + 1), true))
+	if (!vm->show_print_mode && *argc >= 2 && ft_isint(*(*argv + 1), true))
 	{
-		if ((vm->drop = ft_atoi(*(*argv + 1))) <= 0)
-			vm->drop = -1;
+		if ((vm->show_cycle = ft_atoi(*(*argv + 1))) <= 0)
+			vm->show_cycle = -1;
+		if (!ft_strcmp(**argv, "-s"))
+			vm->show_print_mode = 64;
+		else
+			vm->show_print_mode = 32;
 		(*argc) -= 2;
 		(*argv) += 2;
 	}
@@ -54,13 +62,9 @@ void	parse_aff_flag(int *argc, char ***argv, t_vm *vm)
 
 void	parse_log_flag(int *argc, char ***argv, t_vm *vm)
 {
-	int	level;
-
-	if (*argc >= 2 && ft_isint(*(*argv + 1), true)
-		&& (level = ft_atoi(*(*argv + 1))) >= 0)
+	if (*argc >= 2 && ft_isint(*(*argv + 1), true))
 	{
-		level = (level > 31) ? 31 : level;
-		vm->log |= level;
+		vm->log = ft_atoi(*(*argv + 1));
 		(*argc) -= 2;
 		(*argv) += 2;
 	}

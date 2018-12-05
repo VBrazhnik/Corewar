@@ -71,7 +71,7 @@ t_player		*parse_champion(char *filename, int id)
 	player->name = parse_str(fd, PROG_NAME_LENGTH);
 	if (parse_int32(fd) != 0)
 		terminate(ERR_NO_NULL);
-	if ((player->code_size = parse_int32(fd)) <= 0 ||
+	if ((player->code_size = parse_int32(fd)) < 0 ||
 		player->code_size > CHAMP_MAX_SIZE)
 		terminate(ERR_INVALID_CODE_SIZE);
 	player->comment = parse_str(fd, COMMENT_LENGTH);
