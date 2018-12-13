@@ -1,0 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   process_code_utils.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/12/13 03:47:54 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/13 03:47:54 by vbrazhni         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "asm.h"
+#include "asm_error_msg.h"
+
+void			update_code_buff(t_parser *parser, size_t *code_size)
+{
+	*code_size += CHAMP_MAX_SIZE;
+	parser->code = (char *)realloc(parser->code, *code_size + MAX_STMT_SIZE);
+	if (!(parser->code))
+		terminate(ERR_REALLOC_MEM);
+}
+
+t_op			*get_op(char *name)
+{
+	int		i;
+
+	i = 0;
+	while (i < (sizeof(g_op) / sizeof(t_op)))
+	{
+		if (!ft_strcmp(g_op[i].name, name))
+			return (&g_op[i]);
+		i++;
+	}
+	return (NULL);
+}
+
+static uint8_t	get_arg_code(int8_t type)
+{
+	if (type == T_DIR)
+		return (DIR_CODE);
+	else if (type == T_REG)
+		return (REG_CODE);
+	else
+		return (IND_CODE);
+}
+
+void			update_types_code(int8_t *types_code, int8_t type, int arg_num)
+{
+	(*types_code) |= (get_arg_code(type) << 2 * (4 - arg_num - 1));
+}

@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_skip_whitespaces.c                              :+:      :+:    :+:   */
+/*   print.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amedvedi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/01 14:00:17 by amedvedi          #+#    #+#             */
-/*   Updated: 2018/11/01 14:00:18 by amedvedi         ###   ########.fr       */
+/*   Created: 2018/12/05 23:08:40 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/13 04:49:26 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int		ft_iswhitespace(int c)
-{
-	if ((c > 8 && c < 14) || c == 32)
-		return (1);
-	else
-		return (0);
-}
+#include "asm.h"
+#include "ft_printf.h"
 
-int		ft_skip_whitespaces(char *str, int i)
+void	print_help(void)
 {
-	while (ft_iswhitespace(str[i]))
-		i++;
-	return (i);
+	ft_printf("Usage: ./asm (champion.s|champion.cor)\n");
+	ft_printf("\t* champion.s   — from assembler to bytecode\n");
+	ft_printf("\t* champion.cor — from bytecode to assembler\n");
 }

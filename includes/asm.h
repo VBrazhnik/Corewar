@@ -3,237 +3,275 @@
 /*                                                        :::      ::::::::   */
 /*   asm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amedvedi <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:33:27 by amedvedi          #+#    #+#             */
-/*   Updated: 2018/06/29 02:11:13 by amedvedi         ###   ########.fr       */
+/*   Updated: 2018/12/13 05:00:47 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ASM_H
+
 # define ASM_H
 
-# include "op.h"
 # include "libft.h"
-# include "get_next_line.h"
-# include "ft_printf.h"
-# include <stdio.h>
+# include "asm_op.h"
 
-/*
-** Bot name and command length
-** 16: 4 - magic header, 4 - null, 4 - bot size, 4 - null
-** 2192
-*/
+# define BUFF_SIZE 2048
 
-# define NAME_COMM_LENGTH	(PROG_NAME_LENGTH + COMMENT_LENGTH + 16)
+# define MAX_STMT_SIZE 20
 
 # define REG_CHAR 'r'
 
 /*
-** Label mention list
-** idx ------position at the file
-** size -----size of the label (4 or 2)
-** value ----the given value to calculate the distance
+** Token
 */
 
-typedef struct			s_replace
+typedef enum
 {
-	int					idx;
-	int					size;
-	int					value;
-	struct s_replace	*next;
-}						t_replace;
+	COMMAND,
+	STRING,
+	LABEL,
+	OPERATOR,
+	REGISTER,
+	DIRECT,
+	DIRECT_LABEL,
+	INDIRECT,
+	INDIRECT_LABEL,
+	SEPARATOR,
+	NEW_LINE,
+	END
+}	t_type;
+
+static char				*g_type[] = {
+	"COMMAND",
+	"STRING",
+	"LABEL",
+	"OPERATOR",
+	"REGISTER",
+	"DIRECT",
+	"DIRECT_LABEL",
+	"INDIRECT",
+	"INDIRECT_LABEL",
+	"SEPARATOR",
+	"NEW_LINE",
+	"END"
+};
+
+typedef struct			s_token
+{
+	char				*content;
+	t_type				type;
+	unsigned			line;
+	unsigned			column;
+	struct s_token		*next;
+}						t_token;
 
 /*
-** Labels list
-** name ---------name of the label
-** initialized ----indicator if the label was initialized
-** pos ----------position at the file in the instruction section
-** x ------------column position at file
-** y ------------row position at file
-** mention ------list of the mentions of the label from instructions
+** Mention
 */
 
-typedef struct			s_lbl
+/*
+** pos    — number of byte where argument-label is placed
+** op_pos — number of byte where operator is placed
+** size   — number of bytes which store a value at pos
+** next   — pointer to the next mention
+*/
+
+typedef struct			s_mention
+{
+	unsigned			line;
+	unsigned			column;
+	int32_t				pos;
+	int32_t				op_pos;
+	size_t				size;
+	struct s_mention	*next;
+}						t_mention;
+
+/*
+** Label
+*/
+
+/*
+** name     — name of label
+** line     — line where label is placed in asm file
+** column   — column where label is placed in asm file
+** pos      — number of byte on which argument-label point
+** mentions — list of mentions
+** next     — pointer to the next label
+*/
+
+typedef struct			s_label
 {
 	char				*name;
-	int					initialized;
-	int					pos;
-	int					x;
-	int					y;
-	t_replace			*mention;
-	struct s_lbl		*next;
-}						t_lbl;
+	int32_t				op_pos;
+	t_mention			*mentions;
+	struct s_label		*next;
+}						t_label;
 
 /*
-** Main structure
-** i -----------length of the whole given file
-** pos ---------row position at file
-** pos_x -------column position at file
-** fd ----------file descriptor
-** str ---------line from gnl
-** r_str -------array used to save important parts from str
-** file_name ----name for new .cor file
-** data --------an array containing all written hex code
-** label -------array containing a list of labels
+** Assembler
 */
 
-typedef struct			s_val
+typedef struct			s_parser
 {
-	int					i;
-	int					pos_y;
-	int					pos_x;
 	int					fd;
-	char				*str;
-	char				*r_str;
-	char				*file_name;
-	char				*data;
-	t_lbl				*label;
-}						t_val;
+	unsigned			line;
+	unsigned			column;
+	t_token				*tokens;
+	int32_t				pos;
+	int32_t				op_pos;
+	char				*name;
+	char				*comment;
+	char				*code;
+	t_label				*labels;
+}						t_parser;
 
 /*
-** Libft_functions
+** Init
 */
 
-int						ft_skip_whitespaces(char *str, int i);
-int						ft_iswhitespace(int c);
-int						ft_strchri(const char *s, int c);
-int						ft_strcmpi(const char *s1, const char *s2);
+t_parser				*init_parser(int fd);
+
+t_token					*init_token(t_parser *parser, t_type type);
+
+t_label					*init_label(char *name, int op_pos);
+
+t_mention				*init_mention(t_parser *parser, size_t size);
 
 /*
-** Validating header
+** Parse
 */
 
-void					read_bot_name_comm(t_val *assm, int i, int ret);
-void					check_comm(t_val *assm, int i);
+int						get_row(int fd, char **line);
+
+void					parse_asm(t_parser *parser);
 
 /*
-** Validating instruction name and parsing
+** Parse Utils
 */
 
-void					read_bot_op(t_val *assm);
+t_bool					is_delimiter(int c);
+
+t_bool					is_register(const char *arg);
+
+char					*get_token_content(t_parser *parser,
+											const char *line,
+											unsigned start);
+
+void					update_parser_position(t_parser *parser,
+											const char *line);
 
 /*
-** All instruction parsing
-** check_dir - 				live, zjump, fork, lfork
-** check_two_reg -  		ld, lld
-** check_three_reg - 		and, or, xor
-** check_reg - 				sub, add
-** check_three_two_reg - 	ldi, lldi
-** in own files - 			st, sti, aff
+** Skip
 */
 
-void					check_live(t_val *assm, int i);
-void					check_zjmp(t_val *assm, int i);
-void					check_fork(t_val *assm, int i);
-void					check_lfork(t_val *assm, int i);
+void					skip_whitespaces(t_parser *parser, const char *line);
+
+void					skip_comment(t_parser *parser, const char *line);
 
 /*
-** -------------------------------------------check_two_reg
+** Token
 */
 
-void					check_ld(t_val *assm, int i);
-void					check_lld(t_val *assm, int i);
+void					add_token(t_token **list, t_token *new);
 
 /*
-** -------------------------------------------check_three_reg
+** Label
 */
 
-void					check_and(t_val *assm, int i);
-void					check_or(t_val *assm, int i);
-void					check_xor(t_val *assm, int i);
+void					add_label(t_label **list, t_label *new);
+
+void					add_mention(t_mention **list, t_mention *new);
+
+t_label					*find_label(t_label *list, char *name);
+
+void					replace_mentions(t_parser *file);
 
 /*
-** -------------------------------------------check_reg
+** Process
 */
 
-void					check_sub(t_val *assm, int i);
-void					check_add(t_val *assm, int i);
+void					process_info(t_parser *parser, t_token **current);
+
+void					process_code(t_parser *parser, t_token **current);
+
+int8_t					process_arg(t_parser *parser,
+									t_token **current,
+									t_op *op,
+									int arg_num);
 
 /*
-** -------------------------------------------check_three_two_reg
+** Process Utils
 */
 
-void					check_ldi(t_val *assm, int i);
-void					check_lldi(t_val *assm, int i);
+void					update_code_buff(t_parser *parser, size_t *code_size);
 
-/*
-** -------------------------------------------own files
-*/
+t_op					*get_op(char *name);
 
-void					check_st(t_val *assm, int i);
-void					check_sti(t_val *assm, int i);
-void					check_aff(t_val *assm, int i);
-
-/*
-** Validating arguments in instruction
-*/
-
-int						get_type(char c, int *codage);
-int						check_all_arg(t_val *assm, int i, int pos, int *codage);
-int						check_reg_dir(t_val *assm, int i, int pos, int *codage);
-int						check_dir_ind(t_val *assm, int i, int pos, int *codage);
-
-/*
-** Argument validation
-*/
-
-void					args_amount(t_val *assm, char *str, int nbr, int w);
-int						reg_arg(t_val *assm, char *str, int i, int w);
-int						dir_arg(t_val *assm, char *str, int i, int w);
-int						ind_arg(t_val *assm, char *str, int i, int w);
-int						skip_comma(t_val *assm, int i, char *error, int w);
-
-/*
-** Getting argument information
-*/
-
-int						get_arg(t_val *assm, int i, int size, int octet);
-int						get_size(int dir_size, int type, int mode);
-
-/*
-** Minimized parsing of first and second argument
-*/
-
-int						get_arg_first_2(t_val *assm, int i, int codage,
-										int i_pos);
-int						get_arg_second_2(t_val *assm, int i, int codage,
-										int i_pos);
-int						get_arg_first_4(t_val *assm, int i, int codage,
-										int i_pos);
-int						get_arg_second_4(t_val *assm, int i, int codage,
-										int i_pos);
-
-/*
-** Label operations
-*/
-
-int						read_label(t_val *assm, int init, int pc, int size);
-void					create_label(t_val *assm, t_lbl **tmp, int pc,
-									int size);
-void					upd_label(t_val *assm, t_lbl **tmp, int pc, int size);
-void					place_num(t_val *assm, int start, int i);
+void					update_types_code(int8_t *types_code,
+										int8_t type,
+										int arg_num);
 
 /*
 ** Error
 */
 
-void					print_error(t_val *assm, char *str);
-void					local_error(t_val *assm, char *msg, int what);
-void					print_error_label(t_val *assm, char *msg, int x, int y);
+void					lexical_error(t_parser *parser);
+
+void					token_error(t_token *token);
+
+void					name_error(void);
+
+void					comment_error(void);
+
+void					label_error(t_label *label);
+
+void					operator_error(char *name);
+
+void					arg_type_error(t_op *op, int arg_num, t_parser *parser);
+
+/*
+** Print
+*/
+
+void					print_help(void);
+
+/*
+** Write
+*/
+
+void					write_file(int fd, t_parser *parser);
 
 /*
 ** Free
 */
 
-void					free_asm(t_val *assm);
+void					free_parser(t_parser **parser);
 
 /*
-** Final preparations
+** Filename
 */
 
-void					place_labels(t_val *assm);
-void					place_size(t_val *assm);
-void					create_file(t_val *assm);
+t_bool					is_filename(const char *filename, const char *ext);
+
+char					*replace_extension(char *filename,
+											char *old,
+											char *new);
+
+/*
+** Utils
+*/
+
+void					terminate(char *s);
+
+void					int32_to_bytecode(char *data,
+											int32_t i,
+											int32_t value,
+											size_t size);
+
+t_bool					is_terminator(int c);
+
+int						is_whitespace(int c);
 
 #endif
