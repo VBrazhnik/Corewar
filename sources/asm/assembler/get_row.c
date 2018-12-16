@@ -6,11 +6,11 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/11 23:59:01 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/11 23:59:01 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/14 08:24:57 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "asm.h"
+#include "asm_asm.h"
 #include <unistd.h>
 
 static int	divide_str(char **str, char **line)

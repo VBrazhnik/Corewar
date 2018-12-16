@@ -6,17 +6,17 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 02:12:27 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/13 05:12:22 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 14:25:18 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "asm.h"
+#include "asm_asm.h"
 #include "ft_printf.h"
 
 void	lexical_error(t_parser *parser)
 {
 	ft_dprintf(2, "Lexical error at [%03u:%03u]\n",
-													parser->line,
+													parser->row,
 													parser->column);
 	exit(1);
 }
@@ -26,7 +26,7 @@ void	token_error(t_token *token)
 	ft_dprintf(2, "Unexpected token \"%s\" %s at [%03u:%03u]\n",
 														token->content,
 														g_type[token->type],
-														token->line,
+														token->row,
 														token->column);
 	exit(1);
 }
@@ -53,7 +53,7 @@ void	label_error(t_label *label)
 	mention = label->mentions;
 	while (mention)
 	{
-		ft_dprintf(2, "\t— [%03u:%03u]\n", mention->line, mention->column);
+		ft_dprintf(2, "\t— [%03u:%03u]\n", mention->row, mention->column);
 		mention = mention->next;
 	}
 	exit(1);
@@ -71,7 +71,7 @@ void	arg_type_error(t_op *op, int arg_num, t_parser *parser)
 													" at [%03u:%03u]\n",
 															arg_num + 1,
 															op->name,
-															parser->line,
+															parser->row,
 															parser->column);
 	exit(1);
 }

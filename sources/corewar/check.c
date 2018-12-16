@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   rules.c                                            :+:      :+:    :+:   */
+/*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/23 09:18:53 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/05 21:29:48 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/16 17:49:07 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/16 18:12:20 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "corewar.h"
 
-void		reset_lives_nums(t_vm *vm)
+static void		reset_lives_nums(t_vm *vm)
 {
-	int			i;
+	int32_t		i;
 	t_cursor	*current;
 
 	i = 0;
@@ -33,42 +33,42 @@ void		reset_lives_nums(t_vm *vm)
 	}
 }
 
-t_bool		is_died(t_vm *vm, t_cursor *cursor)
+static t_bool	is_died(t_vm *vm, t_cursor *cursor)
 {
 	return (!cursor->lives_num
 		&& vm->cycles - cursor->last_live >= vm->cycles_to_die);
 }
 
-void		delete_died_cursors(t_vm *vm)
+static void		delete_died_cursors(t_vm *vm)
 {
-	t_cursor	*del;
-	t_cursor	*iterator;
+	t_cursor	*delete;
+	t_cursor	*current;
 
 	while (vm->cursors && is_died(vm, vm->cursors))
 	{
 		if (vm->log & DEATH_LOG)
 			log_cursor_death(vm, vm->cursors);
-		del = vm->cursors;
+		delete = vm->cursors;
 		vm->cursors = (vm->cursors)->next;
-		ft_memdel((void **)&del);
+		ft_memdel((void **)&delete);
 		vm->cursors_num--;
 	}
-	iterator = vm->cursors;
-	while (iterator && iterator->next)
-		if (is_died(vm, iterator->next))
+	current = vm->cursors;
+	while (current && current->next)
+		if (is_died(vm, current->next))
 		{
-			del = iterator->next;
+			delete = current->next;
 			if (vm->log & DEATH_LOG)
-				log_cursor_death(vm, del);
-			iterator->next = iterator->next->next;
-			ft_memdel((void **)&del);
+				log_cursor_death(vm, delete);
+			current->next = current->next->next;
+			ft_memdel((void **)&delete);
 			vm->cursors_num--;
 		}
 		else
-			iterator = iterator->next;
+			current = current->next;
 }
 
-void		cycles_to_die_check(t_vm *vm)
+void			cycles_to_die_check(t_vm *vm)
 {
 	vm->checks_num++;
 	delete_died_cursors(vm);

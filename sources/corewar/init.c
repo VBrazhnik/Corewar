@@ -6,16 +6,16 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 16:04:36 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/03 00:11:58 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 18:12:20 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-#include "corewar_error_msg.h"
+#include "corewar_error.h"
 
 t_player	*init_player(int id)
 {
-	t_player	*player;
+	t_player *player;
 
 	if (!(player = (t_player *)ft_memalloc(sizeof(t_player))))
 		terminate(ERR_PLAYER_INIT);
@@ -52,7 +52,7 @@ t_cursor	*init_cursor(int32_t player_id,
 
 t_vm		*init_vm(void)
 {
-	t_vm	*vm;
+	t_vm *vm;
 
 	if (!(vm = (t_vm *)ft_memalloc(sizeof(t_vm))))
 		terminate(ERR_VM_INIT);
@@ -76,7 +76,7 @@ t_vm		*init_vm(void)
 
 void		init_arena(t_vm *vm)
 {
-	int			id;
+	int32_t		id;
 	uint32_t	pc;
 
 	id = 1;

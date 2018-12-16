@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 18:39:07 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/05 21:29:48 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 18:12:20 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 #include "corewar.h"
 #include <stdlib.h>
 
-void		print_intro(t_player **players, size_t players_num)
+void		print_intro(t_player **players, int32_t players_num)
 {
-	int		id;
+	int32_t id;
 
 	id = 1;
 	ft_printf("Introducing contestants...\n");
@@ -41,8 +41,8 @@ inline void	print_last_alive(t_vm *vm)
 
 void		print_arena(uint8_t *arena, int print_mode)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (i < MEM_SIZE)

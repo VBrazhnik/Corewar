@@ -6,24 +6,25 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 03:47:54 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/13 03:47:54 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-#include "asm_error_msg.h"
+#include "asm_asm.h"
+#include "asm_error.h"
 
-void			update_code_buff(t_parser *parser, size_t *code_size)
+void			update_code_buff(t_parser *parser)
 {
-	*code_size += CHAMP_MAX_SIZE;
-	parser->code = (char *)realloc(parser->code, *code_size + MAX_STMT_SIZE);
-	if (!(parser->code))
-		terminate(ERR_REALLOC_MEM);
+	parser->code_size += CHAMP_MAX_SIZE;
+	if (!(parser->code = (char *)realloc(parser->code,
+				((size_t)parser->code_size + MAX_STATEMENT_SIZE))))
+		terminate(ERR_STR_INIT);
 }
 
 t_op			*get_op(char *name)
 {
-	int		i;
+	unsigned	i;
 
 	i = 0;
 	while (i < (sizeof(g_op) / sizeof(t_op)))

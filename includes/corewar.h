@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/05 21:41:08 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 18:30:19 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,16 @@
 # define OP_CODE_LEN	1
 # define ARGS_CODE_LEN	1
 # define REG_LEN		1
-# define IND_LEN		2
+
+/*
+** Log Levels
+*/
+
+# define LIVE_LOG			1
+# define CYCLE_LOG			2
+# define OP_LOG				4
+# define DEATH_LOG			8
+# define PC_MOVEMENT_LOG	16
 
 /*
 ** Arg's type — Arg's code
@@ -63,7 +72,7 @@ typedef struct			s_player
 	int32_t				code_size;
 	uint8_t				*code;
 	size_t				lives_num;
-	size_t				last_live;
+	ssize_t				last_live;
 	struct s_player		*next;
 }						t_player;
 
@@ -92,7 +101,7 @@ typedef struct			s_cursor
 	t_bool				carry;
 	uint8_t				op_code;
 	size_t				lives_num;
-	size_t				last_live;
+	ssize_t				last_live;
 	int					cycles_to_exec;
 	uint8_t				args_types[3];
 	int32_t				pc;
@@ -128,13 +137,13 @@ typedef struct			s_vm
 {
 	uint8_t				arena[MEM_SIZE];
 	t_player			*players[MAX_PLAYERS];
-	size_t				players_num;
+	int32_t				players_num;
 	t_player			*last_alive;
 	t_cursor			*cursors;
 	size_t				cursors_num;
-	size_t				cycles;
+	ssize_t				cycles;
 	ssize_t				cycles_to_die;
-	size_t				cycles_after_check;
+	ssize_t				cycles_after_check;
 	size_t				checks_num;
 	t_vs				*vs;
 	ssize_t				dump_cycle;
@@ -165,7 +174,7 @@ void					init_arena(t_vm *vm);
 ** Parse
 */
 
-void					parse_args(int argc, char **argv, t_vm *vm);
+void					parse_corewar_args(int argc, char **argv, t_vm *vm);
 
 void					parse_vs_flag(int *argc, char ***argv, t_vm *vm);
 
@@ -179,7 +188,11 @@ void					parse_log_flag(int *argc, char ***argv, t_vm *vm);
 
 t_player				*parse_champion(char *filename, int num);
 
-static void				add_player(t_player **list, t_player *new);
+/*
+** Cursor
+*/
+
+void					set_cursors(t_vm *vm);
 
 void					add_cursor(t_cursor **list, t_cursor *new);
 
@@ -209,7 +222,7 @@ t_player				*find_player(t_player *list, int32_t id);
 
 void					delete_cursors(t_vm *vm);
 
-void					free_players(t_player **players, size_t players_num);
+void					free_players(t_player **players, int32_t players_num);
 
 /*
 ** Utils
@@ -217,10 +230,7 @@ void					free_players(t_player **players, size_t players_num);
 
 void					terminate(char *s);
 
-int32_t					bytecode_to_int32_ptr(const uint8_t *bytecode,
-															size_t size);
-
-t_bool					is_filename(const char *filename);
+t_bool					is_filename(const char *filename, const char *ext);
 
 int32_t					calc_addr(int32_t addr);
 
@@ -234,7 +244,7 @@ void					cycles_to_die_check(t_vm *vm);
 ** Print
 */
 
-void					print_intro(t_player **players, size_t players_num);
+void					print_intro(t_player **players, int32_t players_num);
 
 void					print_last_alive(t_vm *vm);
 
@@ -246,21 +256,7 @@ void					print_arena(uint8_t *arena, int print_mode);
 ** Log
 */
 
-/*
-** Levels
-*/
-
-# define LIVE_LOG			1
-# define CYCLE_LOG			2
-# define OP_LOG				4
-# define DEATH_LOG			8
-# define PC_MOVEMENT_LOG	16
-
-/*
-** Functions
-*/
-
-void					log_cycle(size_t cycle);
+void					log_cycle(ssize_t cycle);
 
 void					log_pc_movements(uint8_t *arena, t_cursor *cursor);
 

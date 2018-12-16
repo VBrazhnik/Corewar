@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   skip.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 18:01:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:15:08 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/06 06:34:57 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/14 08:24:57 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar.h"
+#include "asm_asm.h"
 
-void	free_players(t_player **players, int32_t players_num)
+void	skip_whitespaces(t_parser *parser, const char *line)
 {
-	int32_t id;
+	while (is_whitespace(line[parser->column]))
+		parser->column++;
+}
 
-	id = 1;
-	while (id <= players_num)
-	{
-		ft_strdel(&(players[INDEX(id)]->name));
-		ft_strdel(&(players[INDEX(id)]->comment));
-		ft_memdel((void **)&(players[INDEX(id)]->code));
-		ft_memdel((void **)&players[INDEX(id)]);
-		id++;
-	}
+void	skip_comment(t_parser *parser, const char *line)
+{
+	if (line[parser->column] == COMMENT_CHAR
+		|| line[parser->column] == ALT_COMMENT_CHAR)
+		while (line[parser->column] && line[parser->column] != '\n')
+			parser->column++;
 }

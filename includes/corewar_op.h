@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   corewar_op.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 16:52:17 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/13 12:40:03 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/12/16 17:22:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,11 +282,11 @@ int32_t			get_op_arg(t_vm *vm,
 
 t_cursor		*duplicate_cursor(t_cursor *cursor, int32_t addr);
 
-void			parse_arg_types(t_vm *vm, t_cursor *cursor, t_op *op);
+void			parse_types_code(t_vm *vm, t_cursor *cursor, t_op *op);
 
-t_bool			valid_arg_types(t_cursor *cursor, t_op *op);
+t_bool			is_arg_types_valid(t_cursor *cursor, t_op *op);
 
-t_bool			valid_args(t_cursor *cursor, t_vm *vm, t_op *op);
+t_bool			is_args_valid(t_cursor *cursor, t_vm *vm, t_op *op);
 
 uint32_t		calc_step(t_cursor *cursor, t_op *op);
 

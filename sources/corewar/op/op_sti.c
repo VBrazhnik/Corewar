@@ -32,10 +32,10 @@ inline static void	log_sti(t_cursor *cursor,
 
 void				op_sti(t_vm *vm, t_cursor *cursor)
 {
-	int32_t		r_id;
-	int32_t		value;
-	int32_t		addr_1;
-	int32_t		addr_2;
+	int32_t	r_id;
+	int32_t	value;
+	int32_t	addr_1;
+	int32_t	addr_2;
 
 	cursor->step += OP_CODE_LEN + ARGS_CODE_LEN;
 	r_id = get_byte(vm, cursor->pc, cursor->step);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 12:33:19 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/12 17:33:31 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/12/16 16:20:20 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int32_t		bytecode_to_int32(const uint8_t *arena, int32_t addr, int32_t size)
 void		int32_to_bytecode(uint8_t *arena, int32_t addr, int32_t value,
 						int32_t size)
 {
-	int8_t		i;
+	int8_t i;
 
 	i = 0;
 	while (size)
@@ -66,7 +66,7 @@ int32_t		get_op_arg(t_vm *vm, t_cursor *cursor, uint8_t index, t_bool mod)
 	{
 		addr = bytecode_to_int32(vm->arena,
 								cursor->pc + cursor->step,
-								IND_LEN);
+								IND_SIZE);
 		value = bytecode_to_int32(vm->arena,
 							cursor->pc + (mod ? (addr % IDX_MOD) : addr),
 							DIR_SIZE);

@@ -23,7 +23,7 @@ inline static void	log_zjmp(t_cursor *cursor, int32_t addr)
 
 void				op_zjmp(t_vm *vm, t_cursor *cursor)
 {
-	int32_t		addr;
+	int32_t addr;
 
 	cursor->step += OP_CODE_LEN;
 	addr = get_op_arg(vm, cursor, 1, true);

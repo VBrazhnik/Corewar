@@ -14,7 +14,7 @@
 
 t_player	*find_player(t_player *list, int32_t id)
 {
-	t_player	*player;
+	t_player *player;
 
 	player = NULL;
 	if (id >= 1 && id <= MAX_PLAYERS)

@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   skip.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/06 06:34:57 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/12 00:05:14 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/14 11:19:21 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/14 11:19:25 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "asm.h"
+#include "asm_disasm.h"
 
-void	skip_whitespaces(t_parser *parser, const char *line)
+int32_t		bytecode_to_int32(const uint8_t *bytecode, size_t size)
 {
-	while (is_whitespace(line[parser->column]))
-		parser->column++;
-}
+	int32_t	result;
+	t_bool	sign;
+	int		i;
 
-void	skip_comment(t_parser *parser, const char *line)
-{
-	if (line[parser->column] == COMMENT_CHAR
-		|| line[parser->column] == ALT_COMMENT_CHAR)
-		while (!is_terminator(line[parser->column]))
-			parser->column++;
+	result = 0;
+	sign = (t_bool)(bytecode[0] & 0x80);
+	i = 0;
+	while (size)
+	{
+		if (sign)
+			result += ((bytecode[size - 1] ^ 0xFF) << (i++ * 8));
+		else
+			result += bytecode[size - 1] << (i++ * 8);
+		size--;
+	}
+	if (sign)
+		result = ~(result);
+	return (result);
 }

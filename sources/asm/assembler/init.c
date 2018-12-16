@@ -6,27 +6,29 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/05 23:11:01 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/13 04:23:05 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-#include "asm_error_msg.h"
+#include "asm_asm.h"
+#include "asm_error.h"
 
-t_parser	*init_parser(int fd)
+t_parser	*init_asm_parser(int fd)
 {
 	t_parser	*parser;
 
 	if (!(parser = (t_parser *)ft_memalloc(sizeof(t_parser))))
-		terminate(ERR_ASM_INIT);
+		terminate(ERR_PARSER_INIT);
 	parser->fd = fd;
-	parser->line = 0;
+	parser->row = 0;
 	parser->column = 0;
 	parser->pos = 0;
 	parser->op_pos = 0;
 	parser->name = NULL;
 	parser->comment = NULL;
 	parser->code = NULL;
+	parser->code_size = 0;
 	parser->labels = NULL;
 	return (parser);
 }
@@ -51,7 +53,7 @@ t_mention	*init_mention(t_parser *parser, size_t size)
 
 	if (!(mention = (t_mention *)ft_memalloc(sizeof(t_mention))))
 		terminate(ERR_MENTION_INIT);
-	mention->line = parser->line;
+	mention->row = parser->row;
 	mention->column = parser->column;
 	mention->pos = parser->pos;
 	mention->op_pos = parser->op_pos;
@@ -65,10 +67,10 @@ t_token		*init_token(t_parser *parser, t_type type)
 	t_token	*token;
 
 	if (!(token = (t_token *)ft_memalloc(sizeof(t_token))))
-		terminate(ERR_INIT_TOKEN);
+		terminate(ERR_TOKEN_INIT);
 	token->content = NULL;
 	token->type = type;
-	token->line = parser->line;
+	token->row = parser->row;
 	token->column = parser->column;
 	token->next = NULL;
 	return (token);

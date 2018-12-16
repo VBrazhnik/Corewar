@@ -6,16 +6,16 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 17:31:17 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/05 21:49:11 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 18:02:50 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "corewar_op.h"
 
-void	exec_op(t_cursor *cursor, t_vm *vm)
+static void	exec_op(t_cursor *cursor, t_vm *vm)
 {
-	t_op	*op;
+	t_op *op;
 
 	if (cursor->cycles_to_exec == 0)
 		update_op_code(vm, cursor);
@@ -28,9 +28,9 @@ void	exec_op(t_cursor *cursor, t_vm *vm)
 			op = &g_op[INDEX(cursor->op_code)];
 		if (op)
 		{
-			parse_arg_types(vm, cursor, op);
-			if (valid_arg_types(cursor, op) && valid_args(cursor, vm, op))
-				(*op).func(vm, cursor);
+			parse_types_code(vm, cursor, op);
+			if (is_arg_types_valid(cursor, op) && is_args_valid(cursor, vm, op))
+				op->func(vm, cursor);
 			else
 				cursor->step += calc_step(cursor, op);
 			if (vm->log & PC_MOVEMENT_LOG && cursor->step)
@@ -42,9 +42,9 @@ void	exec_op(t_cursor *cursor, t_vm *vm)
 	}
 }
 
-void	exec_cycle(t_vm *vm)
+static void	exec_cycle(t_vm *vm)
 {
-	t_cursor	*current;
+	t_cursor *current;
 
 	vm->cycles++;
 	vm->cycles_after_check++;
@@ -58,7 +58,7 @@ void	exec_cycle(t_vm *vm)
 	}
 }
 
-void	exec(t_vm *vm)
+void		exec(t_vm *vm)
 {
 	while (vm->cycles_to_die > 0 && vm->cursors_num)
 	{

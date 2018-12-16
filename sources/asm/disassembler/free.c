@@ -5,24 +5,33 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 18:01:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:15:08 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/16 15:42:16 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/16 19:07:36 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar.h"
+#include "asm_disasm.h"
 
-void	free_players(t_player **players, int32_t players_num)
+static void	free_statements(t_statement **list)
 {
-	int32_t id;
+	t_statement	*current;
+	t_statement	*delete;
 
-	id = 1;
-	while (id <= players_num)
+	current = *list;
+	while (current)
 	{
-		ft_strdel(&(players[INDEX(id)]->name));
-		ft_strdel(&(players[INDEX(id)]->comment));
-		ft_memdel((void **)&(players[INDEX(id)]->code));
-		ft_memdel((void **)&players[INDEX(id)]);
-		id++;
+		delete = current;
+		current = current->next;
+		ft_memdel((void **)&delete);
 	}
+	*list = NULL;
+}
+
+void		free_bytecode_parser(t_parser **parser)
+{
+	ft_strdel(&((*parser)->name));
+	ft_strdel(&((*parser)->comment));
+	ft_memdel((void **)&((*parser)->code));
+	free_statements(&((*parser)->statements));
+	ft_memdel((void **)parser);
 }

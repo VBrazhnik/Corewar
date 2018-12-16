@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   corewar_error_msg.h                                :+:      :+:    :+:   */
+/*   corewar_error.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/24 17:57:46 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/10/24 17:57:47 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/16 14:49:19 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/16 14:49:19 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COREWAR_ERROR_MSG_H
+#ifndef COREWAR_ERROR_H
 
-# define COREWAR_ERROR_MSG_H
+# define COREWAR_ERROR_H
 
 # define ERR_PLAYER_INIT		"ERROR: Can\'t initialize player"
 

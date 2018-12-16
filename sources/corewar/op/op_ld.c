@@ -20,8 +20,8 @@ inline static void	log_ld(uint32_t cursor_id, int32_t value, int32_t r_id)
 
 void				op_ld(t_vm *vm, t_cursor *cursor)
 {
-	int32_t		value;
-	int32_t		r_id;
+	int32_t	value;
+	int32_t	r_id;
 
 	cursor->step += (OP_CODE_LEN + ARGS_CODE_LEN);
 	value = get_op_arg(vm, cursor, 1, true);

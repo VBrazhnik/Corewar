@@ -6,12 +6,13 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 23:00:20 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/13 04:30:53 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-#include "asm_error_msg.h"
+#include "asm_asm.h"
+#include "asm_error.h"
 
 static void	process_name(t_parser *parser, t_token **current)
 {
@@ -45,9 +46,10 @@ static void	process_comment(t_parser *parser, t_token **current)
 
 void		process_info(t_parser *parser, t_token **current)
 {
-	while (*current && (!parser->name || !parser->comment))
+	while (!parser->name || !parser->comment)
 	{
-		if ((*current)->type == COMMAND && !parser->name
+		if ((*current)->type == COMMAND
+			&& !parser->name
 			&& !ft_strcmp((*current)->content, NAME_CMD_STRING))
 		{
 			(*current) = (*current)->next;
@@ -55,7 +57,8 @@ void		process_info(t_parser *parser, t_token **current)
 			if ((*current)->type != NEW_LINE)
 				token_error(*current);
 		}
-		else if ((*current)->type == COMMAND && !parser->comment
+		else if ((*current)->type == COMMAND
+			&& !parser->comment
 			&& !ft_strcmp((*current)->content, COMMENT_CMD_STRING))
 		{
 			(*current) = (*current)->next;

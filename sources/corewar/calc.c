@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calc.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/23 08:59:12 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/11/23 08:59:19 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 16:20:20 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ uint32_t	step_size(uint8_t arg_type, t_op *op)
 	else if (arg_type & T_DIR)
 		return (op->t_dir_size);
 	else if (arg_type & T_IND)
-		return (IND_LEN);
+		return (IND_SIZE);
 	return (0);
 }
 
@@ -50,7 +50,7 @@ int32_t		calc_addr(int32_t addr)
 
 uint32_t	calc_lives_num(t_cursor *cursor)
 {
-	uint32_t	sum;
+	uint32_t sum;
 
 	sum = 0;
 	while (cursor)

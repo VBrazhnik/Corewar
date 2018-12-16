@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_args.c                                       :+:      :+:    :+:   */
+/*   parse_corewar_args.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/25 17:06:23 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/05 21:26:16 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/16 17:58:16 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/16 17:58:26 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-#include "corewar_error_msg.h"
+#include "corewar_error.h"
 
 static void	add_player(t_player **list, t_player *new)
 {
-	t_player	*iterator;
+	t_player *iterator;
 
 	if (list && new)
 	{
@@ -36,7 +36,7 @@ static void	parse_champion_filename(int *argc,
 									t_vm *vm,
 									t_player **list)
 {
-	int		id;
+	int32_t id;
 
 	id = 0;
 	if (*argc >= 3 && !ft_strcmp(**argv, "-n"))
@@ -45,14 +45,14 @@ static void	parse_champion_filename(int *argc,
 			|| (id = ft_atoi(*(*argv + 1))) < 1
 			|| id > MAX_PLAYERS
 			|| find_player(*list, id)
-			|| !is_filename(*(*argv + 2)))
+			|| !is_filename(*(*argv + 2), ".cor"))
 			print_help();
 		add_player(list, parse_champion(*(*argv + 2), id));
 		vm->players_num++;
 		(*argc) -= 3;
 		(*argv) += 3;
 	}
-	else if (is_filename(**argv))
+	else if (is_filename(**argv, ".cor"))
 	{
 		add_player(list, parse_champion(**argv, id));
 		vm->players_num++;
@@ -92,7 +92,7 @@ static void	set_players(t_vm *vm, t_player *list)
 	}
 }
 
-void		parse_args(int argc, char **argv, t_vm *vm)
+void		parse_corewar_args(int argc, char **argv, t_vm *vm)
 {
 	t_player *list;
 
@@ -111,7 +111,7 @@ void		parse_args(int argc, char **argv, t_vm *vm)
 			parse_aff_flag(&argc, &argv, vm);
 		else if (!ft_strcmp(*argv, "-l"))
 			parse_log_flag(&argc, &argv, vm);
-		else if (!ft_strcmp(*argv, "-n") || is_filename(*argv))
+		else if (!ft_strcmp(*argv, "-n") || is_filename(*argv, ".cor"))
 			parse_champion_filename(&argc, &argv, vm, &list);
 		else
 			print_help();

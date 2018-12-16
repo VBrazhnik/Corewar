@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/06 07:28:58 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/13 05:00:25 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 14:47:05 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,20 @@
 
 # include "op.h"
 # include "libft.h"
-# include <stdint.h>
+
+/*
+** Operator
+*/
+
+/*
+** name            — name of operator
+** code            — code of operator
+** args_num        — number of arguments
+** args_types_code — does bytecode of statement with this operator contain code
+**                   of argument's types
+** args_types      — types of arguments
+** t_dir_size      — size of T_DIR argument
+*/
 
 typedef struct	s_op
 {

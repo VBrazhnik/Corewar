@@ -6,12 +6,13 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/09 00:56:00 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/13 02:19:50 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-#include "asm_error_msg.h"
+#include "asm_asm.h"
+#include "asm_error.h"
 #include "ft_printf.h"
 
 void	parse_symbols(t_parser *parser,
@@ -96,7 +97,7 @@ void	parse_str(t_parser *parser,
 	}
 	update_parser_position(parser, *line);
 	if (size == -1)
-		terminate(ERR_READ_CHAMPION);
+		terminate(ERR_READ_FILE);
 	if (size == 0)
 		lexical_error(parser);
 	token->content = get_token_content(parser, *line, start);
@@ -135,7 +136,7 @@ void	parse_asm(t_parser *parser)
 	ssize_t	size;
 	char	*line;
 
-	while ((size = get_row(parser->fd, &line)) > 0 && ++parser->line)
+	while ((size = get_row(parser->fd, &line)) > 0 && ++parser->row)
 	{
 		parser->column = 0;
 		while (line[parser->column])
@@ -148,6 +149,6 @@ void	parse_asm(t_parser *parser)
 		ft_strdel(&line);
 	}
 	if (size == -1)
-		terminate(ERR_READ_CHAMPION);
+		terminate(ERR_READ_FILE);
 	add_token(&(parser->tokens), init_token(parser, END));
 }

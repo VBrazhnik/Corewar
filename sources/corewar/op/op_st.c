@@ -20,9 +20,9 @@ inline static void	log_st(uint32_t cursor_id, int32_t r_id, int32_t addr)
 
 void				op_st(t_vm *vm, t_cursor *cursor)
 {
-	int32_t		r_id;
-	int32_t		r_value;
-	int32_t		addr;
+	int32_t	r_id;
+	int32_t	r_value;
+	int32_t	addr;
 
 	cursor->step += (OP_CODE_LEN + ARGS_CODE_LEN);
 	r_id = get_byte(vm, cursor->pc, cursor->step);

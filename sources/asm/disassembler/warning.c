@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   warning.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 18:01:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:15:08 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/14 19:18:51 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/15 12:23:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar.h"
+#include "asm_disasm.h"
+#include "ft_printf.h"
 
-void	free_players(t_player **players, int32_t players_num)
+void	name_warning(size_t pos)
 {
-	int32_t id;
+	int32_t	prefix;
 
-	id = 1;
-	while (id <= players_num)
-	{
-		ft_strdel(&(players[INDEX(id)]->name));
-		ft_strdel(&(players[INDEX(id)]->comment));
-		ft_memdel((void **)&(players[INDEX(id)]->code));
-		ft_memdel((void **)&players[INDEX(id)]);
-		id++;
-	}
+	prefix = 4;
+	ft_dprintf(2, "Name was completed with not null bytes — [%zu]\n",
+																prefix + pos);
+}
+
+void	comment_warning(size_t pos)
+{
+	int32_t	prefix;
+
+	prefix = 4 + PROG_NAME_LENGTH + 4 + 4;
+	ft_dprintf(2, "Comment was completed with not null bytes — [%zu]\n",
+																prefix + pos);
 }

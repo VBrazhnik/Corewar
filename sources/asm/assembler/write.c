@@ -6,16 +6,17 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/07 11:37:59 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/09 05:49:21 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-#include "asm_error_msg.h"
+#include "asm_asm.h"
+#include "asm_error.h"
 #include <fcntl.h>
 #include <unistd.h>
 
-void		write_file(int fd, t_parser *parser)
+void		write_bytecode_file(int fd, t_parser *parser)
 {
 	int32_t	len;
 	int32_t	pos;

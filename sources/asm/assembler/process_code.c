@@ -6,14 +6,15 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 23:00:12 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/13 03:50:52 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-#include "asm_error_msg.h"
+#include "asm_asm.h"
+#include "asm_error.h"
 
-void	process_label(t_parser *parser, t_token **current)
+static void		process_label(t_parser *parser, t_token **current)
 {
 	t_label	*label;
 	char	*name;
@@ -28,7 +29,7 @@ void	process_label(t_parser *parser, t_token **current)
 	ft_strdel(&name);
 }
 
-int8_t	process_args(t_parser *parser, t_token **current, t_op *op)
+static int8_t	process_args(t_parser *parser, t_token **current, t_op *op)
 {
 	int		arg_num;
 	int8_t	types_code;
@@ -56,7 +57,7 @@ int8_t	process_args(t_parser *parser, t_token **current, t_op *op)
 	return (types_code);
 }
 
-void	process_operator(t_parser *parser, t_token **current)
+static void		process_operator(t_parser *parser, t_token **current)
 {
 	t_op	*op;
 	int8_t	types_code;
@@ -75,14 +76,12 @@ void	process_operator(t_parser *parser, t_token **current)
 		operator_error((*current)->content);
 }
 
-void	process_code(t_parser *parser, t_token **current)
+void			process_asm_code(t_parser *parser, t_token **current)
 {
-	static size_t	code_size = 0;
-
 	while ((*current)->type != END)
 	{
-		if (parser->pos >= code_size)
-			update_code_buff(parser, &code_size);
+		if (parser->pos >= parser->code_size)
+			update_code_buff(parser);
 		parser->op_pos = parser->pos;
 		if ((*current)->type == LABEL)
 		{
@@ -90,9 +89,7 @@ void	process_code(t_parser *parser, t_token **current)
 			(*current) = (*current)->next;
 		}
 		if ((*current)->type == OPERATOR)
-		{
 			process_operator(parser, current);
-		}
 		if ((*current)->type == NEW_LINE)
 			(*current) = (*current)->next;
 		else

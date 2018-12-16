@@ -23,10 +23,10 @@ inline static void	log_or(uint32_t cursor_id,
 
 void				op_or(t_vm *vm, t_cursor *cursor)
 {
-	int32_t		value_1;
-	int32_t		value_2;
-	int32_t		value;
-	int32_t		r_id;
+	int32_t	value_1;
+	int32_t	value_2;
+	int32_t	value;
+	int32_t	r_id;
 
 	cursor->step += OP_CODE_LEN + ARGS_CODE_LEN;
 	value_1 = get_op_arg(vm, cursor, 1, true);

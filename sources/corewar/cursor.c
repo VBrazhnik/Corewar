@@ -1,39 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   token.c                                            :+:      :+:    :+:   */
+/*   cursor.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 00:12:04 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/12 01:09:04 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/16 16:14:30 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/16 16:20:20 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "asm.h"
+#include "corewar.h"
 
-void	add_token(t_token **list, t_token *new)
+void	add_cursor(t_cursor **list, t_cursor *new)
 {
-	t_token	*current;
+	if (new)
+		new->next = *list;
+	*list = new;
+}
 
-	if (list)
+void	set_cursors(t_vm *vm)
+{
+	int32_t		id;
+	uint32_t	pc;
+
+	id = 1;
+	pc = 0;
+	while (id <= vm->players_num)
 	{
-		if (*list)
-		{
-			current = *list;
-			while (current->next)
-				current = current->next;
-			if (current->type == NEW_LINE && new->type == NEW_LINE)
-				ft_memdel((void **)&new);
-			else
-				current->next = new;
-		}
-		else
-		{
-			if (new->type == NEW_LINE)
-				ft_memdel((void **)&new);
-			else
-				*list = new;
-		}
+		add_cursor(&(vm->cursors), init_cursor(-id, pc));
+		vm->cursors_num++;
+		pc += MEM_SIZE / vm->players_num;
+		id++;
 	}
 }

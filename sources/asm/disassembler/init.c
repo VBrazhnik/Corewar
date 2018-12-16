@@ -1,36 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   filename.c                                         :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/11 23:26:44 by vbrazhni          #+#    #+#             */
+/*   Created: 2018/12/14 11:38:52 by vbrazhni          #+#    #+#             */
 /*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-#include "asm_asm.h"
+#include "asm_disasm.h"
 #include "asm_error.h"
 
-t_bool	is_filename(const char *filename, const char *ext)
+t_parser	*init_bytecode_parser(int fd)
 {
-	if (filename && ext && ft_strlen(filename) >= ft_strlen(ext))
-		return (!ft_strcmp(ft_strchr(filename, '\0') - ft_strlen(ext), ext));
-	else
-		return (false);
+	t_parser *parser;
+
+	if (!(parser = (t_parser *)ft_memalloc(sizeof(t_parser))))
+		terminate(ERR_PARSER_INIT);
+	parser->fd = fd;
+	parser->name = NULL;
+	parser->comment = NULL;
+	parser->code_size = 0;
+	parser->code = NULL;
+	parser->pos = 0;
+	parser->statements = NULL;
+	return (parser);
 }
 
-char	*replace_extension(char *filename, char *old, char *new)
+t_statement	*init_statement(void)
 {
-	char	*basename;
+	t_statement *statement;
 
-	basename = ft_strsub(filename, 0, ft_strlen(filename) - ft_strlen(old));
-	if (!basename)
-		terminate(ERR_STR_INIT);
-	if (!(filename = ft_strjoin(basename, new)))
-		terminate(ERR_STR_INIT);
-	ft_strdel(&basename);
-	return (filename);
+	if (!(statement = (t_statement *)ft_memalloc(sizeof(t_statement))))
+		terminate(ERR_STATEMENT_INIT);
+	statement->op = NULL;
+	statement->next = NULL;
+	return (statement);
 }

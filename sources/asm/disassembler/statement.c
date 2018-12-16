@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free.c                                             :+:      :+:    :+:   */
+/*   statement.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/29 18:01:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:15:08 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/15 17:13:11 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/15 17:13:11 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar.h"
+#include "asm_disasm.h"
 
-void	free_players(t_player **players, int32_t players_num)
+void	add_statement(t_statement **list, t_statement *new)
 {
-	int32_t id;
+	t_statement *current;
 
-	id = 1;
-	while (id <= players_num)
+	if (list)
 	{
-		ft_strdel(&(players[INDEX(id)]->name));
-		ft_strdel(&(players[INDEX(id)]->comment));
-		ft_memdel((void **)&(players[INDEX(id)]->code));
-		ft_memdel((void **)&players[INDEX(id)]);
-		id++;
+		if (*list)
+		{
+			current = *list;
+			while (current->next)
+				current = current->next;
+			current->next = new;
+		}
+		else
+			*list = new;
 	}
 }

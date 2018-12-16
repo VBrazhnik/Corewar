@@ -28,9 +28,9 @@ inline static void	log_lldi(t_cursor *cursor,
 
 void				op_lldi(t_vm *vm, t_cursor *cursor)
 {
-	int32_t		addr_1;
-	int32_t		addr_2;
-	int32_t		r_id;
+	int32_t	addr_1;
+	int32_t	addr_2;
+	int32_t	r_id;
 
 	cursor->step += OP_CODE_LEN + ARGS_CODE_LEN;
 	addr_1 = get_op_arg(vm, cursor, 1, true);

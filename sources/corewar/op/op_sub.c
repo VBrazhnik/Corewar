@@ -23,10 +23,10 @@ inline static void	log_sub(uint32_t cursor_id,
 
 void				op_sub(t_vm *vm, t_cursor *cursor)
 {
-	int32_t		r1_id;
-	int32_t		r2_id;
-	int32_t		r3_id;
-	int32_t		value;
+	int32_t	r1_id;
+	int32_t	r2_id;
+	int32_t	r3_id;
+	int32_t	value;
 
 	cursor->step += (OP_CODE_LEN + ARGS_CODE_LEN);
 	r1_id = get_byte(vm, cursor->pc, cursor->step);
