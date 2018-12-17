@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 14:36:23 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 19:43:19 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 11:19:40 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,15 +69,21 @@ void					validate_name(t_parser *parser);
 
 void					validate_comment(t_parser *parser);
 
+void					validate_types_code(t_parser *parser,
+											int8_t args_types_code,
+											int args_num);
+
 t_bool					is_arg_types_valid(t_statement *statement);
 
 /*
 ** Warning
 */
 
-void					name_warning(size_t i);
+void					name_warning(size_t pos);
 
-void					comment_warning(size_t i);
+void					comment_warning(size_t pos);
+
+void					types_code_warning(size_t pos);
 
 /*
 ** Process
@@ -113,6 +119,10 @@ void					free_bytecode_parser(t_parser **parser);
 void					op_code_error(t_parser *parser);
 
 void					arg_types_code_error(t_parser *parser);
+
+void					length_error(t_parser *parser);
+
+void					register_error(t_parser *parser);
 
 /*
 ** Utils

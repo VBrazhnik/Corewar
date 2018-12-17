@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 07:34:23 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 15:25:08 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,62 +14,50 @@
 #include "asm_asm.h"
 #include "asm_error.h"
 
-int		is_whitespace(int c)
-{
-	return (c == '\t' ||
-			c == '\v' ||
-			c == '\f' ||
-			c == '\r' ||
-			c == ' ');
-}
-
-t_bool	is_delimiter(int c)
-{
-	return (c == '\0'
-			|| c == '\n'
-			|| is_whitespace(c)
-			|| c == COMMAND_CHAR
-			|| c == '\"'
-			|| c == DIRECT_CHAR
-			|| c == SEPARATOR_CHAR);
-}
-
-t_bool	is_register(const char *arg)
-{
-	int	i;
-
-	i = 0;
-	if (ft_strlen(arg) >= 2 && ft_strlen(arg) <= 3 && arg[i] == REG_CHAR)
-	{
-		i++;
-		while (ft_isdigit(arg[i]))
-			i++;
-		return (!arg[i]);
-	}
-	return (false);
-}
-
-char	*get_token_content(t_parser *parser, const char *line, unsigned start)
+char	*get_token_content(t_parser *parser, const char *row, unsigned start)
 {
 	char	*content;
 
-	if (!(content = ft_strsub(line, start, parser->column - start)))
+	if (!(content = ft_strsub(row, start, parser->column - start)))
 		terminate(ERR_STR_INIT);
 	return (content);
 }
 
-void	update_parser_position(t_parser *parser, const char *line)
+char	*join_str(char **str1, char **str2)
 {
-	parser->column++;
-	while (line[parser->column] && line[parser->column] != '\"')
+	char *result;
+
+	if (!(result = ft_strjoin(*str1, *str2)))
+		terminate(ERR_STR_INIT);
+	ft_strdel(str1);
+	ft_strdel(str2);
+	return (result);
+}
+
+void	update_parser_position(t_parser *parser, const char *row)
+{
+	unsigned i;
+
+	i = ++parser->column;
+	while (row[i] && row[i] != '\"')
 	{
-		if (line[parser->column] == '\n')
+		if (row[i] == '\n')
 		{
 			parser->row++;
 			parser->column = 0;
 		}
 		else
 			parser->column++;
+		i++;
 	}
-	parser->column++;
+}
+
+void	update_row(char **row, char *ptr)
+{
+	char *new;
+
+	if (!(new = ft_strdup(ptr)))
+		terminate(ERR_STR_INIT);
+	ft_strdel(row);
+	*row = new;
 }

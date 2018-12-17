@@ -25,7 +25,7 @@ static int32_t	parse_int32(int fd)
 	if (size == -1)
 		terminate(ERR_READ_FILE);
 	if (size < 4)
-		terminate(ERR_INVALID_CHAMPION);
+		terminate(ERR_INVALID_FILE);
 	return (bytecode_to_int32(buffer, 4));
 }
 
@@ -40,7 +40,7 @@ static char		*parse_str(int fd, size_t len)
 	if (size == -1)
 		terminate(ERR_READ_FILE);
 	if (size < (ssize_t)len)
-		terminate(ERR_INVALID_CHAMPION);
+		terminate(ERR_INVALID_FILE);
 	return (buffer);
 }
 
@@ -55,7 +55,7 @@ static uint8_t	*parse_code(int fd, size_t len)
 	if (size == -1)
 		terminate(ERR_READ_FILE);
 	if (size < (ssize_t)len || read(fd, buffer, 0) != 0)
-		terminate(ERR_INVALID_CHAMPION);
+		terminate(ERR_INVALID_FILE);
 	return (buffer);
 }
 

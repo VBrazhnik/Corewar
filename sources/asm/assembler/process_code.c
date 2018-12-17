@@ -73,7 +73,7 @@ static void		process_operator(t_parser *parser, t_token **current)
 			parser->code[parser->op_pos + 1] = types_code;
 	}
 	else
-		operator_error((*current)->content);
+		operator_error((*current));
 }
 
 void			process_asm_code(t_parser *parser, t_token **current)

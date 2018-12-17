@@ -31,7 +31,7 @@ void	assemble(char *filename)
 	process_info(parser, &current);
 	process_asm_code(parser, &current);
 	replace_mentions(parser);
-	filename = replace_extension(filename, ".s", ".cot");
+	filename = replace_extension(filename, ".s", ".cor");
 	if ((fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644)) == -1)
 		terminate(ERR_CREATE_FILE);
 	write_bytecode_file(fd, parser);

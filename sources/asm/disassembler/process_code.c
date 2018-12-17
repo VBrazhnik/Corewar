@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 19:41:11 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 19:41:11 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 10:53:05 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,11 @@ static void			process_arg(t_parser *parser,
 		statement->args[i] = bytecode_to_int32(&parser->code[parser->pos],
 																		size);
 		parser->pos += size;
+		if (statement->args_types[i] == T_REG && statement->args[i] < 0)
+			register_error(parser);
 	}
 	else
-	{
-		ft_dprintf(2, "Too short at %u\n", parser->pos);
-		exit(0);
-	}
+		length_error(parser);
 }
 
 static void			process_args(t_parser *parser, t_statement *statement)
@@ -70,8 +69,11 @@ static t_statement	*process_statement(t_parser *parser)
 		process_arg_types(parser, statement);
 		if (is_arg_types_valid(statement))
 		{
-			if (statement->op->args_types_code)
+			if (statement->op->args_types_code
+				&& parser->pos < parser->code_size)
 				parser->pos++;
+			else if (statement->op->args_types_code)
+				length_error(parser);
 			process_args(parser, statement);
 		}
 		else

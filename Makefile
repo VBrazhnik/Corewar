@@ -79,6 +79,7 @@ ASM_ASSEMBLER_SOURCES_LIST = \
 	init.c\
 	get_row.c\
 	parse.c\
+	parse_is.c\
 	parse_utils.c\
 	skip.c\
 	token.c\
@@ -90,6 +91,7 @@ ASM_ASSEMBLER_SOURCES_LIST = \
 	write.c\
 	free.c\
 	error.c\
+	error_info.c\
 	utils.c
 ASM_ASSEMBLER_SOURCES = $(addprefix $(ASM_ASSEMBLER_SOURCES_DIRECTORY), $(ASM_ASSEMBLER_SOURCES_LIST))
 

@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 17:51:02 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 15:53:27 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 11:36:55 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,26 @@ void	validate_comment(t_parser *parser)
 			return ;
 		}
 		i++;
+	}
+}
+
+void	validate_types_code(t_parser *parser,
+							int8_t args_types_code,
+							int args_num)
+{
+	int		arg_num;
+	int8_t	type;
+
+	arg_num = 4;
+	while (arg_num > args_num)
+	{
+		type = (int8_t)((args_types_code >> (2 * (4 - arg_num))) & 0x3);
+		if (type != 0)
+		{
+			types_code_warning((size_t)parser->pos);
+			return ;
+		}
+		arg_num--;
 	}
 }
 

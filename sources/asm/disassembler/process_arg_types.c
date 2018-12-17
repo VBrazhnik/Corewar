@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 19:39:40 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 19:39:40 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 11:15:17 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void			process_arg_types(t_parser *parser, t_statement *statement)
 			set_arg_type((int8_t)((args_types_code & 0x30) >> 4), 2, statement);
 		if (statement->op->args_num >= 3)
 			set_arg_type((int8_t)((args_types_code & 0xC) >> 2), 3, statement);
+		validate_types_code(parser, args_types_code, statement->op->args_num);
 	}
 	else
 		statement->args_types[0] = statement->op->args_types[0];

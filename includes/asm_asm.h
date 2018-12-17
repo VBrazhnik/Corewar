@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 14:35:04 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 19:44:07 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 15:16:32 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ t_mention				*init_mention(t_parser *parser, size_t size);
 ** Parse
 */
 
-int						get_row(int fd, char **line);
+int						get_row(int fd, char **row);
 
 void					parse_asm(t_parser *parser);
 
@@ -192,19 +192,23 @@ t_bool					is_delimiter(int c);
 t_bool					is_register(const char *arg);
 
 char					*get_token_content(t_parser *parser,
-											const char *line,
+											const char *row,
 											unsigned start);
 
+char					*join_str(char **str1, char **str2);
+
 void					update_parser_position(t_parser *parser,
-											const char *line);
+											const char *row);
+
+void					update_row(char **row, char *ptr);
 
 /*
 ** Skip
 */
 
-void					skip_whitespaces(t_parser *parser, const char *line);
+void					skip_whitespaces(t_parser *parser, const char *row);
 
-void					skip_comment(t_parser *parser, const char *line);
+void					skip_comment(t_parser *parser, const char *row);
 
 /*
 ** Token
@@ -275,7 +279,7 @@ void					comment_error(void);
 
 void					label_error(t_label *label);
 
-void					operator_error(char *name);
+void					operator_error(t_token *token);
 
 void					arg_type_error(t_op *op, int arg_num, t_parser *parser);
 

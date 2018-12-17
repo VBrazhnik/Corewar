@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 17:58:16 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 17:58:26 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 10:36:53 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,11 @@ static void	set_players(t_vm *vm, t_player *list)
 	update_players_ids(list);
 	while (id <= vm->players_num)
 	{
-		if (!(vm->players[id - 1] = find_player(list, id)))
+		if (!(vm->players[INDEX(id)] = find_player(list, id)))
 			print_help();
 		id++;
 	}
+	vm->last_alive = vm->players[INDEX(vm->players_num)];
 }
 
 void		parse_corewar_args(int argc, char **argv, t_vm *vm)

@@ -13,14 +13,14 @@
 #include "asm_asm.h"
 #include <unistd.h>
 
-static int	divide_str(char **str, char **line)
+static int	divide_str(char **str, char **row)
 {
 	char	*new;
 	char	*div;
 
 	div = ft_strchrs(*str, '\n');
 	div++;
-	if (!(*line = ft_strsub(*str, 0, div - *str)))
+	if (!(*row = ft_strsub(*str, 0, div - *str)))
 		return (-1);
 	if (!ft_strlen(div))
 	{
@@ -34,20 +34,20 @@ static int	divide_str(char **str, char **line)
 	return ((new) ? 1 : -1);
 }
 
-int			get_row(const int fd, char **line)
+int			get_row(const int fd, char **row)
 {
 	static char		*str = NULL;
 	char			buff[BUFF_SIZE + 1];
 	ssize_t			size;
 	char			*tmp;
 
-	if (fd < 0 || !line || read(fd, buff, 0) < 0)
+	if (fd < 0 || !row || read(fd, buff, 0) < 0)
 		return (-1);
 	while (!ft_strchrs(str, '\n'))
 	{
 		if (!(size = read(fd, buff, BUFF_SIZE)))
 		{
-			if (!(*line = str))
+			if (!(*row = str))
 				return (0);
 			str = NULL;
 			return (1);
@@ -59,5 +59,5 @@ int			get_row(const int fd, char **line)
 		if (!str)
 			return (-1);
 	}
-	return (divide_str(&str, line));
+	return (divide_str(&str, row));
 }

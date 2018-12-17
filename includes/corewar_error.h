@@ -20,11 +20,11 @@
 
 # define ERR_VM_INIT			"ERROR: Can\'t initialize virtual machine"
 
-# define ERR_OPEN_CHAMPION		"ERROR: Can\'t open file with champion"
+# define ERR_OPEN_FILE			"ERROR: Can\'t open file with champion"
 
-# define ERR_READ_CHAMPION		"ERROR: Can\'t read file with champion"
+# define ERR_READ_FILE			"ERROR: Can\'t read file with champion"
 
-# define ERR_INVALID_CHAMPION	"ERROR: Invalid file with champion"
+# define ERR_INVALID_FILE		"ERROR: Invalid file with champion"
 
 # define ERR_INVALID_MAGIC		"ERROR: Invalid magic header"
 

@@ -29,7 +29,7 @@ void	disassemble(char *filename)
 	validate_name(parser);
 	validate_comment(parser);
 	process_exec_code(parser);
-	filename = replace_extension(filename, ".cor", ".l");
+	filename = replace_extension(filename, ".cor", ".s");
 	if ((fd = open(filename, O_CREAT | O_TRUNC | O_WRONLY, 0644)) == -1)
 		terminate(ERR_CREATE_FILE);
 	write_asm_file(fd, parser);

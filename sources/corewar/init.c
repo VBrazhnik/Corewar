@@ -83,7 +83,6 @@ void		init_arena(t_vm *vm)
 	pc = 0;
 	while (id <= vm->players_num)
 	{
-		vm->last_alive = vm->players[INDEX(id)];
 		ft_memcpy(&(vm->arena[pc]),
 			vm->players[INDEX(id)]->code,
 			(size_t)(vm->players[INDEX(id)]->code_size));

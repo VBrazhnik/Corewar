@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   skip.c                                             :+:      :+:    :+:   */
+/*   error_info.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/06 06:34:57 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/14 08:24:57 by vbrazhni         ###   ########.fr       */
+/*   Created: 2018/12/17 15:20:35 by vbrazhni          #+#    #+#             */
+/*   Updated: 2018/12/17 15:21:48 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm_asm.h"
+#include "ft_printf.h"
 
-void	skip_whitespaces(t_parser *parser, const char *row)
+void	name_error(void)
 {
-	while (is_whitespace(row[parser->column]))
-		parser->column++;
+	ft_dprintf(2, "Champion name too long (Max length %u)\n", PROG_NAME_LENGTH);
+	exit(1);
 }
 
-void	skip_comment(t_parser *parser, const char *row)
+void	comment_error(void)
 {
-	if (row[parser->column] == COMMENT_CHAR
-		|| row[parser->column] == ALT_COMMENT_CHAR)
-		while (row[parser->column] && row[parser->column] != '\n')
-			parser->column++;
+	ft_dprintf(2, "Champion comment too long (Max length %u)\n",
+																COMMENT_LENGTH);
+	exit(1);
 }

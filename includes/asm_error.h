@@ -32,7 +32,7 @@
 
 # define ERR_CREATE_FILE		"ERROR: Can\'t create file"
 
-# define ERR_INVALID_CHAMPION	"ERROR: Invalid file with champion"
+# define ERR_INVALID_FILE		"ERROR: Invalid file with champion"
 
 # define ERR_INVALID_MAGIC		"ERROR: Invalid magic header"
 

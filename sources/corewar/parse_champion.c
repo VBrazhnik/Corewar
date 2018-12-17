@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:59:53 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 17:46:13 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 15:48:02 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static int32_t	parse_int32(int fd)
 
 	size = read(fd, &buffer, 4);
 	if (size == -1)
-		terminate(ERR_READ_CHAMPION);
+		terminate(ERR_READ_FILE);
 	if (size < 4)
-		terminate(ERR_INVALID_CHAMPION);
+		terminate(ERR_INVALID_FILE);
 	return (bytecode_to_int32(buffer, 4));
 }
 
@@ -59,9 +59,9 @@ static char		*parse_str(int fd, size_t len)
 		terminate(ERR_STR_INIT);
 	size = read(fd, buffer, len);
 	if (size == -1)
-		terminate(ERR_READ_CHAMPION);
+		terminate(ERR_READ_FILE);
 	if (size < (ssize_t)len)
-		terminate(ERR_INVALID_CHAMPION);
+		terminate(ERR_INVALID_FILE);
 	return (buffer);
 }
 
@@ -74,9 +74,9 @@ static uint8_t	*parse_code(int fd, size_t len)
 		terminate(ERR_CODE_INIT);
 	size = read(fd, buffer, len);
 	if (size == -1)
-		terminate(ERR_READ_CHAMPION);
+		terminate(ERR_READ_FILE);
 	if (size < (ssize_t)len || read(fd, buffer, 0) != 0)
-		terminate(ERR_INVALID_CHAMPION);
+		terminate(ERR_INVALID_FILE);
 	return (buffer);
 }
 
@@ -87,7 +87,7 @@ t_player		*parse_champion(char *filename, int id)
 
 	player = init_player(id);
 	if ((fd = open(filename, O_RDONLY)) < 0)
-		terminate(ERR_OPEN_CHAMPION);
+		terminate(ERR_OPEN_FILE);
 	if (parse_int32(fd) != COREWAR_EXEC_MAGIC)
 		terminate(ERR_INVALID_MAGIC);
 	player->name = parse_str(fd, PROG_NAME_LENGTH);

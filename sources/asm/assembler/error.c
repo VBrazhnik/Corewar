@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/12 02:12:27 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 14:25:18 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 12:23:07 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	lexical_error(t_parser *parser)
 {
 	ft_dprintf(2, "Lexical error at [%03u:%03u]\n",
 													parser->row,
-													parser->column);
+													parser->column + 1);
 	exit(1);
 }
 
@@ -27,21 +27,7 @@ void	token_error(t_token *token)
 														token->content,
 														g_type[token->type],
 														token->row,
-														token->column);
-	exit(1);
-}
-
-void	name_error(void)
-{
-	ft_dprintf(2, "Champion name too long (Max length %u)\n",
-															PROG_NAME_LENGTH);
-	exit(1);
-}
-
-void	comment_error(void)
-{
-	ft_dprintf(2, "Champion comment too long (Max length %u)\n",
-																COMMENT_LENGTH);
+														token->column + 1);
 	exit(1);
 }
 
@@ -53,15 +39,18 @@ void	label_error(t_label *label)
 	mention = label->mentions;
 	while (mention)
 	{
-		ft_dprintf(2, "\t— [%03u:%03u]\n", mention->row, mention->column);
+		ft_dprintf(2, "\t— [%03u:%03u]\n", mention->row, mention->column + 1);
 		mention = mention->next;
 	}
 	exit(1);
 }
 
-void	operator_error(char *name)
+void	operator_error(t_token *token)
 {
-	ft_dprintf(2, "Unknown operator \"%s\"\n", name);
+	ft_dprintf(2, "Unknown operator \"%s\"at [%03u:%03u]\n",
+															token->content,
+															token->row,
+															token->column + 1);
 	exit(1);
 }
 
@@ -72,6 +61,6 @@ void	arg_type_error(t_op *op, int arg_num, t_parser *parser)
 															arg_num + 1,
 															op->name,
 															parser->row,
-															parser->column);
+															parser->column + 1);
 	exit(1);
 }
