@@ -38,7 +38,7 @@ void	update_parser_position(t_parser *parser, const char *row)
 {
 	unsigned i;
 
-	i = ++parser->column;
+	i = ++(parser->column);
 	while (row[i] && row[i] != '\"')
 	{
 		if (row[i] == '\n')

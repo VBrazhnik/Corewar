@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 19:41:11 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/17 10:53:05 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/19 18:01:42 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void			process_args(t_parser *parser, t_statement *statement)
 
 static t_statement	*process_statement(t_parser *parser)
 {
-	t_statement *statement;
+	t_statement	*statement;
 	uint8_t		op_code;
 
 	statement = init_statement();
@@ -66,14 +66,13 @@ static t_statement	*process_statement(t_parser *parser)
 	{
 		parser->pos++;
 		statement->op = &g_op[INDEX(op_code)];
+		if (statement->op->args_types_code && parser->pos >= parser->code_size)
+			length_error(parser);
 		process_arg_types(parser, statement);
 		if (is_arg_types_valid(statement))
 		{
-			if (statement->op->args_types_code
-				&& parser->pos < parser->code_size)
+			if (statement->op->args_types_code)
 				parser->pos++;
-			else if (statement->op->args_types_code)
-				length_error(parser);
 			process_args(parser, statement);
 		}
 		else

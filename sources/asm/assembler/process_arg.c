@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 03:11:14 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/19 17:06:04 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static void		process_mention(t_parser *parser, t_token *current, t_op *op)
 		add_label(&(parser->labels), label);
 	}
 	ft_strdel(&name);
-	add_mention(&label->mentions, init_mention(parser, size));
+	add_mention(&label->mentions, init_mention(parser, current, size));
 	parser->pos += size;
 }
 
@@ -58,12 +58,12 @@ static void		process_num(t_parser *parser, t_token *current, t_op *op)
 	if (size == 2)
 		int32_to_bytecode(parser->code,
 						parser->pos,
-						(int16_t)ft_atoi(&current->content[start]),
+						(int16_t)ft_atoi32(&current->content[start]),
 						size);
 	else
 		int32_to_bytecode(parser->code,
 						parser->pos,
-						ft_atoi(&current->content[start]),
+						ft_atoi32(&current->content[start]),
 						size);
 	parser->pos += size;
 }
@@ -72,7 +72,7 @@ static void		process_register(t_parser *parser, t_token *current)
 {
 	int32_to_bytecode(parser->code,
 						parser->pos,
-						ft_atoi(&current->content[1]),
+						(int8_t)ft_atoi(&current->content[1]),
 						1);
 	parser->pos += 1;
 }

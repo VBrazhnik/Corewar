@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/09 00:56:00 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/17 15:35:17 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/19 16:05:09 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,9 @@ void	parse_symbols(t_parser *parser,
 					unsigned start,
 					t_token *token)
 {
-	unsigned	column;
+	unsigned column;
 
+	token->column = start;
 	column = parser->column;
 	while (row[parser->column]
 		&& ft_strchr(LABEL_CHARS, row[parser->column]))
@@ -51,18 +52,17 @@ void	parse_num(t_parser *parser,
 {
 	unsigned	column;
 
+	token->column = start;
 	if (row[parser->column] == '-')
 		parser->column++;
 	column = parser->column;
 	while (ft_isdigit(row[parser->column]))
 		parser->column++;
-	if (parser->column - column)
+	if ((parser->column - column)
+		&& (token->type == DIRECT || is_delimiter(row[parser->column])))
 	{
-		if (token->type == DIRECT || is_delimiter(row[parser->column]))
-		{
-			token->content = get_token_content(parser, row, start);
-			add_token(&parser->tokens, token);
-		}
+		token->content = get_token_content(parser, row, start);
+		add_token(&parser->tokens, token);
 	}
 	else if (token->type != DIRECT)
 	{
@@ -83,6 +83,7 @@ void	parse_str(t_parser *parser,
 	ssize_t	size;
 	char	*str;
 
+	token->column = start;
 	size = 1;
 	while ((begin = ft_strchr(&((*row)[start]), '\"'))
 		&& (end = ft_strrchr(&((*row)[start]), '\"'))
@@ -109,22 +110,22 @@ void	parse_token(t_parser *parser, char **row)
 	else if (*(*row + parser->column) == '\n' && ++parser->column)
 		add_token(&parser->tokens, init_token(parser, NEW_LINE));
 	else if (*(*row + parser->column) == '.')
-		parse_symbols(parser, *row,
-				parser->column++, init_token(parser, COMMAND));
+		parse_symbols(parser, *row, parser->column++,
+					init_token(parser, COMMAND));
 	else if (*(*row + parser->column) == DIRECT_CHAR && ++parser->column)
 	{
 		if (*(*row + parser->column) == LABEL_CHAR && ++parser->column)
-			parse_symbols(parser, *row,
-					parser->column - 2, init_token(parser, DIRECT_LABEL));
+			parse_symbols(parser, *row, parser->column - 2,
+					init_token(parser, DIRECT_LABEL));
 		else
-			parse_num(parser, *row,
-					parser->column - 1, init_token(parser, DIRECT));
+			parse_num(parser, *row, parser->column - 1,
+					init_token(parser, DIRECT));
 	}
 	else if (*(*row + parser->column) == '\"')
 		parse_str(parser, row, parser->column, init_token(parser, STRING));
 	else if (*(*row + parser->column) == LABEL_CHAR)
-		parse_symbols(parser, *row,
-				parser->column++, init_token(parser, INDIRECT_LABEL));
+		parse_symbols(parser, *row, parser->column++,
+					init_token(parser, INDIRECT_LABEL));
 	else
 		parse_num(parser, *row, parser->column, init_token(parser, INDIRECT));
 }

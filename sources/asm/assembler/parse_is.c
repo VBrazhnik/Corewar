@@ -42,7 +42,7 @@ t_bool	is_register(const char *arg)
 		i++;
 		while (ft_isdigit(arg[i]))
 			i++;
-		return (!arg[i]);
+		return (!arg[i] && ft_atoi(&arg[1]) > 0);
 	}
 	return (false);
 }

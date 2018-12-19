@@ -16,7 +16,7 @@
 
 static void	process_name(t_parser *parser, t_token **current)
 {
-	if (*current && (*current)->type == STRING)
+	if ((*current)->type == STRING)
 	{
 		if (!(parser->name = ft_strsub((*current)->content,
 					1, ft_strlen((*current)->content) - 2)))
@@ -31,7 +31,7 @@ static void	process_name(t_parser *parser, t_token **current)
 
 static void	process_comment(t_parser *parser, t_token **current)
 {
-	if (*current && (*current)->type == STRING)
+	if ((*current)->type == STRING)
 	{
 		if (!(parser->comment = ft_strsub((*current)->content,
 					1, ft_strlen((*current)->content) - 2)))

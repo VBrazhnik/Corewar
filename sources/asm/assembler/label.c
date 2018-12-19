@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/06 06:42:08 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/14 08:24:57 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/19 16:34:35 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,17 +70,20 @@ void	replace_mentions(t_parser *file)
 	label = file->labels;
 	while (label)
 	{
-		if (label->op_pos == -1 && label->mentions)
+		if (label->op_pos == -1)
 			label_error(label);
 		else
 		{
 			mention = label->mentions;
 			while (mention)
 			{
-				int32_to_bytecode(file->code,
-									mention->pos,
-									label->op_pos - mention->op_pos,
-									mention->size);
+				if (mention->size == 2)
+					int32_to_bytecode(file->code, mention->pos,
+								(int16_t)(label->op_pos - mention->op_pos),
+								mention->size);
+				else
+					int32_to_bytecode(file->code, mention->pos,
+						label->op_pos - mention->op_pos, mention->size);
 				mention = mention->next;
 			}
 		}

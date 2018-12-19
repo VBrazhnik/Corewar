@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 14:35:04 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/17 15:16:32 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/19 15:56:57 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,7 +171,9 @@ t_token					*init_token(t_parser *parser, t_type type);
 
 t_label					*init_label(char *name, int op_pos);
 
-t_mention				*init_mention(t_parser *parser, size_t size);
+t_mention				*init_mention(t_parser *parser,
+										t_token *token,
+										size_t size);
 
 /*
 ** Parse

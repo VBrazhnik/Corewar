@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/05 23:11:01 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 19:47:53 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/19 16:12:30 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,14 @@ t_label		*init_label(char *name, int op_pos)
 	return (label);
 }
 
-t_mention	*init_mention(t_parser *parser, size_t size)
+t_mention	*init_mention(t_parser *parser, t_token *token, size_t size)
 {
 	t_mention	*mention;
 
 	if (!(mention = (t_mention *)ft_memalloc(sizeof(t_mention))))
 		terminate(ERR_MENTION_INIT);
-	mention->row = parser->row;
-	mention->column = parser->column;
+	mention->row = token->row;
+	mention->column = token->column;
 	mention->pos = parser->pos;
 	mention->op_pos = parser->op_pos;
 	mention->size = size;
@@ -71,7 +71,10 @@ t_token		*init_token(t_parser *parser, t_type type)
 	token->content = NULL;
 	token->type = type;
 	token->row = parser->row;
-	token->column = parser->column;
+	if (type == SEPARATOR || type == NEW_LINE)
+		token->column = parser->column - 1;
+	else
+		token->column = parser->column;
 	token->next = NULL;
 	return (token);
 }

@@ -49,7 +49,7 @@ static uint8_t	*parse_code(int fd, size_t len)
 	ssize_t	size;
 	uint8_t	*buffer;
 
-	if (!(buffer = malloc(len)))
+	if (!(buffer = ft_memalloc(len)))
 		terminate(ERR_CODE_INIT);
 	size = read(fd, buffer, len);
 	if (size == -1)
@@ -66,8 +66,7 @@ void			parse_bytecode(t_parser *parser)
 	parser->name = parse_str(parser->fd, PROG_NAME_LENGTH);
 	if (parse_int32(parser->fd) != 0)
 		terminate(ERR_NO_NULL);
-	if ((parser->code_size = parse_int32(parser->fd)) < 0 ||
-		parser->code_size > CHAMP_MAX_SIZE)
+	if ((parser->code_size = parse_int32(parser->fd)) < 0)
 		terminate(ERR_INVALID_CODE_SIZE);
 	parser->comment = parse_str(parser->fd, COMMENT_LENGTH);
 	if (parse_int32(parser->fd) != 0)

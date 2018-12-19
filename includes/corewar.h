@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:30:19 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/17 16:47:09 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,10 @@ typedef struct			s_cursor
 ** cycles_after_check — number of cycles that was passed after last rules check
 ** checks_num         — game parameter
 ** vs                 — visualizer
-** dump               — cycle's number after which dump will be created
+** dump_cycle         — cycle's number after which dump of arena will be created
+** dump_print_mode    — print mode of dump (32/64 bytes per line)
+** show_cycle         — number of cycles after which arena will be shown
+** show_print_mode    — print mode of show (32/64 bytes per line)
 ** display_aff        — flag that reports display output of aff operator or not
 ** log                — number that reports about log level.
 **                      If log is assigned as -1, it means that log doesn't
