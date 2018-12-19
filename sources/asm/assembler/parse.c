@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/09 00:56:00 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/19 16:05:09 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/19 22:06:51 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,16 +78,13 @@ void	parse_str(t_parser *parser,
 					unsigned start,
 					t_token *token)
 {
-	char	*begin;
 	char	*end;
 	ssize_t	size;
 	char	*str;
 
 	token->column = start;
 	size = 1;
-	while ((begin = ft_strchr(&((*row)[start]), '\"'))
-		&& (end = ft_strrchr(&((*row)[start]), '\"'))
-		&& begin == end
+	while (!(end = ft_strchr(&((*row)[start + 1]), '\"'))
 		&& (size = get_row(parser->fd, &str)) > 0)
 		*row = join_str(row, &str);
 	update_parser_position(parser, *row);
@@ -95,7 +92,7 @@ void	parse_str(t_parser *parser,
 		terminate(ERR_READ_FILE);
 	if (size == 0)
 		lexical_error(parser);
-	if (!(token->content = ft_strsub(*row, start, end + 1 - begin)))
+	if (!(token->content = ft_strsub(*row, start, end + 1 - &((*row)[start]))))
 		terminate(ERR_STR_INIT);
 	if (end - parser->column != *row)
 		update_row(row, end - parser->column);
@@ -135,9 +132,10 @@ void	parse_asm(t_parser *parser)
 	ssize_t	size;
 	char	*row;
 
-	while ((size = get_row(parser->fd, &row)) > 0 && ++parser->row)
+	while (++parser->row
+		&& !(parser->column = 0)
+		&& (size = get_row(parser->fd, &row)) > 0)
 	{
-		parser->column = 0;
 		while (row[parser->column])
 		{
 			skip_whitespaces(parser, row);
