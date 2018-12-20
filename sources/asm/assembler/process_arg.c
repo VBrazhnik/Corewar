@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/13 03:11:14 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/19 17:06:04 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/20 21:00:47 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ int8_t			process_arg(t_parser *parser,
 
 	type = get_arg_type((*current)->type);
 	if (!(op->args_types[arg_num] & type))
-		arg_type_error(op, arg_num, parser);
+		arg_type_error(op, arg_num, *current);
 	if ((*current)->type == INDIRECT_LABEL
 		|| (*current)->type == DIRECT_LABEL)
 		process_mention(parser, *current, op);

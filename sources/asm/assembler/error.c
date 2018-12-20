@@ -54,13 +54,13 @@ void	operator_error(t_token *token)
 	exit(1);
 }
 
-void	arg_type_error(t_op *op, int arg_num, t_parser *parser)
+void	arg_type_error(t_op *op, int arg_num, t_token *token)
 {
 	ft_dprintf(2, "Invalid type of parameter #%d for instruction \"%s\""\
 													" at [%03u:%03u]\n",
 															arg_num + 1,
 															op->name,
-															parser->row,
-															parser->column + 1);
+															token->row,
+															token->column + 1);
 	exit(1);
 }

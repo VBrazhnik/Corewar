@@ -283,7 +283,7 @@ void					label_error(t_label *label);
 
 void					operator_error(t_token *token);
 
-void					arg_type_error(t_op *op, int arg_num, t_parser *parser);
+void					arg_type_error(t_op *op, int arg_num, t_token *token);
 
 /*
 ** Utils
