@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/17 15:14:56 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/17 15:14:56 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/20 22:14:27 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ t_bool	is_delimiter(int c)
 			|| c == COMMAND_CHAR
 			|| c == '\"'
 			|| c == DIRECT_CHAR
-			|| c == SEPARATOR_CHAR);
+			|| c == SEPARATOR_CHAR
+			|| c == COMMENT_CHAR
+			|| c == ALT_COMMENT_CHAR);
 }
 
 t_bool	is_register(const char *arg)
