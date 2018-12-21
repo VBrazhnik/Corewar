@@ -24,4 +24,14 @@ void			op_aff(t_vm *vm, t_cursor *cursor)
 	cursor->step += REG_LEN;
 	if (vm->display_aff)
 		printf("Aff: %c\n", (char)value);
+	if (vm->vs)
+	{
+		vm->vs->aff_symbol = (char)value;
+		if (cursor->reg[INDEX(1)] >= 1 && cursor->reg[INDEX(1)] <= 4)
+			vm->vs->aff_owner = FT_ABS(cursor->reg[INDEX(1)]);
+		else
+			vm->vs->aff_owner = vm->vs->map[cursor->pc].value;
+		vm->vs->map[cursor->pc].value = COLOR_YELLOW;
+		vm->vs->map[cursor->pc].time_to_wait = CYCLE_TO_WAIT;
+	}
 }

@@ -38,4 +38,6 @@
 
 # define ERR_PLAYERS_NUM		"ERROR: Invalid number of players"
 
+# define ERR_VS_INIT			"ERROR: Can\'t initialize visualiser"
+
 #endif

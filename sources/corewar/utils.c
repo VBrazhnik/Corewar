@@ -35,3 +35,23 @@ inline int8_t	get_byte(t_vm *vm, int32_t pc, int32_t step)
 {
 	return (vm->arena[calc_addr(pc + step)]);
 }
+
+void			visual_interface_indexation(t_vm *vm,
+				t_cursor *cursor, int32_t addr, int32_t size)
+{
+	uint32_t	value;
+
+	value = 0;
+	if (cursor->player >= MIN_PLAYER_ID && cursor->player <= vm->players_num)
+		value = cursor->player;
+	if (value)
+	{
+		while (size)
+		{
+			vm->vs->map[calc_addr(addr + size - 1)].value = value;
+			vm->vs->map[calc_addr(addr + size - 1)].time_to_wait =
+					CYCLE_TO_WAIT;
+			size--;
+		}
+	}
+}

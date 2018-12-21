@@ -12,10 +12,18 @@
 
 #include "ft_printf.h"
 #include "corewar_op.h"
+#include "corewar_vs_lib.h"
 
 inline static void	log_st(uint32_t cursor_id, int32_t r_id, int32_t addr)
 {
 	ft_printf("P %4d | st r%d %d\n", cursor_id, r_id, addr);
+}
+
+static void			vs_st(t_vm *vm, t_cursor *cursor, int32_t addr)
+{
+	if (vm->vs)
+		visual_interface_indexation(vm, cursor,
+				(cursor->pc + (addr % IDX_MOD)), DIR_SIZE);
 }
 
 void				op_st(t_vm *vm, t_cursor *cursor)
@@ -40,6 +48,7 @@ void				op_st(t_vm *vm, t_cursor *cursor)
 																IND_SIZE);
 		int32_to_bytecode(vm->arena, cursor->pc + (addr % IDX_MOD), r_value,
 																DIR_SIZE);
+		vs_st(vm, cursor, addr);
 		cursor->step += IND_SIZE;
 	}
 	if (vm->log & OP_LOG)

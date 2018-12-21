@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 16:04:36 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:12:20 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/21 17:58:32 by ablizniu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 t_player	*init_player(int id)
 {
-	t_player *player;
+	t_player	*player;
 
 	if (!(player = (t_player *)ft_memalloc(sizeof(t_player))))
 		terminate(ERR_PLAYER_INIT);
@@ -30,8 +30,7 @@ t_player	*init_player(int id)
 	return (player);
 }
 
-t_cursor	*init_cursor(int32_t player_id,
-						int32_t pc)
+t_cursor	*init_cursor(int32_t player_id, int32_t pc)
 {
 	t_cursor		*cursor;
 	static uint32_t	cursor_id;
@@ -47,12 +46,13 @@ t_cursor	*init_cursor(int32_t player_id,
 	cursor->pc = pc;
 	cursor->next = NULL;
 	cursor->reg[0] = player_id;
+	cursor->player = (uint8_t)FT_ABS(player_id);
 	return (cursor);
 }
 
 t_vm		*init_vm(void)
 {
-	t_vm *vm;
+	t_vm	*vm;
 
 	if (!(vm = (t_vm *)ft_memalloc(sizeof(t_vm))))
 		terminate(ERR_VM_INIT);
@@ -76,13 +76,14 @@ t_vm		*init_vm(void)
 
 void		init_arena(t_vm *vm)
 {
-	int32_t		id;
+	int			id;
 	uint32_t	pc;
 
 	id = 1;
 	pc = 0;
 	while (id <= vm->players_num)
 	{
+		vm->last_alive = vm->players[INDEX(id)];
 		ft_memcpy(&(vm->arena[pc]),
 			vm->players[INDEX(id)]->code,
 			(size_t)(vm->players[INDEX(id)]->code_size));
