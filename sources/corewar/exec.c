@@ -12,10 +12,11 @@
 
 #include "ft_printf.h"
 #include "corewar_op.h"
+#include "corewar_vs_lib.h"
 
-static void	exec_op(t_cursor *cursor, t_vm *vm)
+static void		exec_op(t_cursor *cursor, t_vm *vm)
 {
-	t_op *op;
+	t_op		*op;
 
 	if (cursor->cycles_to_exec == 0)
 		update_op_code(vm, cursor);
@@ -38,13 +39,13 @@ static void	exec_op(t_cursor *cursor, t_vm *vm)
 		}
 		else
 			cursor->step = OP_CODE_LEN;
-		move_cursor(cursor);
+		move_cursor(vm, cursor);
 	}
 }
 
-static void	exec_cycle(t_vm *vm)
+void			exec_cycle(t_vm *vm)
 {
-	t_cursor *current;
+	t_cursor	*current;
 
 	vm->cycles++;
 	vm->cycles_after_check++;
@@ -58,8 +59,10 @@ static void	exec_cycle(t_vm *vm)
 	}
 }
 
-void		exec(t_vm *vm)
+void			exec(t_vm *vm)
 {
+	if (vm->vs)
+		controller(vm);
 	while (vm->cycles_to_die > 0 && vm->cursors_num)
 	{
 		if (vm->dump_cycle == vm->cycles)

@@ -15,9 +15,9 @@
 # define COREWAR_H
 
 # include "op.h"
-# include "vs.h"
 # include "libft.h"
 # include <stdint.h>
+# include "corewar_vs.h"
 
 /*
 ** Macroses
@@ -97,6 +97,7 @@ typedef struct			s_player
 
 typedef struct			s_cursor
 {
+	uint8_t				player;
 	uint32_t			id;
 	t_bool				carry;
 	uint8_t				op_code;
@@ -205,13 +206,15 @@ void					add_cursor(t_cursor **list, t_cursor *new);
 
 void					exec(t_vm *vm);
 
+void					exec_cycle(t_vm *vm);
+
 /*
 ** Execute Utils
 */
 
 void					update_op_code(t_vm *vm, t_cursor *current);
 
-void					move_cursor(t_cursor *cursor);
+void					move_cursor(t_vm *vm, t_cursor *cursor);
 
 /*
 ** Find

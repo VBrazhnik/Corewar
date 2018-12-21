@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "corewar.h"
+#include "corewar_vs_lib.h"
 
 static void		reset_lives_nums(t_vm *vm)
 {
@@ -41,31 +41,35 @@ static t_bool	is_died(t_vm *vm, t_cursor *cursor)
 
 static void		delete_died_cursors(t_vm *vm)
 {
-	t_cursor	*delete;
-	t_cursor	*current;
+	t_cursor	*del;
+	t_cursor	*iterator;
 
 	while (vm->cursors && is_died(vm, vm->cursors))
 	{
 		if (vm->log & DEATH_LOG)
 			log_cursor_death(vm, vm->cursors);
-		delete = vm->cursors;
+		del = vm->cursors;
 		vm->cursors = (vm->cursors)->next;
-		ft_memdel((void **)&delete);
+		if (vm->vs)
+			clear_cursor(vm, del);
+		ft_memdel((void **)&del);
 		vm->cursors_num--;
 	}
-	current = vm->cursors;
-	while (current && current->next)
-		if (is_died(vm, current->next))
+	iterator = vm->cursors;
+	while (iterator && iterator->next)
+		if (is_died(vm, iterator->next))
 		{
-			delete = current->next;
+			del = iterator->next;
 			if (vm->log & DEATH_LOG)
-				log_cursor_death(vm, delete);
-			current->next = current->next->next;
-			ft_memdel((void **)&delete);
+				log_cursor_death(vm, del);
+			iterator->next = iterator->next->next;
+			if (vm->vs)
+				clear_cursor(vm, del);
+			ft_memdel((void **)&del);
 			vm->cursors_num--;
 		}
 		else
-			current = current->next;
+			iterator = iterator->next;
 }
 
 void			cycles_to_die_check(t_vm *vm)

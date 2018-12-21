@@ -6,7 +6,7 @@
 #    By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/24 18:27:10 by vbrazhni          #+#    #+#              #
-#    Updated: 2018/10/24 18:27:11 by vbrazhni         ###   ########.fr        #
+#    Updated: 2018/12/21 21:11:52 by ablizniu         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -24,7 +24,7 @@ ASM_INCLUDES = \
 	-I$(LIBFT_HEADERS)\
 	-I$(FT_PRINTF_HEADERS)
 
-COREWAR_LIBRARIES = -lftprintf -L$(FT_PRINTF_DIRECTORY)
+COREWAR_LIBRARIES = -lncurses -lftprintf -L$(FT_PRINTF_DIRECTORY)
 COREWAR_INCLUDES = \
 	-I$(HEADERS_DIRECTORY)\
 	-I$(LIBFT_HEADERS)\
@@ -58,7 +58,8 @@ COREWAR_HEADERS_LIST = \
 	op.h\
 	corewar.h\
 	corewar_error.h\
-	vs.h
+	corewar_vs.h\
+	corewar_vs_lib.h
 COREWAR_HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(COREWAR_HEADERS_LIST))
 
 # Sources
@@ -156,8 +157,20 @@ COREWAR_OP_SOURCES_LIST = \
 COREWAR_OP_SOURCES = $(addprefix $(COREWAR_OP_SOURCES_DIRECTORY), $(COREWAR_OP_SOURCES_LIST))
 
 COREWAR_VS_SOURCES_DIRECTORY = $(COREWAR_SOURCES_DIRECTORY)vs/
-COREWAR_VS_SOURCES_LIST = \
-	init.c
+COREWAR_VS_SOURCES_LIST =\
+	colors.c \
+	controller.c \
+	draw.c \
+	drawing_cursors.c \
+	drawing_info.c \
+	drawing_widgets.c \
+	free.c \
+	init.c \
+	init_utils.c \
+	print.c \
+	sounds.c \
+	utils.c \
+	widget_utils.c
 COREWAR_VS_SOURCES = $(addprefix $(COREWAR_VS_SOURCES_DIRECTORY), $(COREWAR_VS_SOURCES_LIST))
 
 # Objects
