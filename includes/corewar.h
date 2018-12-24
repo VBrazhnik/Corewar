@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/17 16:47:09 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/23 17:12:30 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include "op.h"
 # include "libft.h"
 # include <stdint.h>
-# include "corewar_vs.h"
 
 /*
 ** Macroses
@@ -97,7 +96,6 @@ typedef struct			s_player
 
 typedef struct			s_cursor
 {
-	uint8_t				player;
 	uint32_t			id;
 	t_bool				carry;
 	uint8_t				op_code;
@@ -108,6 +106,7 @@ typedef struct			s_cursor
 	int32_t				pc;
 	uint32_t			step;
 	int32_t				reg[REG_NUMBER];
+	t_player			*player;
 	struct s_cursor		*next;
 }						t_cursor;
 
@@ -149,7 +148,7 @@ typedef struct			s_vm
 	ssize_t				cycles_to_die;
 	ssize_t				cycles_after_check;
 	size_t				checks_num;
-	t_vs				*vs;
+	struct s_vs			*vs;
 	ssize_t				dump_cycle;
 	int					dump_print_mode;
 	ssize_t				show_cycle;
@@ -168,7 +167,7 @@ typedef struct			s_vm
 
 t_player				*init_player(int id);
 
-t_cursor				*init_cursor(int32_t id, int32_t pc);
+t_cursor				*init_cursor(t_player *player, int32_t pc);
 
 t_vm					*init_vm(void);
 

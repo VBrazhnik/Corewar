@@ -6,12 +6,12 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 17:49:07 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:12:20 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/23 15:29:59 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-#include "corewar_vs_lib.h"
+#include "corewar_vs.h"
 
 static void		reset_lives_nums(t_vm *vm)
 {

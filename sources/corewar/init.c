@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 16:04:36 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/21 17:58:32 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/12/23 17:12:30 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 t_player	*init_player(int id)
 {
-	t_player	*player;
+	t_player *player;
 
 	if (!(player = (t_player *)ft_memalloc(sizeof(t_player))))
 		terminate(ERR_PLAYER_INIT);
@@ -30,7 +30,7 @@ t_player	*init_player(int id)
 	return (player);
 }
 
-t_cursor	*init_cursor(int32_t player_id, int32_t pc)
+t_cursor	*init_cursor(t_player *player, int32_t pc)
 {
 	t_cursor		*cursor;
 	static uint32_t	cursor_id;
@@ -45,14 +45,14 @@ t_cursor	*init_cursor(int32_t player_id, int32_t pc)
 	cursor->cycles_to_exec = 0;
 	cursor->pc = pc;
 	cursor->next = NULL;
-	cursor->reg[0] = player_id;
-	cursor->player = (uint8_t)FT_ABS(player_id);
+	cursor->reg[0] = -(player->id);
+	cursor->player = player;
 	return (cursor);
 }
 
 t_vm		*init_vm(void)
 {
-	t_vm	*vm;
+	t_vm *vm;
 
 	if (!(vm = (t_vm *)ft_memalloc(sizeof(t_vm))))
 		terminate(ERR_VM_INIT);

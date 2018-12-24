@@ -6,11 +6,12 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 17:48:59 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:15:09 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/23 19:06:22 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#include "corewar_vs.h"
 #include <stdio.h>
 #include <errno.h>
 
@@ -34,24 +35,4 @@ t_bool			is_filename(const char *filename, const char *ext)
 inline int8_t	get_byte(t_vm *vm, int32_t pc, int32_t step)
 {
 	return (vm->arena[calc_addr(pc + step)]);
-}
-
-void			visual_interface_indexation(t_vm *vm,
-				t_cursor *cursor, int32_t addr, int32_t size)
-{
-	uint32_t	value;
-
-	value = 0;
-	if (cursor->player >= MIN_PLAYER_ID && cursor->player <= vm->players_num)
-		value = cursor->player;
-	if (value)
-	{
-		while (size)
-		{
-			vm->vs->map[calc_addr(addr + size - 1)].value = value;
-			vm->vs->map[calc_addr(addr + size - 1)].time_to_wait =
-					CYCLE_TO_WAIT;
-			size--;
-		}
-	}
 }

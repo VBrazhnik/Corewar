@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "corewar.h"
-#include "corewar_vs_lib.h"
+#include "corewar_vs.h"
 
 void	parse_vs_flag(int *argc, char ***argv, t_vm *vm)
 {

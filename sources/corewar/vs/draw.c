@@ -3,64 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 22:39:12 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/20 23:17:15 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/12/23 21:30:59 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar_vs_lib.h"
+#include "corewar_vs.h"
 
-void	draw_border(WINDOW *wnd)
+static void	draw_arena(t_vm *vm)
 {
-	wattron(wnd, COLOR_PAIR(GRAY_PLAYER));
-	box(wnd, 0, 0);
-	wattroff(wnd, COLOR_PAIR(GRAY_PLAYER));
+	int			i;
+	int			j;
+	uint32_t	attribute;
+
+	i = 0;
+	while (i < 64)
+	{
+		j = 0;
+		wmove(vm->vs->win_arena, i + 2, 5);
+		while (j < 64)
+		{
+			attribute = check_attributes(vm, &vm->vs->map[i * 64 + j]);
+			wattron(vm->vs->win_arena, attribute);
+			wprintw(vm->vs->win_arena, "%.2x", vm->arena[i * 64 + j]);
+			wattroff(vm->vs->win_arena, attribute);
+			waddch(vm->vs->win_arena, ' ');
+			j++;
+		}
+		wprintw(vm->vs->win_arena, "\n");
+		i++;
+	}
 }
 
-void	draw_status(t_vm *vm)
+static void	draw_border(WINDOW *win)
 {
-	if (vm->vs->control_button == SPACE)
-		vm->vs->is_run = !vm->vs->is_run;
-	vm->vs->curr_cursor_position = 2;
-	wattron(vm->vs->win_info, A_BOLD);
-	if (!vm->vs->is_run)
-	{
-		wattron(vm->vs->win_info, g_colors_players[3]);
-		mvwprintw(vm->vs->win_info, vm->vs->curr_cursor_position,
-				DEFAULT_CUSTOM_INDENT, "PAUSED\t\t");
-		wattroff(vm->vs->win_info, g_colors_players[3]);
-	}
-	else
-	{
-		wattron(vm->vs->win_info, g_colors_players[1]);
-		mvwprintw(vm->vs->win_info, vm->vs->curr_cursor_position,
-				DEFAULT_CUSTOM_INDENT, "RUNNING\t\t");
-		wattroff(vm->vs->win_info, g_colors_players[1]);
-	}
-	wattroff(vm->vs->win_info, A_BOLD);
+	wattron(win, COLOR_PAIR(GRAY_PLAYER));
+	box(win, 0, 0);
+	wattroff(win, COLOR_PAIR(GRAY_PLAYER));
 }
 
-void	draw_aff(t_vm *vm)
+void		draw(t_vm *vm)
 {
-	mvwprintw(vm->vs->win_info, vm->vs->curr_cursor_position,
-			DEFAULT_CUSTOM_INDENT, "Aff value : ");
-	wprintw(vm->vs->win_info, "\t\t\t%d ", vm->vs->aff_symbol);
-	if (ft_isprint(vm->vs->aff_symbol))
-	{
-		waddch(vm->vs->win_info, (const chtype)' ');
-		waddstr(vm->vs->win_info, "'");
-		wattron(vm->vs->win_info,
-				g_colors_players[vm->vs->aff_owner]);
-		waddch(vm->vs->win_info, (const chtype)vm->vs->aff_symbol);
-		wattroff(vm->vs->win_info,
-				g_colors_players[vm->vs->aff_owner]);
-		waddstr(vm->vs->win_info, "'");
-		waddch(vm->vs->win_info, (const chtype)' ');
-		waddch(vm->vs->win_info, (const chtype)' ');
-	}
-	else
-		wprintw(vm->vs->win_info, "  NONE!  ");
-	vm->vs->curr_cursor_position += 2;
+	draw_arena(vm);
+	draw_info(vm);
+	draw_border(vm->vs->win_arena);
+	wrefresh(vm->vs->win_info);
+	wrefresh(vm->vs->win_arena);
+	wrefresh(vm->vs->win_help);
 }

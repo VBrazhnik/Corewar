@@ -81,7 +81,7 @@ t_cursor	*duplicate_cursor(t_cursor *cursor, int32_t addr)
 	int			i;
 
 	addr = calc_addr(cursor->pc + addr);
-	new = init_cursor(cursor->reg[0], addr);
+	new = init_cursor(cursor->player, addr);
 	i = 0;
 	while (i < REG_NUMBER)
 	{

@@ -6,7 +6,7 @@
 #    By: vbrazhni <vbrazhni@student.unit.ua>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/10/24 18:27:10 by vbrazhni          #+#    #+#              #
-#    Updated: 2018/12/21 21:11:52 by ablizniu         ###   ########.fr        #
+#    Updated: 2018/12/23 18:27:06 by vbrazhni         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
 
@@ -14,7 +14,7 @@ ASM_NAME = asm
 COREWAR_NAME = corewar
 
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -O3
+FLAGS = -Wall -Werror -Wextra -O3 -g
 
 # Libraries and Includes
 
@@ -58,8 +58,7 @@ COREWAR_HEADERS_LIST = \
 	op.h\
 	corewar.h\
 	corewar_error.h\
-	corewar_vs.h\
-	corewar_vs_lib.h
+	corewar_vs.h
 COREWAR_HEADERS = $(addprefix $(HEADERS_DIRECTORY), $(COREWAR_HEADERS_LIST))
 
 # Sources
@@ -158,18 +157,19 @@ COREWAR_OP_SOURCES = $(addprefix $(COREWAR_OP_SOURCES_DIRECTORY), $(COREWAR_OP_S
 
 COREWAR_VS_SOURCES_DIRECTORY = $(COREWAR_SOURCES_DIRECTORY)vs/
 COREWAR_VS_SOURCES_LIST =\
-	colors.c \
-	controller.c \
-	draw.c \
-	drawing_cursors.c \
-	drawing_info.c \
-	drawing_widgets.c \
-	free.c \
-	init.c \
-	init_utils.c \
-	print.c \
-	sounds.c \
-	utils.c \
+	exec.c\
+	colors.c\
+	configure.c\
+	draw.c\
+	draw_status.c\
+	draw_cursor.c\
+	draw_info.c\
+	draw_widgets.c\
+	free.c\
+	init.c\
+	draw_help.c\
+	sounds.c\
+	utils.c\
 	widget_utils.c
 COREWAR_VS_SOURCES = $(addprefix $(COREWAR_VS_SOURCES_DIRECTORY), $(COREWAR_VS_SOURCES_LIST))
 

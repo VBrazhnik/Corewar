@@ -12,6 +12,7 @@
 
 #include "ft_printf.h"
 #include "corewar_op.h"
+#include "corewar_vs.h"
 
 inline static void	log_live(uint32_t cursor_id, int32_t player_id)
 {
@@ -35,8 +36,6 @@ void				op_live(t_vm *vm, t_cursor *cursor)
 	cursor->lives_num++;
 	cursor->last_live = vm->cycles;
 	player = NULL;
-	if (vm->vs)
-		vm->vs->map[cursor->pc].time_to_wait_live = CYCLE_TO_WAIT;
 	if (player_id <= -1 && player_id >= -((int32_t)vm->players_num))
 	{
 		player = vm->players[INDEX(FT_ABS(player_id))];
@@ -48,4 +47,6 @@ void				op_live(t_vm *vm, t_cursor *cursor)
 		log_live(cursor->id, player_id);
 	if (vm->log & LIVE_LOG && player)
 		log_live_msg(FT_ABS(player_id), player->name);
+	if (vm->vs)
+		vm->vs->map[cursor->pc].wait_cycles_live = CYCLE_TO_WAIT;
 }

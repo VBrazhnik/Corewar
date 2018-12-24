@@ -28,7 +28,7 @@ void	set_cursors(t_vm *vm)
 	pc = 0;
 	while (id <= vm->players_num)
 	{
-		add_cursor(&(vm->cursors), init_cursor(-id, pc));
+		add_cursor(&(vm->cursors), init_cursor(vm->players[INDEX(id)], pc));
 		vm->cursors_num++;
 		pc += MEM_SIZE / vm->players_num;
 		id++;

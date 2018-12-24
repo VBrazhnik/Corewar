@@ -6,12 +6,13 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:10:02 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:02:50 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/23 19:49:14 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 #include "corewar_op.h"
+#include "corewar_vs.h"
 #include <errno.h>
 
 static void	update_flags(t_vm *vm)
@@ -37,10 +38,13 @@ int			main(int argc, char **argv)
 		init_arena(vm);
 		set_cursors(vm);
 		if (!vm->vs)
+		{
 			print_intro(vm->players, vm->players_num);
-		exec(vm);
-		if (!vm->vs)
+			exec(vm);
 			print_last_alive(vm);
+		}
+		else
+			exec_vs(vm);
 		free_players(vm->players, vm->players_num);
 		ft_memdel((void **)&vm);
 	}

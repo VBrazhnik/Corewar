@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   widget_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ablizniu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/21 16:11:00 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/21 16:24:59 by ablizniu         ###   ########.fr       */
+/*   Updated: 2018/12/24 17:08:06 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar_vs_lib.h"
+#include "corewar_vs.h"
 
-int32_t		calc_live_breakdown(double curr_lives, size_t total_lives)
+int32_t		calc_percent(double curr_lives, size_t total_lives)
 {
-	double	value;
+	double value;
 
 	if (!total_lives)
 		return (0);
@@ -28,29 +28,26 @@ int32_t		calc_live_breakdown(double curr_lives, size_t total_lives)
 	return (0);
 }
 
-void		fill_last_live_arr(t_vm **vm)
+void		store_players_lives(t_vm *vm)
 {
-	int32_t	i;
+	int32_t i;
 
 	i = 0;
-	while (i < (*vm)->players_num)
+	while (i < vm->players_num)
 	{
-		(*vm)->vs->last_per_live[i] = (*vm)->players[i]->lives_num;
+		vm->vs->players_lives[i] = vm->players[i]->lives_num;
 		i++;
 	}
 }
 
-size_t		total_lives_in_curr_period(t_vm *vm)
+size_t		calc_players_lives(t_vm *vm)
 {
 	int32_t	i;
-	size_t	total_amount;
+	size_t	sum;
 
 	i = 0;
-	total_amount = 0;
+	sum = 0;
 	while (i < vm->players_num)
-	{
-		total_amount += vm->players[i]->lives_num;
-		i++;
-	}
-	return (total_amount);
+		sum += vm->players[i++]->lives_num;
+	return (sum);
 }

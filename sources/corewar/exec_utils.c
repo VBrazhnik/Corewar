@@ -6,12 +6,12 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/02 20:46:00 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/02 20:50:54 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/24 14:50:51 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar_op.h"
-#include "corewar_vs_lib.h"
+#include "corewar_vs.h"
 
 void	update_op_code(t_vm *vm, t_cursor *current)
 {
@@ -35,17 +35,19 @@ void	move_cursor(t_vm *vm, t_cursor *cursor)
 void	delete_cursors(t_vm *vm)
 {
 	t_cursor	*current;
-	t_cursor	*del;
+	t_cursor	*delete;
 
 	current = vm->cursors;
 	while (current)
 	{
-		del = current;
+		delete = current;
 		current = current->next;
 		if (vm->log & DEATH_LOG)
-			log_cursor_death(vm, del);
+			log_cursor_death(vm, delete);
 		if (vm->vs)
-			clear_cursor(vm, del);
-		ft_memdel((void **)&del);
+			clear_cursor(vm, delete);
+		ft_memdel((void **)&delete);
+		vm->cursors_num--;
 	}
+	vm->cursors = NULL;
 }

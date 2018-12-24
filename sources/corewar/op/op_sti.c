@@ -6,13 +6,13 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 17:28:48 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/11/30 20:53:32 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/23 17:45:09 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "corewar_op.h"
-#include "corewar_vs_lib.h"
+#include "corewar_vs.h"
 
 inline static void	log_sti(t_cursor *cursor,
 							int32_t r_id,
@@ -47,8 +47,8 @@ void				op_sti(t_vm *vm, t_cursor *cursor)
 	int32_to_bytecode(vm->arena,
 			(cursor->pc + ((addr_1 + addr_2) % IDX_MOD)), value, DIR_SIZE);
 	if (vm->vs)
-		visual_interface_indexation(vm, cursor, (cursor->pc +
-		((addr_1 + addr_2) % IDX_MOD)), DIR_SIZE);
+		update_map(vm, cursor, cursor->pc + ((addr_1 + addr_2) % IDX_MOD),
+																DIR_SIZE);
 	if (vm->log & OP_LOG)
 		log_sti(cursor, r_id, addr_1, addr_2);
 }

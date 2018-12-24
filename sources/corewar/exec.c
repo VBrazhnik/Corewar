@@ -6,17 +6,17 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 17:31:17 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/16 18:02:50 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/24 14:41:13 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "corewar_op.h"
-#include "corewar_vs_lib.h"
+#include "corewar_vs.h"
 
-static void		exec_op(t_cursor *cursor, t_vm *vm)
+static void	exec_op(t_cursor *cursor, t_vm *vm)
 {
-	t_op		*op;
+	t_op *op;
 
 	if (cursor->cycles_to_exec == 0)
 		update_op_code(vm, cursor);
@@ -43,9 +43,9 @@ static void		exec_op(t_cursor *cursor, t_vm *vm)
 	}
 }
 
-void			exec_cycle(t_vm *vm)
+void		exec_cycle(t_vm *vm)
 {
-	t_cursor	*current;
+	t_cursor *current;
 
 	vm->cycles++;
 	vm->cycles_after_check++;
@@ -59,11 +59,9 @@ void			exec_cycle(t_vm *vm)
 	}
 }
 
-void			exec(t_vm *vm)
+void		exec(t_vm *vm)
 {
-	if (vm->vs)
-		controller(vm);
-	while (vm->cycles_to_die > 0 && vm->cursors_num)
+	while (vm->cursors_num)
 	{
 		if (vm->dump_cycle == vm->cycles)
 		{
@@ -77,12 +75,9 @@ void			exec(t_vm *vm)
 				;
 		}
 		exec_cycle(vm);
+		if (vm->cycles_to_die <= 0)
+			delete_cursors(vm);
 		if (vm->cycles_to_die == vm->cycles_after_check)
 			cycles_to_die_check(vm);
-	}
-	if (vm->cycles_to_die <= 0 && vm->cursors_num)
-	{
-		exec_cycle(vm);
-		delete_cursors(vm);
 	}
 }
