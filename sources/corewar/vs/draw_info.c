@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 21:56:54 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/24 16:39:03 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/25 02:11:36 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,25 @@ static void	draw_players(t_vm *vm)
 	int32_t i;
 
 	i = 0;
-	vm->vs->cursor_pos += 2;
+	vm->vs->cursor_pos += 1;
 	while (i < vm->players_num)
 	{
 		mvwprintw(vm->vs->win_info,
-				vm->vs->cursor_pos++,
+				vm->vs->cursor_pos += 2,
 				DEFAULT_CUSTOM_INDENT,
 				"Player %d : ", -(vm->players[i]->id));
 		wattron(vm->vs->win_info, g_colors_players[vm->players[i]->id]);
 		wprintw(vm->vs->win_info, "%.40s", vm->players[i]->name);
 		wattroff(vm->vs->win_info, g_colors_players[vm->players[i]->id]);
 		mvwprintw(vm->vs->win_info,
-				vm->vs->cursor_pos++,
+				vm->vs->cursor_pos += 1,
 				DEFAULT_CUSTOM_INDENT,
 				"%-32s %-10zd", "   Last live :", vm->players[i]->last_live);
 		mvwprintw(vm->vs->win_info,
-				vm->vs->cursor_pos++,
+				vm->vs->cursor_pos += 1,
 				DEFAULT_CUSTOM_INDENT,
 				"%-32s %-10zu", "   Lives in current period :",
 				vm->players[i]->lives_num);
-		vm->vs->cursor_pos++;
 		i++;
 	}
 }
@@ -44,7 +43,7 @@ static void	draw_players(t_vm *vm)
 static void	draw_game_params(t_vm *vm)
 {
 	mvwprintw(vm->vs->win_info,
-			vm->vs->cursor_pos,
+			vm->vs->cursor_pos += 4,
 			DEFAULT_CUSTOM_INDENT,
 			"%-32s %-10zd", "Cycle to die :", vm->cycles_to_die);
 	mvwprintw(vm->vs->win_info,
@@ -83,8 +82,9 @@ static void	draw_aff(t_vm *vm)
 
 static void	draw_winner(t_vm *vm)
 {
+	vm->vs->cursor_pos = (vm->vs->cursor_pos + HEIGHT - 3) / 2;
 	mvwprintw(vm->vs->win_info,
-			vm->vs->cursor_pos += 15,
+			vm->vs->cursor_pos,
 			DEFAULT_CUSTOM_INDENT,
 			"The winner is ");
 	wattron(vm->vs->win_info, g_colors_players[vm->last_alive->id]);
@@ -95,6 +95,7 @@ static void	draw_winner(t_vm *vm)
 void		draw_info(t_vm *vm)
 {
 	wattron(vm->vs->win_info, A_BOLD);
+	draw_exec_status(vm);
 	mvwprintw(vm->vs->win_info,
 			vm->vs->cursor_pos += 2,
 			DEFAULT_CUSTOM_INDENT,
@@ -108,8 +109,8 @@ void		draw_info(t_vm *vm)
 			DEFAULT_CUSTOM_INDENT,
 			"Cursors : %-6zu", vm->cursors_num);
 	draw_players(vm);
-	draw_live_breakdown(vm, vm->vs->total_lives_in_curr_per, "current");
-	draw_live_breakdown(vm, vm->vs->total_lives_in_last_per, "last");
+	draw_current_lives_bar(vm);
+	draw_previous_lives_bar(vm);
 	draw_game_params(vm);
 	if (vm->vs->aff_player)
 		draw_aff(vm);

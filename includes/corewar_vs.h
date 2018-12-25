@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:22:10 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/24 17:53:14 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/25 04:13:09 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,28 +23,41 @@
 
 # define MIN_PLAYER_ID			1
 # define MAX_PLAYER_ID			4
+
+/*
+** Dimensions
+*/
+
 # define HEIGHT					(MEM_SIZE / 64 + 4)
 # define WIDTH					(64 * 3 + 5)
 # define DEFAULT_CUSTOM_INDENT	7
 # define WIDGET_LEN				(WIDTH / 4 + 4)
 # define TAB_LEN				4
+
+/*
+** Color
+*/
+
 # define COLOR_GRAY				8
-# define ZERO_BYTE_CURSOR(x)	(x == 0) ? (x = x + 9) : (x)
-# define ZERO_CURSOR			9
-# define GREEN_PLAYER			9
-# define BLUE_PLAYER			10
-# define RED_PLAYER				11
-# define CYAN_PLAYER			12
-# define GREEN_CURSOR			13
-# define BLUE_CURSOR			14
-# define RED_CURSOR				15
-# define CYAN_CURSOR			16
-# define GRAY_PLAYER			17
-# define GRAY_CURSOR			18
-# define LIVE_PAIR_GREEN		19
-# define LIVE_PAIR_BLUE			20
-# define LIVE_PAIR_RED			21
-# define LIVE_PAIR_CYAN			22
+
+/*
+** Color pairs
+*/
+
+# define GRAY					9
+# define GREEN					10
+# define YELLOW					11
+# define RED					12
+# define CYAN					13
+# define GRAY_CURSOR			14
+# define GREEN_CURSOR			15
+# define YELLOW_CURSOR			16
+# define RED_CURSOR				17
+# define CYAN_CURSOR			18
+# define LIVE_GREEN				19
+# define LIVE_YELLOW			20
+# define LIVE_RED				21
+# define LIVE_CYAN				22
 
 /*
 ** Buttons
@@ -52,33 +65,33 @@
 
 # define ESC					27
 # define SPACE					' '
-# define SPEED_UP_1				'e'
-# define SPEED_UP_10			'r'
-# define SPEED_UP_100			't'
-# define SPEED_DOWN_1			'q'
-# define SPEED_DOWN_10			'a'
-# define SPEED_DOWN_100			'z'
+# define SPEED_UP_1				'r'
+# define SPEED_UP_10			't'
+# define SPEED_UP_100			'y'
+# define SPEED_DOWN_1			'e'
+# define SPEED_DOWN_10			'w'
+# define SPEED_DOWN_100			'q'
 # define SPEED_DEFAULT			'd'
 # define DISPLAY_HELP			'h'
 # define MUSIC					'm'
 # define PASS_ONE_CYCLE			's'
 
-# define CYCLE_TO_WAIT			40
+# define CYCLE_TO_WAIT			49
 # define DEFAULT_SPEED			50
-# define INDEX_CURSOR(X)		((X) + 4)
-# define INDEX_PLAYER(X)		((X) - 4)
+# define INDEX_CURSOR(X)		((X) + 5)
+# define INDEX_PLAYER(X)		((X) - 5)
 
 static unsigned short g_colors_players[15] = {
-	COLOR_PAIR(GRAY_PLAYER),
-	COLOR_PAIR(GREEN_PLAYER),
-	COLOR_PAIR(BLUE_PLAYER),
-	COLOR_PAIR(RED_PLAYER),
-	COLOR_PAIR(CYAN_PLAYER),
-	COLOR_PAIR(GREEN_CURSOR),
-	COLOR_PAIR(BLUE_CURSOR),
-	COLOR_PAIR(RED_CURSOR),
-	COLOR_PAIR(CYAN_CURSOR),
+	COLOR_PAIR(GRAY),
+	COLOR_PAIR(GREEN),
+	COLOR_PAIR(YELLOW),
+	COLOR_PAIR(RED),
+	COLOR_PAIR(CYAN),
 	COLOR_PAIR(GRAY_CURSOR),
+	COLOR_PAIR(GREEN_CURSOR),
+	COLOR_PAIR(YELLOW_CURSOR),
+	COLOR_PAIR(RED_CURSOR),
+	COLOR_PAIR(CYAN_CURSOR)
 };
 
 /*
@@ -88,8 +101,9 @@ static unsigned short g_colors_players[15] = {
 typedef struct		s_map
 {
 	int32_t			value;
-	size_t			wait_cycles;
-	size_t			wait_cycles_live;
+	ssize_t			wait_cycles_store;
+	ssize_t			wait_cycles_live;
+	t_player		*player_live;
 }					t_map;
 
 /*
@@ -98,6 +112,7 @@ typedef struct		s_map
 
 typedef struct		s_vs
 {
+	t_bool			is_running;
 	WINDOW			*win_arena;
 	WINDOW			*win_info;
 	WINDOW			*win_help;
@@ -105,12 +120,7 @@ typedef struct		s_vs
 	size_t			players_lives[MAX_PLAYERS];
 	int32_t			button;
 	clock_t			time;
-	t_bool			is_run;
-	int32_t			help_cursor_position;
 	int32_t			cursor_pos;
-	size_t			total_lives_in_curr_per;
-	size_t			total_lives_in_last_per;
-	t_bool			time_delay;
 	char			aff_symbol;
 	t_player		*aff_player;
 	t_bool			sounds;
@@ -156,6 +166,10 @@ void				draw_sounds_status(t_vm *vm);
 
 void				draw_help_status(t_vm *vm);
 
+void				draw_current_lives_bar(t_vm *vm);
+
+void				draw_previous_lives_bar(t_vm *vm);
+
 /*
 ** Cursor
 */
@@ -170,21 +184,13 @@ void				clear_cursor(t_vm *vm, t_cursor *cursor);
 
 void				init_colors(void);
 
-uint32_t			check_attributes(t_vm *vm, t_map *attribute);
+uint32_t			get_attribute(t_vm *vm, t_map *attribute, ssize_t cycles);
 
 /*
 ** Widgets
 */
 
 void				store_players_lives(t_vm *vm);
-
-void				draw_live_breakdown(t_vm *vm,
-										size_t total_live_in_per,
-										char *period);
-
-int32_t				calc_percent(double curr_lives, size_t total_lives);
-
-size_t				calc_players_lives(t_vm *vm);
 
 /*
 ** Sound

@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 17:58:16 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/17 10:36:53 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/25 00:17:59 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 
 static void	add_player(t_player **list, t_player *new)
 {
-	t_player *iterator;
+	t_player *current;
 
 	if (list && new)
 	{
 		if (*list)
 		{
-			iterator = *list;
-			while (iterator->next)
-				iterator = iterator->next;
-			iterator->next = new;
+			current = *list;
+			while (current->next)
+				current = current->next;
+			current->next = new;
 		}
 		else
 			*list = new;
@@ -116,8 +116,8 @@ void		parse_corewar_args(int argc, char **argv, t_vm *vm)
 			parse_champion_filename(&argc, &argv, vm, &list);
 		else
 			print_help();
-		if (vm->players_num > MAX_PLAYERS)
-			terminate(ERR_PLAYERS_NUM);
 	}
+	if (vm->players_num < 1 || vm->players_num > MAX_PLAYERS)
+		terminate(ERR_PLAYERS_NUM);
 	set_players(vm, list);
 }

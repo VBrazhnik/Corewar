@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/23 19:49:18 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/24 17:42:54 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/25 01:46:45 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 
 static void	handle_buttons(t_vm *vm)
 {
-	if (vm->vs->button == MUSIC)
+	if (vm->vs->button == SPACE)
+		vm->vs->is_running = !(vm->vs->is_running);
+	else if (vm->vs->button == MUSIC)
 		vm->vs->sounds = !(vm->vs->sounds);
 	else if (vm->vs->button == DISPLAY_HELP)
 		vm->vs->display_help = !(vm->vs->display_help);
@@ -33,10 +35,9 @@ static void	handle_buttons(t_vm *vm)
 		vm->vs->speed -= 100;
 	else if (vm->vs->button == SPEED_DEFAULT)
 		vm->vs->speed = DEFAULT_SPEED;
-	if (vm->vs->speed < 1)
-		vm->vs->speed = 1;
-	if (vm->vs->speed > 1000)
-		vm->vs->speed = 1000;
+	vm->vs->is_running = (!vm->cursors_num) ? false : vm->vs->is_running;
+	vm->vs->speed = (vm->vs->speed < 1) ? 1 : vm->vs->speed;
+	vm->vs->speed = (vm->vs->speed > 1000) ? 1000 : vm->vs->speed;
 }
 
 static void	exec_cycle_vs(t_vm *vm)
@@ -55,43 +56,29 @@ static void	exec_cycle_vs(t_vm *vm)
 			cycles_to_die_check(vm);
 			if (cursors_num != vm->cursors_num)
 				play_death_sound(vm);
-			vm->vs->total_lives_in_last_per = vm->vs->total_lives_in_curr_per;
 		}
 		if (!vm->cursors_num)
 		{
 			play_winner_sound(vm);
-			vm->vs->is_run = false;
+			vm->vs->is_running = false;
 		}
-		vm->vs->total_lives_in_curr_per = calc_players_lives(vm);
 	}
-}
-
-static void	pass_one_cycle(t_vm *vm)
-{
-	vm->vs->is_run = true;
-	vm->vs->time_delay = true;
-	exec_cycle_vs(vm);
-	draw(vm);
-	vm->vs->time_delay = false;
-	vm->vs->is_run = false;
 }
 
 void		exec_vs(t_vm *vm)
 {
-	int32_t id;
+	int32_t i;
 
-	id = 1;
-	while (id <= vm->players_num)
-		clear_name(vm->players[INDEX(id++)]->name);
+	i = 0;
+	while (i < vm->players_num)
+		clear_name(vm->players[i++]->name);
 	configure_vs(vm);
 	while ((vm->vs->button = getch()) != ESC)
 	{
 		handle_buttons(vm);
-		draw_exec_status(vm);
-		if (vm->vs->button == PASS_ONE_CYCLE)
-			pass_one_cycle(vm);
-		else if (vm->vs->is_run
-				&& (vm->vs->time_delay = (clock() >= calc_time_delay(vm))))
+		if (vm->cursors_num && vm->vs->button == PASS_ONE_CYCLE)
+			exec_cycle_vs(vm);
+		else if (vm->vs->is_running && (clock() >= calc_time_delay(vm)))
 		{
 			vm->vs->time = clock();
 			exec_cycle_vs(vm);

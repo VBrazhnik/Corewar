@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 21:45:54 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/23 16:09:35 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/25 04:17:25 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,56 +15,51 @@
 void		init_colors(void)
 {
 	init_color(COLOR_GRAY, 355, 355, 355);
-	init_pair(GREEN_PLAYER, COLOR_GREEN, 0);
-	init_pair(BLUE_PLAYER, COLOR_BLUE, 0);
-	init_pair(RED_PLAYER, COLOR_RED, 0);
-	init_pair(CYAN_PLAYER, COLOR_CYAN, 0);
+	init_pair(GRAY, COLOR_GRAY, 0);
+	init_pair(GREEN, COLOR_GREEN, 0);
+	init_pair(YELLOW, COLOR_YELLOW, 0);
+	init_pair(RED, COLOR_RED, 0);
+	init_pair(CYAN, COLOR_CYAN, 0);
+	init_pair(GRAY_CURSOR, COLOR_BLACK, COLOR_GRAY);
 	init_pair(GREEN_CURSOR, COLOR_BLACK, COLOR_GREEN);
-	init_pair(BLUE_CURSOR, COLOR_BLACK, COLOR_BLUE);
+	init_pair(YELLOW_CURSOR, COLOR_BLACK, COLOR_YELLOW);
 	init_pair(RED_CURSOR, COLOR_BLACK, COLOR_RED);
 	init_pair(CYAN_CURSOR, COLOR_BLACK, COLOR_CYAN);
-	init_pair(LIVE_PAIR_GREEN, COLOR_WHITE, COLOR_GREEN);
-	init_pair(LIVE_PAIR_BLUE, COLOR_WHITE, COLOR_BLUE);
-	init_pair(LIVE_PAIR_RED, COLOR_WHITE, COLOR_RED);
-	init_pair(LIVE_PAIR_CYAN, COLOR_WHITE, COLOR_CYAN);
-	init_pair(GRAY_PLAYER, COLOR_GRAY, 0);
-	init_pair(GRAY_CURSOR, COLOR_BLACK, COLOR_GRAY);
+	init_pair(LIVE_GREEN, COLOR_WHITE, COLOR_GREEN);
+	init_pair(LIVE_YELLOW, COLOR_WHITE, COLOR_YELLOW);
+	init_pair(LIVE_RED, COLOR_WHITE, COLOR_RED);
+	init_pair(LIVE_CYAN, COLOR_WHITE, COLOR_CYAN);
 }
 
-uint32_t	live_announce_colors(t_map *attribute)
+uint32_t	get_live_color(t_player *player)
 {
-	if (attribute->value == MIN_PLAYER_ID
-		&& attribute->wait_cycles_live)
-		return (COLOR_PAIR(LIVE_PAIR_GREEN) | A_BOLD);
-	else if (attribute->value == MIN_PLAYER_ID + 1
-		&& attribute->wait_cycles_live)
-		return (COLOR_PAIR(LIVE_PAIR_BLUE) | A_BOLD);
-	else if (attribute->value == MIN_PLAYER_ID + 2
-		&& attribute->wait_cycles_live)
-		return (COLOR_PAIR(LIVE_PAIR_RED) | A_BOLD);
-	else if (attribute->value == MIN_PLAYER_ID + 3
-		&& attribute->wait_cycles_live)
-		return (COLOR_PAIR(LIVE_PAIR_CYAN) | A_BOLD);
-	return (g_colors_players[attribute->value]);
+	int32_t value;
+
+	value = ((player->id - 1) % MAX_PLAYER_ID) + 1;
+	if (value == MIN_PLAYER_ID)
+		return (COLOR_PAIR(LIVE_GREEN) | A_BOLD);
+	else if (value == MIN_PLAYER_ID + 1)
+		return (COLOR_PAIR(LIVE_YELLOW) | A_BOLD);
+	else if (value == MIN_PLAYER_ID + 2)
+		return (COLOR_PAIR(LIVE_RED) | A_BOLD);
+	else
+		return (COLOR_PAIR(LIVE_CYAN) | A_BOLD);
 }
 
-uint32_t	check_attributes(t_vm *vm, t_map *attribute)
+uint32_t	get_attribute(t_vm *vm, t_map *attribute, ssize_t cycles)
 {
-	if (attribute->value)
-	{
-		if (attribute->wait_cycles_live)
-		{
-			if (vm->vs->is_run && vm->vs->time_delay)
-				attribute->wait_cycles_live--;
-			return (live_announce_colors(attribute));
-		}
-		if (attribute->wait_cycles && !attribute->wait_cycles_live)
-		{
-			if (vm->vs->is_run && vm->vs->time_delay)
-				attribute->wait_cycles--;
-			return (g_colors_players[attribute->value] | A_BOLD);
-		}
+	if (cycles != vm->cycles
+		&& vm->cycles_to_die > 0
+		&& attribute->wait_cycles_live > 0)
+		attribute->wait_cycles_live--;
+	if (cycles != vm->cycles
+		&& vm->cycles_to_die > 0
+		&& attribute->wait_cycles_store > 0)
+		attribute->wait_cycles_store--;
+	if (attribute->wait_cycles_live)
+		return (get_live_color(attribute->player_live));
+	else if (attribute->wait_cycles_store)
+		return (g_colors_players[attribute->value] | A_BOLD);
+	else
 		return (g_colors_players[attribute->value]);
-	}
-	return (g_colors_players[attribute->value]);
 }

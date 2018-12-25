@@ -164,7 +164,7 @@ COREWAR_VS_SOURCES_LIST =\
 	draw_status.c\
 	draw_cursor.c\
 	draw_info.c\
-	draw_widgets.c\
+	draw_bar.c\
 	free.c\
 	init.c\
 	draw_help.c\

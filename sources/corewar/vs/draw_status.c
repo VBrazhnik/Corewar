@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/23 21:26:52 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/23 21:30:59 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/25 03:46:32 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,25 @@
 
 void	draw_exec_status(t_vm *vm)
 {
-	if (vm->vs->button == SPACE)
-		vm->vs->is_run = !(vm->vs->is_run);
 	vm->vs->cursor_pos = 2;
-	wattron(vm->vs->win_info, A_BOLD);
-	if (vm->vs->is_run)
+	if (vm->vs->is_running)
 	{
-		wattron(vm->vs->win_info, g_colors_players[1]);
+		wattron(vm->vs->win_info, COLOR_PAIR(GREEN));
 		mvwprintw(vm->vs->win_info,
 				vm->vs->cursor_pos,
 				DEFAULT_CUSTOM_INDENT,
 				"%-10s", "RUNNING");
-		wattroff(vm->vs->win_info, g_colors_players[1]);
+		wattroff(vm->vs->win_info, COLOR_PAIR(GREEN));
 	}
 	else
 	{
-		wattron(vm->vs->win_info, g_colors_players[3]);
+		wattron(vm->vs->win_info, COLOR_PAIR(RED));
 		mvwprintw(vm->vs->win_info,
 				vm->vs->cursor_pos,
 				DEFAULT_CUSTOM_INDENT,
 				"%-10s", (vm->cursors_num) ? "PAUSED" : "STOPPED");
-		wattroff(vm->vs->win_info, g_colors_players[3]);
+		wattroff(vm->vs->win_info, COLOR_PAIR(RED));
 	}
-	wattroff(vm->vs->win_info, A_BOLD);
 }
 
 void	draw_sounds_status(t_vm *vm)

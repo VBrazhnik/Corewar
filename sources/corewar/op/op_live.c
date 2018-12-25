@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 20:23:16 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/05 20:15:02 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/24 23:09:21 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,14 @@ void				op_live(t_vm *vm, t_cursor *cursor)
 		player->last_live = vm->cycles;
 		player->lives_num++;
 		vm->last_alive = player;
+		if (vm->vs)
+		{
+			vm->vs->map[cursor->pc].wait_cycles_live = CYCLE_TO_WAIT;
+			vm->vs->map[cursor->pc].player_live = player;
+		}
 	}
 	if (vm->log & OP_LOG)
 		log_live(cursor->id, player_id);
 	if (vm->log & LIVE_LOG && player)
 		log_live_msg(FT_ABS(player_id), player->name);
-	if (vm->vs)
-		vm->vs->map[cursor->pc].wait_cycles_live = CYCLE_TO_WAIT;
 }

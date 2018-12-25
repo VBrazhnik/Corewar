@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 22:39:12 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/23 21:30:59 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/25 03:46:24 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 static void	draw_arena(t_vm *vm)
 {
-	int			i;
-	int			j;
-	uint32_t	attribute;
+	static ssize_t	cycles = 0;
+	int				i;
+	int				j;
+	uint32_t		attribute;
 
 	i = 0;
 	while (i < 64)
@@ -25,7 +26,7 @@ static void	draw_arena(t_vm *vm)
 		wmove(vm->vs->win_arena, i + 2, 5);
 		while (j < 64)
 		{
-			attribute = check_attributes(vm, &vm->vs->map[i * 64 + j]);
+			attribute = get_attribute(vm, &vm->vs->map[i * 64 + j], cycles);
 			wattron(vm->vs->win_arena, attribute);
 			wprintw(vm->vs->win_arena, "%.2x", vm->arena[i * 64 + j]);
 			wattroff(vm->vs->win_arena, attribute);
@@ -35,13 +36,14 @@ static void	draw_arena(t_vm *vm)
 		wprintw(vm->vs->win_arena, "\n");
 		i++;
 	}
+	cycles = vm->cycles;
 }
 
 static void	draw_border(WINDOW *win)
 {
-	wattron(win, COLOR_PAIR(GRAY_PLAYER));
+	wattron(win, COLOR_PAIR(GRAY));
 	box(win, 0, 0);
-	wattroff(win, COLOR_PAIR(GRAY_PLAYER));
+	wattroff(win, COLOR_PAIR(GRAY));
 }
 
 void		draw(t_vm *vm)
