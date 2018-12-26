@@ -36,7 +36,7 @@ static void			process_arg(t_parser *parser,
 		statement->args[i] = bytecode_to_int32(&parser->code[parser->pos],
 																		size);
 		parser->pos += size;
-		if (statement->args_types[i] == T_REG && statement->args[i] < 0)
+		if (statement->args_types[i] == T_REG && statement->args[i] <= 0)
 			register_error(parser);
 	}
 	else

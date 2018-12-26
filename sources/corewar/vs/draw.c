@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 22:39:12 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/25 03:46:24 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 16:07:28 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	draw_arena(t_vm *vm)
 	static ssize_t	cycles = 0;
 	int				i;
 	int				j;
-	uint32_t		attribute;
+	int				attribute;
 
 	i = 0;
 	while (i < 64)

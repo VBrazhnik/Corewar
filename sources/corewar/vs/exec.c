@@ -76,7 +76,7 @@ void		exec_vs(t_vm *vm)
 	while ((vm->vs->button = getch()) != ESC)
 	{
 		handle_buttons(vm);
-		if (vm->cursors_num && vm->vs->button == PASS_ONE_CYCLE)
+		if (vm->vs->button == PASS_ONE_CYCLE)
 			exec_cycle_vs(vm);
 		else if (vm->vs->is_running && (clock() >= calc_time_delay(vm)))
 		{

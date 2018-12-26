@@ -25,7 +25,7 @@ static void	exec_op(t_cursor *cursor, t_vm *vm)
 	if (cursor->cycles_to_exec == 0)
 	{
 		op = NULL;
-		if (cursor->op_code > 0 && cursor->op_code <= 0x10)
+		if (cursor->op_code >= 0x01 && cursor->op_code <= 0x10)
 			op = &g_op[INDEX(cursor->op_code)];
 		if (op)
 		{

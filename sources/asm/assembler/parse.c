@@ -50,7 +50,7 @@ void	parse_num(t_parser *parser,
 					unsigned start,
 					t_token *token)
 {
-	unsigned	column;
+	unsigned column;
 
 	token->column = start;
 	if (row[parser->column] == '-')

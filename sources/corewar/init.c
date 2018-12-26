@@ -45,7 +45,7 @@ t_cursor	*init_cursor(t_player *player, int32_t pc)
 	cursor->cycles_to_exec = 0;
 	cursor->pc = pc;
 	cursor->next = NULL;
-	cursor->reg[0] = -(player->id);
+	cursor->reg[INDEX(1)] = -(player->id);
 	cursor->player = player;
 	return (cursor);
 }
@@ -83,7 +83,6 @@ void		init_arena(t_vm *vm)
 	pc = 0;
 	while (id <= vm->players_num)
 	{
-		vm->last_alive = vm->players[INDEX(id)];
 		ft_memcpy(&(vm->arena[pc]),
 			vm->players[INDEX(id)]->code,
 			(size_t)(vm->players[INDEX(id)]->code_size));

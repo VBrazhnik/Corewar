@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/23 20:59:24 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/23 21:05:45 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 16:32:11 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	init_cursors(t_vm *vm)
 void		configure_vs(t_vm *vm)
 {
 	initscr();
-	keypad(stdscr, TRUE);
+	keypad(stdscr, true);
 	nodelay(stdscr, true);
 	curs_set(false);
 	cbreak();
@@ -68,6 +68,5 @@ void		configure_vs(t_vm *vm)
 	vm->vs->win_arena = newwin(HEIGHT, WIDTH + 4, 2, 2);
 	vm->vs->win_info = newwin(HEIGHT, WIDTH / 4 + 10, 2, WIDTH + 6);
 	vm->vs->win_help = newwin(HEIGHT / 5, WIDTH, HEIGHT + 2, 2);
-	vm->vs->speed = DEFAULT_SPEED;
 	init_cursors(vm);
 }
