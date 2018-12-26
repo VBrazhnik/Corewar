@@ -6,20 +6,20 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 22:14:33 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/25 03:38:22 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 10:15:11 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar_vs.h"
 
-static int32_t	calc_length(double part, double sum)
+static size_t	calc_bar_length(size_t lives, size_t sum_lives)
 {
-	double len;
+	size_t result;
 
-	len = ((part / sum) * WIDGET_LEN);
-	if ((len - (int32_t)(len)) >= 0.5)
-		len++;
-	return ((int32_t)len);
+	result = (lives * BAR_LENGTH) / sum_lives;
+	if ((lives * BAR_LENGTH) % sum_lives >= sum_lives / 2)
+		result++;
+	return (result);
 }
 
 static void		draw_empty_bar(t_vm *vm)
@@ -28,7 +28,7 @@ static void		draw_empty_bar(t_vm *vm)
 
 	i = 0;
 	wattron(vm->vs->win_info, COLOR_PAIR(GRAY));
-	while (i < WIDGET_LEN)
+	while (i < BAR_LENGTH)
 	{
 		mvwprintw(vm->vs->win_info,
 				vm->vs->cursor_pos + 1,
@@ -39,36 +39,37 @@ static void		draw_empty_bar(t_vm *vm)
 	wattroff(vm->vs->win_info, COLOR_PAIR(GRAY));
 }
 
-static void		draw_bar(t_vm *vm, int32_t len, int pos, int32_t index)
+static void		draw_bar(t_vm *vm, size_t len, size_t pos, int index)
 {
-	int	i;
+	size_t i;
 
 	i = pos;
 	wattron(vm->vs->win_info, g_colors_players[index + 1]);
-	while (i <= pos + len && i < WIDGET_LEN)
+	while (i <= pos + len && i < BAR_LENGTH)
 	{
 		mvwprintw(vm->vs->win_info,
 				vm->vs->cursor_pos + 1,
-				DEFAULT_CUSTOM_INDENT + i,
+				(int)(DEFAULT_CUSTOM_INDENT + i),
 				"-");
 		i++;
 	}
 	wattroff(vm->vs->win_info, g_colors_players[index + 1]);
 }
 
-void			draw_current_lives_bar(t_vm *vm)
+void			draw_lives_bar(t_vm *vm, t_bool current)
 {
-	int32_t	i;
+	int		i;
 	size_t	sum_lives;
-	int		pos;
-	int32_t	len;
+	size_t	pos;
+	size_t	len;
 
-	mvwprintw(vm->vs->win_info, vm->vs->cursor_pos += 3,
-		DEFAULT_CUSTOM_INDENT, "Bar of lives for current period :");
 	i = 0;
 	sum_lives = 0;
 	while (i < vm->players_num)
-		sum_lives += vm->players[i++]->lives_num;
+		if (current)
+			sum_lives += vm->players[i++]->lives_num;
+		else
+			sum_lives += vm->vs->players_lives[i++];
 	i = 0;
 	pos = 0;
 	if (!sum_lives)
@@ -76,36 +77,10 @@ void			draw_current_lives_bar(t_vm *vm)
 	else
 		while (i < vm->players_num)
 		{
-			len = calc_length(vm->players[i]->lives_num, sum_lives);
-			draw_bar(vm, len, pos, i);
+			len = calc_bar_length((current) ? vm->players[i]->lives_num
+								: vm->vs->players_lives[i], sum_lives);
+			draw_bar(vm, len, pos, i++);
 			pos += len;
-			i++;
 		}
-}
-
-void			draw_previous_lives_bar(t_vm *vm)
-{
-	int32_t	i;
-	size_t	sum_lives;
-	int		pos;
-	int32_t	len;
-
-	mvwprintw(vm->vs->win_info, vm->vs->cursor_pos += 3,
-		DEFAULT_CUSTOM_INDENT, "Bar of lives for previous period :");
-	i = 0;
-	sum_lives = 0;
-	while (i < vm->players_num)
-		sum_lives += vm->vs->players_lives[i++];
-	i = 0;
-	pos = 0;
-	if (!sum_lives)
-		draw_empty_bar(vm);
-	else
-		while (i < vm->players_num)
-		{
-			len = calc_length(vm->vs->players_lives[i], sum_lives);
-			draw_bar(vm, len, pos, i);
-			pos += len;
-			i++;
-		}
+	vm->vs->cursor_pos++;
 }

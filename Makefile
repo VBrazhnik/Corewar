@@ -14,7 +14,7 @@ ASM_NAME = asm
 COREWAR_NAME = corewar
 
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -O3 -g
+FLAGS = -Wall -Werror -Wextra -O3
 
 # Libraries and Includes
 
@@ -165,12 +165,12 @@ COREWAR_VS_SOURCES_LIST =\
 	draw_cursor.c\
 	draw_info.c\
 	draw_bar.c\
+	draw_bar_utils.c\
 	free.c\
 	init.c\
 	draw_help.c\
 	sounds.c\
-	utils.c\
-	widget_utils.c
+	utils.c
 COREWAR_VS_SOURCES = $(addprefix $(COREWAR_VS_SOURCES_DIRECTORY), $(COREWAR_VS_SOURCES_LIST))
 
 # Objects

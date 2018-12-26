@@ -14,9 +14,9 @@
 
 # define COREWAR_OP_H
 
+# include "libft.h"
 # include "corewar.h"
 # include <stdio.h>
-# include "libft.h"
 
 /*
 ** Operator

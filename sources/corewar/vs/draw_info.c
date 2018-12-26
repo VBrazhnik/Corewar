@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 21:56:54 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/25 02:11:36 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 12:53:40 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	draw_players(t_vm *vm)
 				DEFAULT_CUSTOM_INDENT,
 				"Player %d : ", -(vm->players[i]->id));
 		wattron(vm->vs->win_info, g_colors_players[vm->players[i]->id]);
-		wprintw(vm->vs->win_info, "%.40s", vm->players[i]->name);
+		wprintw(vm->vs->win_info, "%.38s", vm->players[i]->name);
 		wattroff(vm->vs->win_info, g_colors_players[vm->players[i]->id]);
 		mvwprintw(vm->vs->win_info,
 				vm->vs->cursor_pos += 1,
@@ -43,7 +43,7 @@ static void	draw_players(t_vm *vm)
 static void	draw_game_params(t_vm *vm)
 {
 	mvwprintw(vm->vs->win_info,
-			vm->vs->cursor_pos += 4,
+			vm->vs->cursor_pos += 3,
 			DEFAULT_CUSTOM_INDENT,
 			"%-32s %-10zd", "Cycle to die :", vm->cycles_to_die);
 	mvwprintw(vm->vs->win_info,
@@ -53,31 +53,34 @@ static void	draw_game_params(t_vm *vm)
 	mvwprintw(vm->vs->win_info,
 			vm->vs->cursor_pos += 2,
 			DEFAULT_CUSTOM_INDENT,
-			"%-32s %.5zu/%zu", "Lives :",
+			"%-32s %.6zu/%-6zu", "Lives :",
 			calc_lives_num(vm->cursors), NBR_LIVE);
 	mvwprintw(vm->vs->win_info,
 			vm->vs->cursor_pos += 2,
 			DEFAULT_CUSTOM_INDENT,
-			"%-32s %.5zu", "Cycles to check :", (vm->cycles_to_die > 0) ?
+			"%-32s %.6zu", "Cycles to check :", (vm->cycles_to_die > 0) ?
 			vm->cycles_to_die - vm->cycles_after_check : 0);
 	mvwprintw(vm->vs->win_info,
 			vm->vs->cursor_pos += 2,
 			DEFAULT_CUSTOM_INDENT,
-			"%-32s %.5zu/%zu", "Checks :",
+			"%-32s %.6zu/%-6zu", "Checks :",
 			vm->checks_num, MAX_CHECKS);
 }
 
 static void	draw_aff(t_vm *vm)
 {
+	int32_t index;
+
+	index = ((vm->vs->aff_player->id - 1) % MAX_PLAYER_ID) + 1;
 	mvwprintw(vm->vs->win_info,
 			vm->vs->cursor_pos += 2,
 			DEFAULT_CUSTOM_INDENT,
 			"%-32s ", "Aff value :");
-	wattron(vm->vs->win_info, g_colors_players[vm->vs->aff_player->id]);
+	wattron(vm->vs->win_info, g_colors_players[index]);
 	wprintw(vm->vs->win_info, "%#0.2x", vm->vs->aff_symbol);
 	if (ft_isprint(vm->vs->aff_symbol))
 		wprintw(vm->vs->win_info, " '%c'", vm->vs->aff_symbol);
-	wattroff(vm->vs->win_info, g_colors_players[vm->vs->aff_player->id]);
+	wattroff(vm->vs->win_info, g_colors_players[index]);
 }
 
 static void	draw_winner(t_vm *vm)
@@ -88,7 +91,7 @@ static void	draw_winner(t_vm *vm)
 			DEFAULT_CUSTOM_INDENT,
 			"The winner is ");
 	wattron(vm->vs->win_info, g_colors_players[vm->last_alive->id]);
-	wprintw(vm->vs->win_info, "%.38s", vm->last_alive->name);
+	wprintw(vm->vs->win_info, "%.36s", vm->last_alive->name);
 	wattroff(vm->vs->win_info, g_colors_players[vm->last_alive->id]);
 }
 
@@ -96,21 +99,19 @@ void		draw_info(t_vm *vm)
 {
 	wattron(vm->vs->win_info, A_BOLD);
 	draw_exec_status(vm);
-	mvwprintw(vm->vs->win_info,
-			vm->vs->cursor_pos += 2,
-			DEFAULT_CUSTOM_INDENT,
-			"Cycles/second : %-6d", vm->vs->speed);
-	mvwprintw(vm->vs->win_info,
-			vm->vs->cursor_pos += 3,
-			DEFAULT_CUSTOM_INDENT,
-			"Cycle : %-6zd", vm->cycles);
-	mvwprintw(vm->vs->win_info,
-			vm->vs->cursor_pos += 2,
-			DEFAULT_CUSTOM_INDENT,
-			"Cursors : %-6zu", vm->cursors_num);
+	mvwprintw(vm->vs->win_info, vm->vs->cursor_pos += 2,
+			DEFAULT_CUSTOM_INDENT, "Cycles/second : %-6d", vm->vs->speed);
+	mvwprintw(vm->vs->win_info, vm->vs->cursor_pos += 3,
+			DEFAULT_CUSTOM_INDENT, "Cycle : %-10zd", vm->cycles);
+	mvwprintw(vm->vs->win_info, vm->vs->cursor_pos += 2,
+			DEFAULT_CUSTOM_INDENT, "Cursors : %-10zu", vm->cursors_num);
 	draw_players(vm);
-	draw_current_lives_bar(vm);
-	draw_previous_lives_bar(vm);
+	mvwprintw(vm->vs->win_info, vm->vs->cursor_pos += 3,
+			DEFAULT_CUSTOM_INDENT, "Bar of lives for current period :");
+	draw_lives_bar(vm, true);
+	mvwprintw(vm->vs->win_info, vm->vs->cursor_pos += 2,
+			DEFAULT_CUSTOM_INDENT, "Bar of lives for previous period :");
+	draw_lives_bar(vm, false);
 	draw_game_params(vm);
 	if (vm->vs->aff_player)
 		draw_aff(vm);

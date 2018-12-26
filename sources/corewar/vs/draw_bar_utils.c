@@ -12,7 +12,7 @@
 
 #include "corewar_vs.h"
 
-void		store_players_lives(t_vm *vm)
+void	store_players_lives(t_vm *vm)
 {
 	int32_t i;
 

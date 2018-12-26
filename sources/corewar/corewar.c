@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:10:02 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/23 19:49:14 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 12:25:11 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,7 @@ int			main(int argc, char **argv)
 		}
 		else
 			exec_vs(vm);
-		free_players(vm->players, vm->players_num);
-		ft_memdel((void **)&vm);
+		free_vm(&vm);
 	}
 	else
 		print_help();

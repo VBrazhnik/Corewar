@@ -14,8 +14,8 @@
 
 # define ASM_OP_H
 
-# include "op.h"
 # include "libft.h"
+# include "op.h"
 
 /*
 ** Operator

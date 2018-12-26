@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/23 21:26:52 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/25 03:46:32 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 10:34:33 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	draw_sounds_status(t_vm *vm)
 	mvwprintw(vm->vs->win_info,
 			vm->vs->cursor_pos,
 			DEFAULT_CUSTOM_INDENT,
-			"Sounds: ");
+			"Sounds are ");
 	wprintw(vm->vs->win_info, "%-3s", (vm->vs->sounds) ? "ON" : "OFF");
 }
 

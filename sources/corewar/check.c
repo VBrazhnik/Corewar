@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 17:49:07 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/23 15:29:59 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 09:23:54 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,35 +41,31 @@ static t_bool	is_died(t_vm *vm, t_cursor *cursor)
 
 static void		delete_died_cursors(t_vm *vm)
 {
-	t_cursor	*del;
-	t_cursor	*iterator;
+	t_cursor	*previous;
+	t_cursor	*current;
+	t_cursor	*delete;
 
-	while (vm->cursors && is_died(vm, vm->cursors))
-	{
-		if (vm->log & DEATH_LOG)
-			log_cursor_death(vm, vm->cursors);
-		del = vm->cursors;
-		vm->cursors = (vm->cursors)->next;
-		if (vm->vs)
-			clear_cursor(vm, del);
-		ft_memdel((void **)&del);
-		vm->cursors_num--;
-	}
-	iterator = vm->cursors;
-	while (iterator && iterator->next)
-		if (is_died(vm, iterator->next))
+	previous = NULL;
+	current = vm->cursors;
+	while (current)
+		if (is_died(vm, (delete = current)) && vm->cursors_num--)
 		{
-			del = iterator->next;
+			current = current->next;
+			if (vm->cursors == delete)
+				vm->cursors = current;
+			if (previous)
+				previous->next = current;
 			if (vm->log & DEATH_LOG)
-				log_cursor_death(vm, del);
-			iterator->next = iterator->next->next;
+				log_cursor_death(vm, delete);
 			if (vm->vs)
-				clear_cursor(vm, del);
-			ft_memdel((void **)&del);
-			vm->cursors_num--;
+				clear_cursor(vm, delete);
+			ft_memdel((void **)&delete);
 		}
 		else
-			iterator = iterator->next;
+		{
+			previous = current;
+			current = current->next;
+		}
 }
 
 void			cycles_to_die_check(t_vm *vm)

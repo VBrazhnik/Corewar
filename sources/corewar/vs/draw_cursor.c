@@ -14,16 +14,16 @@
 
 void	clear_cursor(t_vm *vm, t_cursor *cursor)
 {
-	if (vm->vs->map[cursor->pc].value >= INDEX_CURSOR(0)
-		&& vm->vs->map[cursor->pc].value <= INDEX_CURSOR(MAX_PLAYER_ID))
-		vm->vs->map[cursor->pc].value =
-				INDEX_PLAYER(vm->vs->map[cursor->pc].value);
+	if (vm->vs->map[cursor->pc].index >= INDEX_CURSOR(0)
+		&& vm->vs->map[cursor->pc].index <= INDEX_CURSOR(MAX_PLAYER_ID))
+		vm->vs->map[cursor->pc].index =
+				INDEX_PLAYER(vm->vs->map[cursor->pc].index);
 }
 
 void	draw_cursor(t_vm *vm, t_cursor *cursor)
 {
-	if (vm->vs->map[cursor->pc].value >= 0
-		&& vm->vs->map[cursor->pc].value <= MAX_PLAYER_ID)
-		vm->vs->map[cursor->pc].value =
-				INDEX_CURSOR(vm->vs->map[cursor->pc].value);
+	if (vm->vs->map[cursor->pc].index >= 0
+		&& vm->vs->map[cursor->pc].index <= MAX_PLAYER_ID)
+		vm->vs->map[cursor->pc].index =
+				INDEX_CURSOR(vm->vs->map[cursor->pc].index);
 }

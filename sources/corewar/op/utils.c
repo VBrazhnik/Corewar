@@ -6,11 +6,12 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/12 12:33:19 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/16 16:20:20 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 13:10:49 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar_op.h"
+#include "corewar_vs.h"
 
 int32_t		bytecode_to_int32(const uint8_t *arena, int32_t addr, int32_t size)
 {
@@ -91,4 +92,18 @@ t_cursor	*duplicate_cursor(t_cursor *cursor, int32_t addr)
 	new->carry = cursor->carry;
 	new->last_live = cursor->last_live;
 	return (new);
+}
+
+void		update_map(t_vm *vm, t_cursor *cursor, int32_t addr, int32_t size)
+{
+	int32_t value;
+
+	value = ((cursor->player->id - 1) % MAX_PLAYER_ID) + 1;
+	while (size)
+	{
+		vm->vs->map[calc_addr(addr + size - 1)].index = value;
+		vm->vs->map[calc_addr(addr
+								+ size - 1)].wait_cycles_store = CYCLE_TO_WAIT;
+		size--;
+	}
 }

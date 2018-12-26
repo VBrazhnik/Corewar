@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 21:45:54 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/25 04:17:25 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 12:40:34 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,22 @@ void		init_colors(void)
 	init_pair(LIVE_CYAN, COLOR_WHITE, COLOR_CYAN);
 }
 
-uint32_t	get_live_color(t_player *player)
+static int	get_live_color(t_player *player)
 {
-	int32_t value;
+	int32_t index;
 
-	value = ((player->id - 1) % MAX_PLAYER_ID) + 1;
-	if (value == MIN_PLAYER_ID)
+	index = ((player->id - 1) % MAX_PLAYER_ID) + 1;
+	if (index == MIN_PLAYER_ID)
 		return (COLOR_PAIR(LIVE_GREEN) | A_BOLD);
-	else if (value == MIN_PLAYER_ID + 1)
+	else if (index == MIN_PLAYER_ID + 1)
 		return (COLOR_PAIR(LIVE_YELLOW) | A_BOLD);
-	else if (value == MIN_PLAYER_ID + 2)
+	else if (index == MIN_PLAYER_ID + 2)
 		return (COLOR_PAIR(LIVE_RED) | A_BOLD);
 	else
 		return (COLOR_PAIR(LIVE_CYAN) | A_BOLD);
 }
 
-uint32_t	get_attribute(t_vm *vm, t_map *attribute, ssize_t cycles)
+int			get_attribute(t_vm *vm, t_attr *attribute, ssize_t cycles)
 {
 	if (cycles != vm->cycles
 		&& vm->cycles_to_die > 0
@@ -59,7 +59,7 @@ uint32_t	get_attribute(t_vm *vm, t_map *attribute, ssize_t cycles)
 	if (attribute->wait_cycles_live)
 		return (get_live_color(attribute->player_live));
 	else if (attribute->wait_cycles_store)
-		return (g_colors_players[attribute->value] | A_BOLD);
+		return (g_colors_players[attribute->index] | A_BOLD);
 	else
-		return (g_colors_players[attribute->value]);
+		return (g_colors_players[attribute->index]);
 }

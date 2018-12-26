@@ -21,7 +21,7 @@ static void	fill_map(t_vm *vm, int32_t pc, int32_t len, int32_t player_id)
 	value = ((player_id - 1) % MAX_PLAYER_ID) + 1;
 	while (i < len + pc)
 	{
-		vm->vs->map[i].value = value;
+		vm->vs->map[i].index = value;
 		i++;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/23 17:12:30 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/26 12:25:11 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 # define COREWAR_H
 
-# include "op.h"
 # include "libft.h"
+# include "op.h"
 # include <stdint.h>
 
 /*
@@ -91,6 +91,7 @@ typedef struct			s_player
 ** pc             — address of the next operator to execute at memory
 ** step           — number of bytes to shift
 ** reg            — registers
+** player         — owner of cursor
 ** next           — pointer to the next cursor
 */
 
@@ -222,12 +223,16 @@ void					move_cursor(t_vm *vm, t_cursor *cursor);
 t_player				*find_player(t_player *list, int32_t id);
 
 /*
-** Free
+** Delete
 */
 
 void					delete_cursors(t_vm *vm);
 
-void					free_players(t_player **players, int32_t players_num);
+/*
+** Free
+*/
+
+void					free_vm(t_vm **vm);
 
 /*
 ** Utils

@@ -37,7 +37,7 @@ static void	draw_additional_commands(t_vm *vm)
 	mvwprintw(vm->vs->win_help,
 			vm->vs->cursor_pos + 2,
 			DEFAULT_CUSTOM_INDENT + TAB_LEN * 18,
-			"Sound ON/OFF - 'M'");
+			"Sounds ON/OFF - 'M'");
 }
 
 static void	draw_speed_up_commands(t_vm *vm)
