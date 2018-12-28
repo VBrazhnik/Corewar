@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/26 12:25:11 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/28 21:09:02 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ typedef struct			s_player
 ** id             — id number of cursor
 ** carry          — special flag
 ** op_code        — operator's code that is placed under cursor
-** lives_num      — number of executed live operator during of cycle to die
 ** last_live      — cycle's number when live operator was executed last time
 ** cycles_to_exec — number of cycles that remains to wait
 ** args_types     - types of op's each argument
@@ -100,7 +99,6 @@ typedef struct			s_cursor
 	uint32_t			id;
 	t_bool				carry;
 	uint8_t				op_code;
-	size_t				lives_num;
 	ssize_t				last_live;
 	int					cycles_to_exec;
 	uint8_t				args_types[3];
@@ -122,6 +120,7 @@ typedef struct			s_cursor
 ** last_alive         — pointer to the last player that was assigned as alive
 ** cursors            — list of cursors
 ** cursors_num        — number of cursors
+** lives_num          — number of executed live operators during of cycle_to_die
 ** cycles             — number of cycles that was passed after start
 ** cycles_to_die      — game parameter
 ** cycles_after_check — number of cycles that was passed after last rules check
@@ -145,6 +144,7 @@ typedef struct			s_vm
 	t_player			*last_alive;
 	t_cursor			*cursors;
 	size_t				cursors_num;
+	size_t				lives_num;
 	ssize_t				cycles;
 	ssize_t				cycles_to_die;
 	ssize_t				cycles_after_check;
@@ -245,8 +245,6 @@ t_bool					is_filename(const char *filename, const char *ext);
 int32_t					calc_addr(int32_t addr);
 
 int8_t					get_byte(t_vm *vm, int32_t pc, int32_t step);
-
-uint32_t				calc_lives_num(t_cursor *cursor);
 
 void					cycles_to_die_check(t_vm *vm);
 

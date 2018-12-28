@@ -33,7 +33,7 @@ void				op_live(t_vm *vm, t_cursor *cursor)
 
 	cursor->step += OP_CODE_LEN;
 	player_id = get_op_arg(vm, cursor, 1, false);
-	cursor->lives_num++;
+	vm->lives_num++;
 	cursor->last_live = vm->cycles;
 	player = NULL;
 	if (player_id <= -1 && player_id >= -((int32_t)vm->players_num))

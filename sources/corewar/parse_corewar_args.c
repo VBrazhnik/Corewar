@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 17:58:16 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/25 00:17:59 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/28 19:13:17 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,12 @@ static void	update_players_ids(t_player *list)
 	player = list;
 	while (player)
 	{
-		if (!find_player(list, id))
-			player->id = id++;
+		if (player->id == 0)
+		{
+			while (find_player(list, id))
+				id++;
+			player->id = id;
+		}
 		player = player->next;
 	}
 }

@@ -47,16 +47,3 @@ int32_t		calc_addr(int32_t addr)
 		addr += MEM_SIZE;
 	return (addr);
 }
-
-uint32_t	calc_lives_num(t_cursor *cursor)
-{
-	uint32_t sum;
-
-	sum = 0;
-	while (cursor)
-	{
-		sum += cursor->lives_num;
-		cursor = cursor->next;
-	}
-	return (sum);
-}

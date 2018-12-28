@@ -48,13 +48,14 @@ static uint8_t	*parse_code(int fd, size_t len)
 {
 	ssize_t	size;
 	uint8_t	*buffer;
+	uint8_t	byte;
 
 	if (!(buffer = ft_memalloc(len)))
 		terminate(ERR_CODE_INIT);
 	size = read(fd, buffer, len);
 	if (size == -1)
 		terminate(ERR_READ_FILE);
-	if (size < (ssize_t)len || read(fd, buffer, 0) != 0)
+	if (size < (ssize_t)len || read(fd, &byte, 1) != 0)
 		terminate(ERR_INVALID_FILE);
 	return (buffer);
 }

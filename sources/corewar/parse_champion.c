@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:59:53 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/17 15:48:02 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/28 18:04:25 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,14 @@ static uint8_t	*parse_code(int fd, size_t len)
 {
 	ssize_t	size;
 	uint8_t	*buffer;
+	uint8_t	byte;
 
 	if (!(buffer = malloc(len)))
 		terminate(ERR_CODE_INIT);
 	size = read(fd, buffer, len);
 	if (size == -1)
 		terminate(ERR_READ_FILE);
-	if (size < (ssize_t)len || read(fd, buffer, 0) != 0)
+	if (size < (ssize_t)len || read(fd, &byte, 1) != 0)
 		terminate(ERR_INVALID_FILE);
 	return (buffer);
 }

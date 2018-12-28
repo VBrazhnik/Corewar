@@ -49,7 +49,8 @@ static void	exec_cycle_vs(t_vm *vm)
 		exec_cycle(vm);
 		if (vm->cycles_to_die <= 0)
 			delete_cursors(vm);
-		if (vm->cycles_to_die == vm->cycles_after_check)
+		if (vm->cycles_to_die == vm->cycles_after_check
+			|| vm->cycles_to_die <= 0)
 		{
 			store_players_lives(vm);
 			cursors_num = vm->cursors_num;

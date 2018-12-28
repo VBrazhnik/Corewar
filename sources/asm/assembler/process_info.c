@@ -36,7 +36,7 @@ static void	process_comment(t_parser *parser, t_token **current)
 		if (!(parser->comment = ft_strsub((*current)->content,
 					1, ft_strlen((*current)->content) - 2)))
 			terminate(ERR_STR_INIT);
-		if (ft_strlen(parser->name) > COMMENT_LENGTH)
+		if (ft_strlen(parser->comment) > COMMENT_LENGTH)
 			comment_error();
 		(*current) = (*current)->next;
 	}

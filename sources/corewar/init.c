@@ -40,7 +40,6 @@ t_cursor	*init_cursor(t_player *player, int32_t pc)
 	cursor->id = ++cursor_id;
 	cursor->carry = false;
 	cursor->op_code = 0;
-	cursor->lives_num = 0;
 	cursor->last_live = 0;
 	cursor->cycles_to_exec = 0;
 	cursor->pc = pc;
@@ -60,6 +59,7 @@ t_vm		*init_vm(void)
 	vm->last_alive = NULL;
 	vm->cursors = NULL;
 	vm->cursors_num = 0;
+	vm->lives_num = 0;
 	vm->cycles = 0;
 	vm->cycles_to_die = CYCLE_TO_DIE;
 	vm->cycles_after_check = 0;

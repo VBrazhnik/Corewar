@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 22:39:12 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/26 16:07:28 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2018/12/28 18:38:33 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@ static void	draw_border(WINDOW *win)
 
 void		draw(t_vm *vm)
 {
+	werase(vm->vs->win_arena);
+	werase(vm->vs->win_info);
+	werase(vm->vs->win_help);
 	draw_arena(vm);
 	draw_info(vm);
 	draw_border(vm->vs->win_arena);
