@@ -223,12 +223,6 @@ void					move_cursor(t_vm *vm, t_cursor *cursor);
 t_player				*find_player(t_player *list, int32_t id);
 
 /*
-** Delete
-*/
-
-void					delete_cursors(t_vm *vm);
-
-/*
 ** Free
 */
 

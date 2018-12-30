@@ -29,7 +29,8 @@ static void		reset_lives_nums(t_vm *vm)
 
 static t_bool	is_died(t_vm *vm, t_cursor *cursor)
 {
-	return (vm->cycles - cursor->last_live >= vm->cycles_to_die);
+	return (vm->cycles_to_die <= 0
+			|| vm->cycles - cursor->last_live >= vm->cycles_to_die);
 }
 
 static void		delete_died_cursors(t_vm *vm)

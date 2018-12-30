@@ -75,8 +75,6 @@ void		exec(t_vm *vm)
 				;
 		}
 		exec_cycle(vm);
-		if (vm->cycles_to_die <= 0)
-			delete_cursors(vm);
 		if (vm->cycles_to_die == vm->cycles_after_check
 			|| vm->cycles_to_die <= 0)
 			cycles_to_die_check(vm);

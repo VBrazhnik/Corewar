@@ -31,23 +31,3 @@ void	move_cursor(t_vm *vm, t_cursor *cursor)
 	cursor->step = 0;
 	ft_bzero(cursor->args_types, 3);
 }
-
-void	delete_cursors(t_vm *vm)
-{
-	t_cursor	*current;
-	t_cursor	*delete;
-
-	current = vm->cursors;
-	while (current)
-	{
-		delete = current;
-		current = current->next;
-		if (vm->log & DEATH_LOG)
-			log_cursor_death(vm, delete);
-		if (vm->vs)
-			clear_cursor(vm, delete);
-		ft_memdel((void **)&delete);
-		vm->cursors_num--;
-	}
-	vm->cursors = NULL;
-}

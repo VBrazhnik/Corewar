@@ -47,8 +47,6 @@ static void	exec_cycle_vs(t_vm *vm)
 	if (vm->cursors_num)
 	{
 		exec_cycle(vm);
-		if (vm->cycles_to_die <= 0)
-			delete_cursors(vm);
 		if (vm->cycles_to_die == vm->cycles_after_check
 			|| vm->cycles_to_die <= 0)
 		{
