@@ -24,7 +24,7 @@ void	op_aff(t_vm *vm, t_cursor *cursor)
 	value = cursor->reg[INDEX(r_id)];
 	cursor->step += REG_LEN;
 	if (vm->display_aff)
-		printf("Aff: %c\n", (char)value);
+		ft_printf("Aff: %c\n", (char)value);
 	if (vm->vs)
 	{
 		vm->vs->aff_symbol = (char)value;
