@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 18:39:07 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/16 18:12:20 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2019/01/03 06:35:29 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,22 @@ void		print_help(void)
 {
 	ft_printf("Usage: ./corewar [-a (-dump|-d) <num> (-shed|-s) <num> -l"\
 							" <num>] [-v] [-n <num>] <champion.cor> <...>\n");
-	ft_printf("\t%-11s : Print output from \"aff\" (Default is off)\n", "-a");
-	ft_printf("\t%-11s : Dump memory (32 octets per line)"\
+	ft_printf("    %-11s : Print output from \"aff\" (Default is off)\n", "-a");
+	ft_printf("    %-11s : Dump memory (32 octets per line)"\
 							" after <num> cycles and exit\n", "-dump <num>");
-	ft_printf("\t%-11s : Dump memory (64 octets per line)"\
+	ft_printf("    %-11s : Dump memory (64 octets per line)"\
 							" after <num> cycles and exit\n", "-d    <num>");
-	ft_printf("\t%-11s : Run <num> cycles, dump memory (32 octets per line),"\
+	ft_printf("    %-11s : Run <num> cycles, dump memory (32 octets per line),"\
 							" pause and repeat\n", "-show <num>");
-	ft_printf("\t%-11s : Run <num> cycles, dump memory (64 octets per line),"\
+	ft_printf("    %-11s : Run <num> cycles, dump memory (64 octets per line),"\
 							" pause and repeat\n", "-s    <num>");
-	ft_printf("\t%-11s : Log levels\n", "-l    <num>");
-	ft_printf("\t\t%9s : Show lives\n", "1 ");
-	ft_printf("\t\t%9s : Show cycles\n", "2 ");
-	ft_printf("\t\t%9s : Show operations\n", "4 ");
-	ft_printf("\t\t%9s : Show deaths\n", "8 ");
-	ft_printf("\t\t%9s : Show PC movements\n", "16");
-	ft_printf("\t%-11s : Run visualizer\n", "-v");
-	ft_printf("\t%-11s : Set <num> of the next player\n", "-n    <num>");
+	ft_printf("    %-11s : Log levels\n", "-l    <num>");
+	ft_printf("            %9s : Show lives\n", "1 ");
+	ft_printf("            %9s : Show cycles\n", "2 ");
+	ft_printf("            %9s : Show operations\n", "4 ");
+	ft_printf("            %9s : Show deaths\n", "8 ");
+	ft_printf("            %9s : Show PC movements\n", "16");
+	ft_printf("    %-11s : Run visualizer\n", "-v");
+	ft_printf("    %-11s : Set <num> of the next player\n", "-n    <num>");
 	exit(0);
 }

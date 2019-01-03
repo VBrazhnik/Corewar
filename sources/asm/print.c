@@ -15,7 +15,7 @@
 
 void	print_help(void)
 {
-	ft_printf("Usage: ./assemble (champion.s|champion.cor)\n");
-	ft_printf("\t> champion.s   — from assemble to bytecode\n");
-	ft_printf("\t> champion.cor — from bytecode to assemble\n");
+	ft_printf("Usage: ./asm (champion.s|champion.cor)\n");
+	ft_printf("    champion.s   — from assemble to bytecode\n");
+	ft_printf("    champion.cor — from bytecode to assemble\n");
 }

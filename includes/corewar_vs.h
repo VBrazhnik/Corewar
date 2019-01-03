@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:22:10 by vbrazhni          #+#    #+#             */
-/*   Updated: 2019/01/03 02:00:35 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2019/01/03 06:39:39 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 
 # define HEIGHT					(MEM_SIZE / 64 + 4)
 # define WIDTH					(64 * 3 + 5)
-# define DEFAULT_CUSTOM_INDENT	7
+# define DEFAULT_INDENT			5
 # define BAR_LENGTH				50
 # define TAB_LEN				4
 

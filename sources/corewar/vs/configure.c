@@ -65,8 +65,8 @@ void		configure_vs(t_vm *vm)
 	start_color();
 	init_colors();
 	init_map(vm);
-	vm->vs->win_arena = newwin(HEIGHT, WIDTH + 4, 2, 2);
-	vm->vs->win_info = newwin(HEIGHT, WIDTH / 4 + 10, 2, WIDTH + 6);
+	vm->vs->win_arena = newwin(HEIGHT, WIDTH + 4, 1, 2);
+	vm->vs->win_info = newwin(HEIGHT, WIDTH / 4 + 10, 1, WIDTH + 6);
 	vm->vs->win_help = newwin(HEIGHT / 5, WIDTH, HEIGHT + 2, 2);
 	init_cursors(vm);
 }

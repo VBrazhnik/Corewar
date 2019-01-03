@@ -32,7 +32,7 @@ static void		draw_empty_bar(t_vm *vm)
 	{
 		mvwprintw(vm->vs->win_info,
 				vm->vs->cursor_pos + 1,
-				DEFAULT_CUSTOM_INDENT + i,
+				DEFAULT_INDENT + i,
 				"-");
 		i++;
 	}
@@ -49,7 +49,7 @@ static void		draw_bar(t_vm *vm, size_t len, size_t pos, int index)
 	{
 		mvwprintw(vm->vs->win_info,
 				vm->vs->cursor_pos + 1,
-				(int)(DEFAULT_CUSTOM_INDENT + i),
+				(int)(DEFAULT_INDENT + i),
 				"-");
 		i++;
 	}
