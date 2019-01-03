@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 15:22:10 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/26 13:13:08 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2019/01/03 02:00:35 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,6 @@ typedef struct		s_attr
 ** win_help      — window of help menu
 ** cursor_pos    — position of cursor that draws at windows
 ** map           — map of attributes
-** players_lives — number of lives for each players
-**                 that were reached for previous period
 ** button        — button which was pressed
 ** time          — time stamp
 ** aff_symbol    — symbol that aff operator printed
@@ -144,7 +142,6 @@ typedef struct		s_vs
 	WINDOW			*win_help;
 	int				cursor_pos;
 	t_attr			map[MEM_SIZE];
-	size_t			players_lives[MAX_PLAYERS];
 	int				button;
 	clock_t			time;
 	char			aff_symbol;
@@ -213,15 +210,13 @@ void				clear_cursor(t_vm *vm, t_cursor *cursor);
 
 void				draw_lives_bar(t_vm *vm, t_bool current);
 
-void				store_players_lives(t_vm *vm);
-
 /*
 ** Sound
 */
 
 void				play_death_sound(t_vm *vm);
 
-void				play_winner_sound(t_vm *vm);
+void				play_victory_sound(t_vm *vm);
 
 /*
 ** Free

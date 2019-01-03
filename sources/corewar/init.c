@@ -25,7 +25,8 @@ t_player	*init_player(int id)
 	player->code_size = 0;
 	player->code = NULL;
 	player->last_live = 0;
-	player->lives_num = 0;
+	player->current_lives_num = 0;
+	player->previous_lives_num = 0;
 	player->next = NULL;
 	return (player);
 }

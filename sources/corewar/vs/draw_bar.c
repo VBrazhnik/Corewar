@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/16 22:14:33 by ablizniu          #+#    #+#             */
-/*   Updated: 2018/12/26 10:15:11 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2019/01/03 02:00:34 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,9 @@ void			draw_lives_bar(t_vm *vm, t_bool current)
 	sum_lives = 0;
 	while (i < vm->players_num)
 		if (current)
-			sum_lives += vm->players[i++]->lives_num;
+			sum_lives += vm->players[i++]->current_lives_num;
 		else
-			sum_lives += vm->vs->players_lives[i++];
+			sum_lives += vm->players[i++]->previous_lives_num;
 	i = 0;
 	pos = 0;
 	if (!sum_lives)
@@ -77,8 +77,8 @@ void			draw_lives_bar(t_vm *vm, t_bool current)
 	else
 		while (i < vm->players_num)
 		{
-			len = calc_bar_length((current) ? vm->players[i]->lives_num
-								: vm->vs->players_lives[i], sum_lives);
+			len = calc_bar_length((current) ? vm->players[i]->current_lives_num
+						: vm->players[i]->previous_lives_num, sum_lives);
 			draw_bar(vm, len, pos, i++);
 			pos += len;
 		}

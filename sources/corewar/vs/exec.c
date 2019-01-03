@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/23 19:49:18 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/26 12:02:52 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2019/01/03 02:00:35 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static void	exec_cycle_vs(t_vm *vm)
 		if (vm->cycles_to_die == vm->cycles_after_check
 			|| vm->cycles_to_die <= 0)
 		{
-			store_players_lives(vm);
 			cursors_num = vm->cursors_num;
 			cycles_to_die_check(vm);
 			if (cursors_num != vm->cursors_num && vm->cursors_num)
@@ -58,7 +57,7 @@ static void	exec_cycle_vs(t_vm *vm)
 		}
 		if (!vm->cursors_num)
 		{
-			play_winner_sound(vm);
+			play_victory_sound(vm);
 			vm->vs->is_running = false;
 		}
 	}

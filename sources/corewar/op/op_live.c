@@ -40,7 +40,7 @@ void				op_live(t_vm *vm, t_cursor *cursor)
 	{
 		player = vm->players[INDEX(FT_ABS(player_id))];
 		player->last_live = vm->cycles;
-		player->lives_num++;
+		player->current_lives_num++;
 		vm->last_alive = player;
 		if (vm->vs)
 		{

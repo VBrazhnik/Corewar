@@ -6,7 +6,7 @@
 /*   By: vbrazhni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 14:23:28 by vbrazhni          #+#    #+#             */
-/*   Updated: 2018/12/28 21:09:02 by vbrazhni         ###   ########.fr       */
+/*   Updated: 2019/01/03 02:00:35 by vbrazhni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,18 @@ static uint8_t			g_arg_code[3] = {
 */
 
 /*
-** id        — id number of player
-** name      — champion's name
-** comment   — champion's comment
-** code_size — size of champion's executable code
-** code      — champion's executable code
-** lives_num — number of reports that player is alive during cycles_to_die
-** last_live — cycle's number, on which player was assigned as alive last time
-** next      — pointer to the next player
+** id                 — id number of player
+** name               — champion's name
+** comment            — champion's comment
+** code_size          — size of champion's executable code
+** code               — champion's executable code
+** current_lives_num  — number of reports that player is alive
+**                      during current cycles_to_die period
+** previous_lives_num — number of reports that player is alive
+**                      during previous cycles_to_die period
+** last_live          — cycle's number, on which player was assigned
+**                      as alive last time
+** next               — pointer to the next player
 */
 
 typedef struct			s_player
@@ -70,7 +74,8 @@ typedef struct			s_player
 	char				*comment;
 	int32_t				code_size;
 	uint8_t				*code;
-	size_t				lives_num;
+	size_t				current_lives_num;
+	size_t				previous_lives_num;
 	ssize_t				last_live;
 	struct s_player		*next;
 }						t_player;

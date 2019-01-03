@@ -20,8 +20,8 @@ static void		reset_lives_nums(t_vm *vm)
 	i = 0;
 	while (i < vm->players_num)
 	{
-		if (vm->players[i])
-			vm->players[i]->lives_num = 0;
+		vm->players[i]->previous_lives_num = vm->players[i]->current_lives_num;
+		vm->players[i]->current_lives_num = 0;
 		i++;
 	}
 	vm->lives_num = 0;

@@ -12,7 +12,7 @@
 
 #include "corewar_vs.h"
 
-void	play_winner_sound(t_vm *vm)
+void	play_victory_sound(t_vm *vm)
 {
 	if (vm->vs->sounds)
 	{

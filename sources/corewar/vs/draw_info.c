@@ -35,7 +35,7 @@ static void	draw_players(t_vm *vm)
 				vm->vs->cursor_pos += 1,
 				DEFAULT_CUSTOM_INDENT,
 				"%-32s %zu", "   Lives in current period :",
-				vm->players[i]->lives_num);
+				vm->players[i]->current_lives_num);
 		i++;
 	}
 }
