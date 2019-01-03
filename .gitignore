@@ -1,10 +1,6 @@
 *.DS_Store*
 *.o
 
-# Bytecode
-
-*.cor
-
 # Clion
 .idea
 cmake-build-debug
